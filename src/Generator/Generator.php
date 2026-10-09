@@ -423,7 +423,10 @@ class Generator
             throw new InvalidArgumentException('Unsupported expression type '.(new ReflectionClass($expression))->getShortName());
         }
 
-        return $this->comments && $comment ? $this->maybeComment($sql, $expression) : $sql;
+        // Checked here first: almost no node has comments, and this runs for every node
+        return $this->comments && $comment && $expression->comments !== null && $expression->comments !== []
+            ? $this->maybeComment($sql, $expression)
+            : $sql;
     }
 
     /**

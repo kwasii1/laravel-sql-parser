@@ -106,6 +106,71 @@ Dialect::get('mysql')->parseOne('SELECT 1');
 | `dialects` | `[]` | Custom dialects, `name => class` extending `Dialects\Dialect` |
 | `macros` | `true` | Register the query builder macros |
 
+## Performance
+
+The parser is a pure-PHP port with a flat token store, cached dispatch and a fast path through the operator levels. Times below are the best of three rounds on sqlglot's own benchmark queries (PHP 8.4, opcache on; sqlglot 30.21.0 on Python 3.12, pure Python and the compiled `sqlglot[c]` build; same machine, WSL2). Bold marks this package's faster setting.
+
+**Parse**
+
+| Query | sqlglot | sqlglot (compiled) | this package | this package + JIT |
+|---|---:|---:|---:|---:|
+| tpch | 2.5 ms | 676 µs | **793 µs** | 3.3 ms |
+| short | 175 µs | 47 µs | **79 µs** | 112 µs |
+| deep_arithmetic | 7.6 ms | 2.3 ms | 2.7 ms | **2.3 ms** |
+| large_in | 488 ms | 116 ms | 156 ms | **90.8 ms** |
+| values | 532 ms | 135 ms | 167 ms | **104 ms** |
+| many_joins | 10.1 ms | 2.9 ms | 4.0 ms | **2.6 ms** |
+| many_unions | 38.8 ms | 10.8 ms | 14.3 ms | **9.9 ms** |
+| nested_subqueries | 1.3 ms | 255 µs | 347 µs | **223 µs** |
+| many_columns | 12.0 ms | 3.3 ms | 4.1 ms | **2.5 ms** |
+| large_case | 35.4 ms | 10.0 ms | 15.2 ms | **8.7 ms** |
+| complex_where | 31.8 ms | 7.6 ms | 12.7 ms | **7.2 ms** |
+| many_ctes | 19.6 ms | 4.0 ms | 6.3 ms | **3.4 ms** |
+| many_windows | 21.6 ms | 5.2 ms | 7.3 ms | **4.6 ms** |
+| nested_functions | 895 µs | 165 µs | 240 µs | **139 µs** |
+| large_strings | 5.3 ms | 1.5 ms | 1.8 ms | **1.0 ms** |
+| many_numbers | 103 ms | 28.9 ms | 38.6 ms | **22.2 ms** |
+
+**Transpile** (parse and generate)
+
+| Query | sqlglot | sqlglot (compiled) | this package | this package + JIT |
+|---|---:|---:|---:|---:|
+| tpch | 3.5 ms | 926 µs | **1.5 ms** | 2.3 ms |
+| short | 248 µs | 75 µs | **134 µs** | 159 µs |
+| deep_arithmetic | 9.0 ms | 2.8 ms | 3.8 ms | **2.1 ms** |
+| large_in | 512 ms | 128 ms | 161 ms | **97.8 ms** |
+| values | 590 ms | 154 ms | 209 ms | **114 ms** |
+| many_joins | 14.5 ms | 3.6 ms | 6.1 ms | **4.1 ms** |
+| many_unions | 54.0 ms | 13.8 ms | 27.2 ms | **16.0 ms** |
+| nested_subqueries | 1.8 ms | 378 µs | 651 µs | **442 µs** |
+| many_columns | 15.3 ms | 3.8 ms | 5.8 ms | **3.4 ms** |
+| large_case | 44.8 ms | 11.0 ms | 19.2 ms | **11.7 ms** |
+| complex_where | 35.9 ms | 9.0 ms | 15.2 ms | **10.4 ms** |
+| many_ctes | 22.0 ms | 5.0 ms | 9.1 ms | **5.8 ms** |
+| many_windows | 23.5 ms | 6.4 ms | 9.6 ms | **6.2 ms** |
+| nested_functions | 918 µs | 191 µs | 293 µs | **180 µs** |
+| large_strings | 5.3 ms | 1.5 ms | 2.1 ms | **1.2 ms** |
+| many_numbers | 98.0 ms | 29.4 ms | 44.9 ms | **27.8 ms** |
+
+Against pure-Python sqlglot it is 2.5–4.4x faster on average (geometric mean) and faster on every query. With JIT it is level with the compiled build: about 1.1x faster at parsing and 0.97x at transpiling. Without JIT the compiled build is faster.
+
+### Production tips
+
+- **Turn on OPcache** (and `opcache.enable_cli=1` for queue workers and Octane).
+- **JIT** (`opcache.jit=tracing`, `opcache.jit_buffer_size=128M`) roughly halves the time for large statements. Small statements gain nothing, so it only pays off for long SQL or long-running processes.
+- **Preload the parser core** to skip loading about 1,100 classes per request. It cut the first transpile in a request from about 0.9 ms to about 0.45 ms:
+
+  ```ini
+  opcache.preload=/path/to/app/vendor/kwasii1/laravel-sql-parser/preload.php
+  opcache.preload_user=www-data
+  ```
+
+  Preloading isn't available on Windows. The package works the same without it.
+- **Optimize the autoloader:** `composer dump-autoload --classmap-authoritative`.
+- **Cache repeated work:** turn on `memo` for Octane and queue workers, and `cache` for long statements you transpile often.
+
+Run the benchmarks yourself with `composer bench` (add `-- --subject=transpile` for transpiling).
+
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.

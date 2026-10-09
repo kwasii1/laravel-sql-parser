@@ -106,55 +106,87 @@ trait ParsesExpressions
     protected function parseDisjunction(): ?Expression
     {
         $disjunction = $this->t['DISJUNCTION'];
-        $this_ = $this->parseConjunction();
+
+        if ($this->parseOperandOnly($left)) {
+            return $left;
+        }
+
+        $this_ = $this->parseConjunction($left);
 
         while ($this->curr !== 0 && isset($disjunction[$this->curr])) {
             $this->advance();
             $comments = $this->prevComments;
             /** @var class-string<Expression> $class */
             $class = $disjunction[$this->prev];
-            $this_ = $this->expression(new $class(['this' => $this_, 'expression' => $this->parseConjunction()]), null, $comments);
+            $right = $this->parseOperandOnly($operand) ? $operand : $this->parseConjunction($operand);
+            $this_ = $this->expression(new $class(['this' => $this_, 'expression' => $right]), null, $comments);
         }
 
         return $this_;
     }
 
-    protected function parseConjunction(): ?Expression
+    /**
+     * Fast path through the operator levels: parse one operand, and report true when the next
+     * token can't continue any level between disjunction and factor (a comma, AS, FROM, a closing
+     * paren, ...), so the caller can skip descending through them. Otherwise the operand is to be
+     * handed down as the left side, so nothing is parsed twice.
+     *
+     * @param-out Expression|null $operand
+     */
+    protected function parseOperandOnly(?Expression &$operand): bool
+    {
+        $start = $this->index;
+        $operand = $this->parseAtTimeZone($this->parseFactorOperand());
+
+        if ($this->curr === 0 || ! isset($this->operandContinuations[$this->curr])) {
+            return true;
+        }
+
+        if ($operand === null) {
+            $this->retreat($start);
+        }
+
+        return false;
+    }
+
+    protected function parseConjunction(?Expression $left = null): ?Expression
     {
         $conjunction = $this->t['CONJUNCTION'];
-        $this_ = $this->parseEquality();
+        $this_ = $this->parseEquality($left);
 
         while ($this->curr !== 0 && isset($conjunction[$this->curr])) {
             $this->advance();
             $comments = $this->prevComments;
             /** @var class-string<Expression> $class */
             $class = $conjunction[$this->prev];
-            $this_ = $this->expression(new $class(['this' => $this_, 'expression' => $this->parseEquality()]), null, $comments);
+            $right = $this->parseOperandOnly($operand) ? $operand : $this->parseEquality($operand);
+            $this_ = $this->expression(new $class(['this' => $this_, 'expression' => $right]), null, $comments);
         }
 
         return $this_;
     }
 
-    protected function parseEquality(): ?Expression
+    protected function parseEquality(?Expression $left = null): ?Expression
     {
         $equality = $this->t['EQUALITY'];
-        $this_ = $this->parseComparison();
+        $this_ = $this->parseComparison($left);
 
         while ($this->curr !== 0 && isset($equality[$this->curr])) {
             $this->advance();
             $comments = $this->prevComments;
             /** @var class-string<Expression> $class */
             $class = $equality[$this->prev];
-            $this_ = $this->expression(new $class(['this' => $this_, 'expression' => $this->parseComparison()]), null, $comments);
+            $right = $this->parseOperandOnly($operand) ? $operand : $this->parseComparison($operand);
+            $this_ = $this->expression(new $class(['this' => $this_, 'expression' => $right]), null, $comments);
         }
 
         return $this_;
     }
 
-    protected function parseComparison(): ?Expression
+    protected function parseComparison(?Expression $left = null): ?Expression
     {
         $comparison = $this->t['COMPARISON'];
-        $this_ = $this->parseRange();
+        $this_ = $left === null ? $this->parseRange() : $this->parseRange($this->parseBitwise($left));
 
         while ($this->curr !== 0 && isset($comparison[$this->curr])) {
             $this->advance();
@@ -459,10 +491,13 @@ trait ParsesExpressions
         return $interval;
     }
 
-    protected function parseBitwise(): ?Expression
+    /**
+     * @param  Expression|null  $left  an already parsed first operand (see parseDisjunction())
+     */
+    protected function parseBitwise(?Expression $left = null): ?Expression
     {
         $bitwise = $this->t['BITWISE'];
-        $this_ = $this->parseTerm();
+        $this_ = $this->parseTerm(left: $left);
 
         while (true) {
             if ($this->matchSet($bitwise)) {
@@ -493,10 +528,10 @@ trait ParsesExpressions
         return $this_;
     }
 
-    protected function parseTerm(bool $parseMod = true): ?Expression
+    protected function parseTerm(bool $parseMod = true, ?Expression $left = null): ?Expression
     {
         $term = $this->t['TERM'];
-        $this_ = $this->parseFactor(parseMod: $parseMod);
+        $this_ = $this->parseFactor(parseMod: $parseMod, left: $left);
 
         while ($this->curr !== 0 && isset($term[$this->curr])) {
             $this->advance();
@@ -530,10 +565,10 @@ trait ParsesExpressions
         }
     }
 
-    protected function parseFactor(bool $parseMod = true): ?Expression
+    protected function parseFactor(bool $parseMod = true, ?Expression $left = null): ?Expression
     {
         $factor = $this->t['FACTOR'];
-        $this_ = $this->parseAtTimeZone($this->parseFactorOperand());
+        $this_ = $left ?? $this->parseAtTimeZone($this->parseFactorOperand());
 
         while ($this->curr !== 0 && isset($factor[$this->curr])) {
             if (! $parseMod && $this->curr === TokenType::MOD) {

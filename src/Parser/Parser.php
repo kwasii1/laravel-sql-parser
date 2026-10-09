@@ -124,6 +124,17 @@ class Parser
     /** @var array<class-string, array<string, mixed>> */
     private static array $tableCache = [];
 
+    /**
+     * Tokens that can follow an operand and continue an operator level between disjunction and
+     * factor; any other token ends the expression (see parseDisjunction()).
+     *
+     * @var array<int, true>
+     */
+    protected array $operandContinuations = [];
+
+    /** @var array<class-string, array<int, true>> */
+    private static array $continuationCache = [];
+
     public function __construct(
         public readonly Dialect $dialect,
         public ErrorLevel $errorLevel = ErrorLevel::Immediate,
@@ -137,6 +148,34 @@ class Parser
         $this->typeTokens = $this->t['TYPE_TOKENS'];
         $this->textMatchExcludedTokens = $this->t['TEXT_MATCH_EXCLUDED_TOKENS'];
         $this->commandTokens = $dialect->tokenizerTable('COMMANDS');
+        $this->operandContinuations = self::$continuationCache[static::class] ??= $this->operandContinuationTokens();
+    }
+
+    /**
+     * Every token an operator level reacts to after an operand. A dialect that overrides one of
+     * those levels to react to more tokens must add them here.
+     *
+     * @return array<int, true>
+     */
+    protected function operandContinuationTokens(): array
+    {
+        $tokens = [
+            TokenType::NOT => true,
+            TokenType::ISNULL => true,
+            TokenType::NOTNULL => true,
+            TokenType::DPIPE => true,
+            TokenType::DQMARK => true,
+            TokenType::LT => true,
+            TokenType::GT => true,
+        ];
+
+        foreach (['DISJUNCTION', 'CONJUNCTION', 'EQUALITY', 'COMPARISON', 'RANGE_PARSERS', 'BITWISE', 'JSON_OPERATORS', 'TERM', 'FACTOR', 'EXPONENT'] as $table) {
+            foreach ($this->t[$table] as $type => $_) {
+                $tokens[$type] = true;
+            }
+        }
+
+        return $tokens;
     }
 
     public function reset(): void
@@ -635,7 +674,8 @@ class Parser
             }
         }
 
-        if ($this->errorLevel !== ErrorLevel::Ignore) {
+        // Most node types require no arguments, so there is nothing to check unless args are given
+        if ($this->errorLevel !== ErrorLevel::Ignore && ($expression::REQUIRED_ARGS !== [] || $args !== null)) {
             foreach ($expression->errorMessages($args) as $message) {
                 $this->raiseError($message);
             }

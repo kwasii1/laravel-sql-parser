@@ -19,8 +19,15 @@ trait SubqueryBehavior
      */
     public function unnest(): Expression
     {
-        $expression = $this;
+        return self::unnestSubqueries($this);
+    }
 
+    /**
+     * The loop lives in a static method: starting it from $this trips a type inference warning in
+     * PHP's optimizer when the class is preloaded.
+     */
+    private static function unnestSubqueries(Expression $expression): Expression
+    {
         while ($expression instanceof Subquery && ($expression->args['this'] ?? null) instanceof Expression) {
             $expression = $expression->args['this'];
         }

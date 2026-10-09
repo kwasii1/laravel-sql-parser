@@ -357,6 +357,16 @@ class MySqlParser extends Parser
         return parent::parseColumnConstraint();
     }
 
+    /**
+     * parseRange() also reacts to SOUNDS LIKE, and SOUNDS is a plain word.
+     *
+     * @return array<int, true>
+     */
+    protected function operandContinuationTokens(): array
+    {
+        return parent::operandContinuationTokens() + [TokenType::VAR => true];
+    }
+
     protected function parseRange(?Expression $this_ = null): ?Expression
     {
         $this_ ??= $this->parseBitwise();

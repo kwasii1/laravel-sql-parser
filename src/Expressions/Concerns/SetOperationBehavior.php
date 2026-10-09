@@ -58,8 +58,8 @@ trait SetOperationBehavior
 
         while ($expr instanceof SetOperation) {
             if ($expr->flag('by_name')) {
-                $left = ($expr->args['this'] ?? null)?->unnest();
-                $right = ($expr->args['expression'] ?? null)?->unnest();
+                $left = self::unnestedArg($expr, 'this');
+                $right = self::unnestedArg($expr, 'expression');
 
                 return array_values(array_unique([
                     ...($left instanceof Query ? $left->namedSelects() : []),
@@ -67,7 +67,7 @@ trait SetOperationBehavior
                 ]));
             }
 
-            $expr = ($expr->args['this'] ?? null)?->unnest();
+            $expr = self::unnestedArg($expr, 'this');
         }
 
         // A set operation names its columns after its leftmost query's projections
@@ -79,7 +79,7 @@ trait SetOperationBehavior
         $expr = $this;
 
         while ($expr instanceof SetOperation) {
-            $expr = ($expr->args['this'] ?? null)?->unnest();
+            $expr = self::unnestedArg($expr, 'this');
         }
 
         return $expr;
@@ -93,5 +93,16 @@ trait SetOperationBehavior
     public function side(): string
     {
         return strtoupper($this->text('side'));
+    }
+
+    /**
+     * An argument with its wrapping subqueries stripped, or null. (Written without ?-> on a loop
+     * variable, which trips a type inference warning in PHP's optimizer when preloading.)
+     */
+    private static function unnestedArg(Expression $expression, string $key): ?Expression
+    {
+        $value = $expression->args[$key] ?? null;
+
+        return $value instanceof Expression ? $value->unnest() : null;
     }
 }
