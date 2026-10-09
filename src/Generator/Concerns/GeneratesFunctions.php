@@ -76,9 +76,6 @@ use LaravelSqlParser\LaravelSqlParser\Support\TimeFormat;
  */
 trait GeneratesFunctions
 {
-    /** sqlglot SAFE_JSON_PATH_KEY_RE (exp.SAFE_IDENTIFIER_RE): keys that render as `.key`. */
-    protected string $safeJsonPathKeyPattern = '/^[_a-zA-Z]\w*$/';
-
     public function ceilFloor(Expression $expression): string
     {
         $toClause = $this->sql($expression, 'to');
@@ -877,7 +874,7 @@ trait GeneratesFunctions
 
         $key = is_scalar($this_) ? (string) $this_ : '';
 
-        if (! ($expression->flag('quoted') && $this->t['JSON_PATH_KEY_QUOTED_FORCES_BRACKETS'] === true) && preg_match($this->safeJsonPathKeyPattern, $key) === 1) {
+        if (! ($expression->flag('quoted') && $this->t['JSON_PATH_KEY_QUOTED_FORCES_BRACKETS'] === true) && preg_match($this->t['SAFE_JSON_PATH_KEY_RE'], $key) === 1) {
             return ".{$key}";
         }
 
@@ -1806,13 +1803,13 @@ trait GeneratesFunctions
                     $search = Builder::paren($search);
                 }
 
-                $cond = new OrExpr([
-                    'this' => new EQ(['this' => $decodeExpr->copy(), 'expression' => $search->copy()]),
-                    'expression' => new AndExpr([
-                        'this' => new Is(['this' => $decodeExpr->copy(), 'expression' => new NullExpr]),
-                        'expression' => new Is(['this' => $search->copy(), 'expression' => new NullExpr]),
-                    ]),
-                ]);
+                $cond = Builder::or([
+                    new EQ(['this' => $decodeExpr->copy(), 'expression' => $search->copy()]),
+                    Builder::and([
+                        new Is(['this' => $decodeExpr->copy(), 'expression' => new NullExpr]),
+                        new Is(['this' => $search->copy(), 'expression' => new NullExpr]),
+                    ], copy: false),
+                ], copy: false);
                 $ifs[] = new IfExpr(['this' => $cond, 'true' => $result]);
             }
         }
@@ -1843,7 +1840,10 @@ trait GeneratesFunctions
         $this_ = $expression->argExpr('this') ?? new NullExpr;
         $expr = $expression->args['expression'] ?? null;
 
-        // sqlglot annotates types here; without the optimizer only explicitly typed values are known
+        if ($this_->type() === null || $expression->type() === null) {
+            $this_ = $this->dialect->annotateTypes($this_);
+        }
+
         if ($this_->isType(DType::ARRAY, DType::MAP)) {
             return $this->sql(new Bracket(['this' => $this_, 'expressions' => [$expr]]));
         }

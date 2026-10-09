@@ -17,6 +17,26 @@ function jsonTree(array $tree): array
 }
 
 /**
+ * Drop recorder artifacts: a Python object sqlglot keeps in an arg (e.g. the dialect a DataType
+ * was built with) was recorded as its repr, '<sqlglot.dialects.clickhouse.ClickHouse object ...>'.
+ *
+ * @param  array<array-key, mixed>  $tree
+ * @return array<array-key, mixed>
+ */
+function withoutObjectReprs(array $tree): array
+{
+    foreach ($tree as $key => $value) {
+        if (is_string($value) && str_starts_with($value, '<sqlglot.')) {
+            unset($tree[$key]);
+        } elseif (is_array($value)) {
+            $tree[$key] = withoutObjectReprs($value);
+        }
+    }
+
+    return $tree;
+}
+
+/**
  * @return list<array{0: string, 1: array<string, mixed>}>
  */
 function referenceAstCases(string $dialect): array
@@ -26,7 +46,7 @@ function referenceAstCases(string $dialect): array
 
     foreach ($cases as $case) {
         if (is_array($case['ast'] ?? null)) {
-            $out[] = [$case['sql'], $case['ast']];
+            $out[] = [$case['sql'], withoutObjectReprs($case['ast'])];
         }
     }
 

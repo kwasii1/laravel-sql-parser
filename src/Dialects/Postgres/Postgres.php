@@ -22,4 +22,6 @@ class Postgres extends Dialect
     public const string PARSER = PostgresParser::class;
 
     public const string GENERATOR = PostgresGenerator::class;
+
+    public const string TYPE_TABLES = PostgresTypeTables::class;
 }

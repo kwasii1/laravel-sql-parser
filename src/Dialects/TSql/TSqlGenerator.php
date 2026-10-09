@@ -549,7 +549,7 @@ class TSqlGenerator extends Generator
         return $this->binary($expression, $negate ? 'IS NOT' : 'IS');
     }
 
-    protected function createableSql(Expression $expression, array $locations): string
+    protected function createableSql(Expression $expression, array &$locations): string
     {
         $sql = $this->sql($expression, 'this');
         $properties = $expression->args['properties'] ?? null;

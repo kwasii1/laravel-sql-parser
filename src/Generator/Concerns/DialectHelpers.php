@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace LaravelSqlParser\LaravelSqlParser\Generator\Concerns;
 
 use LaravelSqlParser\LaravelSqlParser\Expressions\Add;
+use LaravelSqlParser\LaravelSqlParser\Expressions\AndExpr;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Anonymous;
 use LaravelSqlParser\LaravelSqlParser\Expressions\ArrayExpr;
+use LaravelSqlParser\LaravelSqlParser\Expressions\ArrayFilter;
 use LaravelSqlParser\LaravelSqlParser\Expressions\ArrayRemove;
+use LaravelSqlParser\LaravelSqlParser\Expressions\AtTimeZone;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Binary;
 use LaravelSqlParser\LaravelSqlParser\Expressions\BitwiseAnd;
 use LaravelSqlParser\LaravelSqlParser\Expressions\BitwiseRightShift;
@@ -16,23 +19,35 @@ use LaravelSqlParser\LaravelSqlParser\Expressions\Coalesce;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Column;
 use LaravelSqlParser\LaravelSqlParser\Expressions\DataType;
 use LaravelSqlParser\LaravelSqlParser\Expressions\DataTypeParam;
+use LaravelSqlParser\LaravelSqlParser\Expressions\DateAdd;
+use LaravelSqlParser\LaravelSqlParser\Expressions\DateDiff;
+use LaravelSqlParser\LaravelSqlParser\Expressions\DatetimeAdd;
+use LaravelSqlParser\LaravelSqlParser\Expressions\DatetimeSub;
+use LaravelSqlParser\LaravelSqlParser\Expressions\Day;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Distinct;
+use LaravelSqlParser\LaravelSqlParser\Expressions\Div;
 use LaravelSqlParser\LaravelSqlParser\Expressions\DPipe;
 use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
 use LaravelSqlParser\LaravelSqlParser\Expressions\EQ;
+use LaravelSqlParser\LaravelSqlParser\Expressions\Explode;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
 use LaravelSqlParser\LaravelSqlParser\Expressions\From;
+use LaravelSqlParser\LaravelSqlParser\Expressions\Identifier;
 use LaravelSqlParser\LaravelSqlParser\Expressions\IfExpr;
 use LaravelSqlParser\LaravelSqlParser\Expressions\In;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Insert;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Interval;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Is;
+use LaravelSqlParser\LaravelSqlParser\Expressions\Join;
 use LaravelSqlParser\LaravelSqlParser\Expressions\JSONExtract;
 use LaravelSqlParser\LaravelSqlParser\Expressions\JSONPath;
 use LaravelSqlParser\LaravelSqlParser\Expressions\JSONPathPart;
 use LaravelSqlParser\LaravelSqlParser\Expressions\JSONPathSubscript;
 use LaravelSqlParser\LaravelSqlParser\Expressions\JSONPathWildcard;
+use LaravelSqlParser\LaravelSqlParser\Expressions\Kwarg;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Lambda;
+use LaravelSqlParser\LaravelSqlParser\Expressions\LastDay;
+use LaravelSqlParser\LaravelSqlParser\Expressions\Lateral;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Like;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Limit;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
@@ -42,21 +57,30 @@ use LaravelSqlParser\LaravelSqlParser\Expressions\Not;
 use LaravelSqlParser\LaravelSqlParser\Expressions\NullExpr;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Order;
 use LaravelSqlParser\LaravelSqlParser\Expressions\OrExpr;
+use LaravelSqlParser\LaravelSqlParser\Expressions\Paren;
+use LaravelSqlParser\LaravelSqlParser\Expressions\Posexplode;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Predicate;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Query;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Select;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Sub;
+use LaravelSqlParser\LaravelSqlParser\Expressions\Subquery;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Substring;
+use LaravelSqlParser\LaravelSqlParser\Expressions\TableAlias;
+use LaravelSqlParser\LaravelSqlParser\Expressions\TimeAdd;
+use LaravelSqlParser\LaravelSqlParser\Expressions\TimestampAdd;
 use LaravelSqlParser\LaravelSqlParser\Expressions\TsOrDsAdd;
 use LaravelSqlParser\LaravelSqlParser\Expressions\TsOrDsToDate;
 use LaravelSqlParser\LaravelSqlParser\Expressions\TsOrDsToTimestamp;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Tuple;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Unnest;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Update;
+use LaravelSqlParser\LaravelSqlParser\Expressions\Upper;
+use LaravelSqlParser\LaravelSqlParser\Expressions\VarExpr;
 use LaravelSqlParser\LaravelSqlParser\Expressions\WeekStart;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Where;
 use LaravelSqlParser\LaravelSqlParser\Expressions\WithinGroup;
 use LaravelSqlParser\LaravelSqlParser\Support\Scope;
+use LaravelSqlParser\LaravelSqlParser\Support\TimeZones;
 use ReflectionClass;
 
 /**
@@ -116,6 +140,339 @@ trait DialectHelpers
     }
 
     /**
+     * sqlglot var_map_sql: MAP(k1, v1, k2, v2, ...) from a Map / VarMap with array keys and values.
+     */
+    public function varMapSql(Expression $expression, string $mapFuncName = 'MAP'): string
+    {
+        $keys = $expression->args['keys'] ?? null;
+        $values = $expression->args['values'] ?? null;
+
+        if (! $keys instanceof ArrayExpr || ! $values instanceof ArrayExpr) {
+            $this->unsupported('Cannot convert array columns into map.');
+
+            return $this->func($mapFuncName, $keys, $values);
+        }
+
+        $args = [];
+        $valueList = $values->argList('expressions');
+
+        foreach ($keys->argList('expressions') as $i => $key) {
+            if (! isset($valueList[$i])) {
+                break;
+            }
+
+            $args[] = $this->sql($key);
+            $args[] = $this->sql($valueList[$i]);
+        }
+
+        return $this->funcWith($mapFuncName, $args);
+    }
+
+    /**
+     * sqlglot jarowinkler_similarity(func).
+     */
+    public function jarowinklerSimilarity(Expression $expression, string $func): string
+    {
+        $this_ = $expression->args['this'] ?? null;
+        $expr = $expression->args['expression'] ?? null;
+
+        if ($expression->flag('case_insensitive')) {
+            $this_ = new Upper(['this' => $this_]);
+            $expr = new Upper(['this' => $expr]);
+        }
+
+        return $this->func($func, $this_, $expr);
+    }
+
+    /**
+     * sqlglot remove_from_array_using_filter: ARRAY_REMOVE(arr, x) as a filter with _u <> x.
+     */
+    public function removeFromArrayUsingFilter(Expression $expression): string
+    {
+        $lambdaId = Builder::toIdentifier('_u');
+        $cond = new NEQ(['this' => $lambdaId, 'expression' => $expression->args['expression'] ?? null]);
+        $filterSql = $this->sql(new ArrayFilter([
+            'this' => $expression->args['this'] ?? null,
+            'expression' => new Lambda(['this' => $cond, 'expressions' => [$lambdaId]]),
+        ]));
+
+        // The source propagates NULLs (Snowflake) and the target doesn't (DuckDB): a NULL removal
+        // value returns NULL instead of applying the filter
+        if ($expression->flag('null_propagation') && $this->dialect->settings['ARRAY_FUNCS_PROPAGATES_NULLS'] !== true) {
+            $removalValue = $expression->args['expression'] ?? null;
+
+            // A non-NULL literal (5, 'a', TRUE) or an array literal can't be NULL
+            if ($removalValue instanceof Literal || $removalValue instanceof ArrayExpr) {
+                return $filterSql;
+            }
+
+            return $this->sql(new IfExpr([
+                'this' => new Is(['this' => $removalValue, 'expression' => new NullExpr]),
+                'true' => new NullExpr,
+                'false' => $filterSql,
+            ]));
+        }
+
+        return $filterSql;
+    }
+
+    /**
+     * sqlglot no_make_interval_sql: MAKE_INTERVAL(...) as an INTERVAL string.
+     */
+    public function noMakeIntervalSql(Expression $expression, string $sep = ', '): string
+    {
+        $args = [];
+
+        foreach ($expression->args as $unit => $value) {
+            if ($value instanceof Kwarg) {
+                $value = $value->args['expression'] ?? null;
+            }
+
+            if ($value === null || $value === false) {
+                continue;
+            }
+
+            $args[] = ($value instanceof Expression ? $value->sql() : (string) $value)." {$unit}";
+        }
+
+        return "INTERVAL '".$this->formatArgs($args, $sep)."'";
+    }
+
+    /**
+     * sqlglot no_timestamp_sql: TIMESTAMP(x [, zone]) as a cast, AT TIME ZONE for a known zone.
+     */
+    public function noTimestampSql(Expression $expression): string
+    {
+        $zone = $expression->args['zone'] ?? null;
+
+        if (! $zone instanceof Expression) {
+            $this->dialect->annotateTypes($expression);
+
+            return $this->sql(Builder::cast($expression->args['this'] ?? null, $expression->type() ?? DType::TIMESTAMP));
+        }
+
+        if (isset(TimeZones::NAMES[strtolower($zone->name())])) {
+            return $this->sql(new AtTimeZone(['this' => Builder::cast($expression->args['this'] ?? null, DType::TIMESTAMP), 'zone' => $zone]));
+        }
+
+        return $this->func('TIMESTAMP', $expression->args['this'] ?? null, $zone);
+    }
+
+    /**
+     * sqlglot timestampdiff_sql: TIMESTAMPDIFF(unit, start, end).
+     */
+    public function timestampdiffSqlHandler(Expression $expression): string
+    {
+        return $this->func('TIMESTAMPDIFF', $expression->args['unit'] ?? null, $expression->args['expression'] ?? null, $expression->args['this'] ?? null);
+    }
+
+    /**
+     * sqlglot week_unit_to_dow: the ISO week start day of a week unit (WEEK / ISOWEEK is Monday,
+     * WEEK(<day>) is that day), or null.
+     */
+    public static function weekUnitToDow(?Expression $unit): ?int
+    {
+        if ($unit instanceof VarExpr && in_array(strtoupper($unit->name()), ['WEEK', 'ISOWEEK'], true)) {
+            return 1;
+        }
+
+        if ($unit instanceof WeekStart) {
+            return self::WEEK_START_DAY_TO_DOW[strtoupper($unit->name())] ?? null;
+        }
+
+        return null;
+    }
+
+    /**
+     * sqlglot array_compact_sql: ARRAY_COMPACT(a) as a filter of the non-NULL elements.
+     */
+    public function arrayCompactSqlHandler(Expression $expression): string
+    {
+        $lambdaId = Builder::toIdentifier('_u');
+        $cond = Builder::not(new Is(['this' => $lambdaId, 'expression' => new NullExpr]));
+
+        return $this->sql(new ArrayFilter([
+            'this' => $expression->args['this'] ?? null,
+            'expression' => new Lambda(['this' => $cond, 'expressions' => [$lambdaId->copy()]]),
+        ]));
+    }
+
+    /**
+     * sqlglot encode_decode_sql: only the UTF-8 character set is supported.
+     */
+    public function encodeDecodeSql(Expression $expression, string $name, bool $replace = true): string
+    {
+        $charset = $expression->args['charset'] ?? null;
+
+        if ($charset instanceof Expression && ! in_array(strtolower($charset->name()), ['utf-8', 'utf8'], true)) {
+            $this->unsupported('Expected utf-8 character set, got '.$charset->sql().'.');
+        }
+
+        return $this->func($name, $expression->args['this'] ?? null, $replace ? ($expression->args['replace'] ?? null) : null);
+    }
+
+    /**
+     * sqlglot explode_to_unnest_sql: LATERAL VIEW [POS]EXPLODE as a cross joined UNNEST.
+     */
+    public function explodeToUnnestSql(Expression $expression): string
+    {
+        $this_ = $expression->args['this'] ?? null;
+        $alias = $expression->args['alias'] ?? null;
+        $crossJoinExpr = null;
+
+        if ($this_ instanceof Posexplode && $alias instanceof Expression) {
+            // Spark's LATERAL VIEW POSEXPLODE(y) t AS pos, col has the 0-based position first and
+            // the exploded values after it, while WITH ORDINALITY is 1-based and comes last:
+            // CROSS JOIN LATERAL (SELECT pos - 1 AS pos, col FROM UNNEST(y) WITH ORDINALITY AS t(col, pos))
+            $columns = $alias->argList('columns');
+            $pos = $columns[0] ?? null;
+            $cols = array_slice($columns, 1);
+            $lateralSubquery = new Select([
+                'expressions' => [Builder::alias(Builder::binop(Sub::class, $pos, Literal::number(1)), $pos instanceof Identifier ? $pos : null), ...array_map(static fn (Expression $c): Expression => $c->copy(), $cols)],
+                'from_' => new From(['this' => new Unnest([
+                    'expressions' => [$this_->args['this'] ?? null],
+                    'offset' => true,
+                    'alias' => new TableAlias(['this' => $alias->args['this'] ?? null, 'columns' => [...$cols, $pos]]),
+                ])]),
+            ]);
+            $crossJoinExpr = new Lateral(['this' => new Subquery(['this' => $lateralSubquery])]);
+        } elseif ($this_ instanceof Explode) {
+            $crossJoinExpr = new Unnest(['expressions' => [$this_->args['this'] ?? null], 'alias' => $alias]);
+        }
+
+        if ($crossJoinExpr !== null) {
+            return $this->sql(new Join(['this' => $crossJoinExpr, 'kind' => 'cross']));
+        }
+
+        return $this->lateralSql($expression);
+    }
+
+    /**
+     * sqlglot months_between_sql: MONTHS_BETWEEN as whole months plus a fraction, Snowflake style,
+     * DATEDIFF('month', date2, date1) + (DAY(date1) - DAY(date2)) / 31.0, the fraction being 0
+     * when both dates are the last day of their month.
+     */
+    public function monthsBetweenSqlHandler(Expression $expression): string
+    {
+        $date1 = Builder::cast($expression->args['this'] ?? null, DType::DATE, copy: false);
+        $date2 = Builder::cast($expression->args['expression'] ?? null, DType::DATE, copy: false);
+        $wholeMonths = new DateDiff(['this' => $date1, 'expression' => $date2, 'unit' => Builder::var('month')]);
+        $day1 = new Day(['this' => $date1->copy()]);
+        $day2 = new Day(['this' => $date2->copy()]);
+        $bothLastDay = new AndExpr([
+            'this' => new EQ(['this' => $day1->copy(), 'expression' => new Day(['this' => new LastDay(['this' => $date1->copy()])])]),
+            'expression' => new EQ(['this' => $day2->copy(), 'expression' => new Day(['this' => new LastDay(['this' => $date2->copy()])])]),
+        ]);
+        $fractional = new Div([
+            'this' => new Paren(['this' => new Sub(['this' => $day1->copy(), 'expression' => $day2->copy()])]),
+            'expression' => Literal::number('31.0'),
+        ]);
+
+        return $this->sql(new Add([
+            'this' => $wholeMonths,
+            'expression' => new IfExpr(['this' => $bothLastDay, 'true' => Literal::number('0'), 'false' => $fractional]),
+        ]));
+    }
+
+    /**
+     * sqlglot no_time_sql: BigQuery's TIME(timestamp, zone) as
+     * CAST(CAST(timestamp AS TIMESTAMPTZ) AT TIME ZONE zone AS TIME).
+     */
+    public function noTimeSql(Expression $expression): string
+    {
+        $this_ = Builder::cast($expression->args['this'] ?? null, DType::TIMESTAMPTZ);
+
+        return $this->sql(Builder::cast(new AtTimeZone(['this' => $this_, 'zone' => $expression->args['zone'] ?? null]), DType::TIME));
+    }
+
+    /**
+     * sqlglot no_datetime_sql: BigQuery's DATETIME(timestamp, zone) via AT TIME ZONE, and
+     * DATETIME(date, time) as a date plus a time.
+     */
+    public function noDatetimeSql(Expression $expression): string
+    {
+        $this_ = $expression->args['this'] ?? null;
+        $expr = $expression->args['expression'] ?? null;
+
+        if ($expr instanceof Expression && isset(TimeZones::NAMES[strtolower($expr->name())])) {
+            $this_ = Builder::cast($this_, DType::TIMESTAMPTZ);
+
+            return $this->sql(Builder::cast(new AtTimeZone(['this' => $this_, 'zone' => $expr]), DType::TIMESTAMP));
+        }
+
+        return $this->sql(Builder::cast(new Add(['this' => Builder::cast($this_, DType::DATE), 'expression' => Builder::cast($expr, DType::TIME)]), DType::TIMESTAMP));
+    }
+
+    public function noCommentColumnConstraintSql(Expression $expression): string
+    {
+        $this->unsupported('CommentColumnConstraint unsupported');
+
+        return '';
+    }
+
+    /**
+     * sqlglot date_delta_to_binary_interval_op(cast): DATE_ADD(x, n, unit) as x + INTERVAL n unit;
+     * with $cast, a string literal is cast to the type the arithmetic needs.
+     */
+    public function dateDeltaToBinaryIntervalOp(Expression $expression, bool $cast = true): string
+    {
+        $this_ = $expression->args['this'] ?? null;
+        $unit = Builder::unitToVar($expression);
+        $isAdd = $expression instanceof DateAdd || $expression instanceof TimeAdd || $expression instanceof DatetimeAdd || $expression instanceof TsOrDsAdd || $expression instanceof TimestampAdd;
+        $toType = null;
+
+        if ($cast) {
+            if ($expression instanceof TsOrDsAdd) {
+                $returnType = $expression->args['return_type'] ?? null;
+                $toType = $returnType instanceof DataType ? $returnType : DataType::build(is_string($returnType) ? $returnType : DType::DATE);
+            } elseif ($this_ instanceof Expression && $this_->isString()) {
+                // String literals need the right type for +/- INTERVAL to work
+                $toType = $expression instanceof DatetimeAdd || $expression instanceof DatetimeSub ? DType::DATETIME : DType::DATE;
+            }
+        }
+
+        if ($toType !== null) {
+            $this_ = Builder::cast($this_, $toType);
+        }
+
+        $expr = $expression->args['expression'] ?? null;
+        $interval = $expr instanceof Interval ? $expr : new Interval(['this' => $expr, 'unit' => $unit]);
+
+        return $this->sql($this_).' '.($isAdd ? '+' : '-').' '.$this->sql($interval);
+    }
+
+    /**
+     * sqlglot nth_value_from_sql: NTH_VALUE(x, n) FROM FIRST / FROM LAST.
+     */
+    public function nthValueFromSql(Expression $expression): string
+    {
+        $this_ = $this->func('NTH_VALUE', $expression->args['this'] ?? null, $expression->args['offset'] ?? null);
+        $fromFirst = $expression->args['from_first'] ?? null;
+
+        if ($fromFirst === null) {
+            return $this_;
+        }
+
+        return $this_.' FROM '.($this->truthy($fromFirst) ? 'FIRST' : 'LAST');
+    }
+
+    /**
+     * sqlglot concat_ws_to_dpipe_sql: CONCAT_WS(d, a, b) as a || d || b.
+     */
+    public function concatWsToDpipeSql(Expression $expression): string
+    {
+        $args = $expression->argList('expressions');
+        $delimiter = array_shift($args);
+        $result = array_shift($args);
+
+        foreach ($args as $arg) {
+            $result = new DPipe(['this' => $result, 'expression' => new DPipe(['this' => $delimiter, 'expression' => $arg])]);
+        }
+
+        return $this->sql($result);
+    }
+
+    /**
      * sqlglot rename_func(name): the node's arguments, flattened, as a call to $name.
      */
     public function renameFunc(Expression $expression, string $name): string
@@ -148,6 +505,22 @@ trait DialectHelpers
         }
 
         return $this->callTransform($func, $expression);
+    }
+
+    /**
+     * sqlglot arg_max_or_min_no_count(name) (wrapped in @unsupported_args("count")).
+     */
+    public function argMaxOrMinNoCount(Expression $expression, string $name): string
+    {
+        return $this->func($name, $expression->args['this'] ?? null, $expression->args['expression'] ?? null);
+    }
+
+    /**
+     * sqlglot regexp_replace_sql (wrapped in @unsupported_args("position", "occurrence", "modifiers")).
+     */
+    public function regexpReplaceSqlHandler(Expression $expression): string
+    {
+        return $this->func('REGEXP_REPLACE', $expression->args['this'] ?? null, $expression->args['expression'] ?? null, $expression->args['replacement'] ?? null);
     }
 
     public function ifSqlHandler(Expression $expression, string $name = 'IF', Expression|string|null $falseValue = null): string
@@ -711,6 +1084,11 @@ trait DialectHelpers
     /**
      * sqlglot groupconcat_sql: GROUP_CONCAT as LISTAGG / STRING_AGG.
      */
+    public function approxCountDistinctSql(Expression $expression): string
+    {
+        return $this->func('APPROX_COUNT_DISTINCT', $expression->argExpr('this'));
+    }
+
     public function groupconcatSqlHandler(Expression $expression, string $funcName = 'LISTAGG', ?string $sep = ',', bool $withinGroup = true, bool $onOverflow = false): string
     {
         $this_ = $expression->argExpr('this') ?? new NullExpr;

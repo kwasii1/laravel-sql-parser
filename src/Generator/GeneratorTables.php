@@ -288,6 +288,8 @@ final class GeneratorTables
 
     public const bool RETURNING_END = true;
 
+    public const string SAFE_JSON_PATH_KEY_RE = '/^[_a-zA-Z][\\w]*$/u';
+
     public const array SELECT_KINDS = [
         'STRUCT',
         'VALUE',

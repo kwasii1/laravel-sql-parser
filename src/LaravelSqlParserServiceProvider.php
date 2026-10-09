@@ -81,7 +81,7 @@ class LaravelSqlParserServiceProvider extends ServiceProvider
         foreach (['toSqlFor', 'bindingsFor', 'toRawSqlFor'] as $method) {
             EloquentBuilder::macro($method, function (mixed ...$arguments) use ($method): mixed {
                 /** @var EloquentBuilder<Model> $this */
-                return $this->toBase()->{$method}(...$arguments);
+                return $this->toBase()->__call($method, $arguments);
             });
         }
     }

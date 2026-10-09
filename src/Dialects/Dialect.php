@@ -15,6 +15,8 @@ use LaravelSqlParser\LaravelSqlParser\Expressions\Func;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Identifier;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
 use LaravelSqlParser\LaravelSqlParser\Generator\Generator;
+use LaravelSqlParser\LaravelSqlParser\Optimizer\TypeAnnotator;
+use LaravelSqlParser\LaravelSqlParser\Optimizer\TypeTables;
 use LaravelSqlParser\LaravelSqlParser\Parser\Parser;
 use LaravelSqlParser\LaravelSqlParser\Support\JsonPath;
 use LaravelSqlParser\LaravelSqlParser\Support\TimeFormat;
@@ -50,6 +52,12 @@ class Dialect
     /** @var class-string<Generator> */
     public const string GENERATOR = Generator::class;
 
+    /** @var class-string generated type inference tables (sqlglot EXPRESSION_METADATA) */
+    public const string TYPE_TABLES = TypeTables::class;
+
+    /** @var class-string<TypeAnnotator> */
+    public const string TYPE_ANNOTATOR = TypeAnnotator::class;
+
     /**
      * Built-in dialects keyed by name and alias.
      *
@@ -68,6 +76,12 @@ class Dialect
         'sqlsrv' => TSql\TSql::class,
         'sqlserver' => TSql\TSql::class,
         'mssql' => TSql\TSql::class,
+        'redshift' => Redshift\Redshift::class,
+        'oracle' => Oracle\Oracle::class,
+        'clickhouse' => ClickHouse\ClickHouse::class,
+        'bigquery' => BigQuery\BigQuery::class,
+        'snowflake' => Snowflake\Snowflake::class,
+        'duckdb' => DuckDB\DuckDB::class,
     ];
 
     /** @var array<string, class-string<Dialect>> */
@@ -302,6 +316,22 @@ class Dialect
         $generator = new (static::GENERATOR)($this, $options);
 
         return $generator->generate($expression, $copy);
+    }
+
+    /**
+     * Infer the types of an expression tree in place (sqlglot annotate_types with this dialect).
+     *
+     * @template T of Expression
+     *
+     * @param  T  $expression
+     * @return T
+     */
+    public function annotateTypes(Expression $expression): Expression
+    {
+        $annotator = new (static::TYPE_ANNOTATOR)($this);
+        $annotator->annotate($expression);
+
+        return $expression;
     }
 
     public function setting(string $name): mixed

@@ -22,4 +22,6 @@ class Sqlite extends Dialect
     public const string PARSER = SqliteParser::class;
 
     public const string GENERATOR = SqliteGenerator::class;
+
+    public const string TYPE_TABLES = SqliteTypeTables::class;
 }

@@ -12,13 +12,13 @@ use RuntimeException;
 final class Reference
 {
     /** Dialects whose recorded cases are exercised by the test suite. */
-    public const array DIALECTS = ['base', 'mysql', 'postgres', 'sqlite', 'tsql'];
+    public const array DIALECTS = ['base', 'mysql', 'postgres', 'sqlite', 'tsql', 'redshift', 'oracle', 'clickhouse', 'bigquery', 'snowflake', 'duckdb'];
 
     /**
      * Dialects whose parser and generator are implemented: their recorded cases are checked end to
      * end, and they're the only read / write targets exercised by validate_all cases.
      */
-    public const array GENERATOR_DIALECTS = ['base', 'mysql', 'postgres', 'sqlite', 'tsql'];
+    public const array GENERATOR_DIALECTS = ['base', 'mysql', 'postgres', 'sqlite', 'tsql', 'redshift', 'oracle', 'clickhouse', 'bigquery', 'snowflake', 'duckdb'];
 
     /** Marks a validate_all write that sqlglot expects to raise UnsupportedError. */
     public const string UNSUPPORTED = '__UNSUPPORTED__';

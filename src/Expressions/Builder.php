@@ -170,6 +170,33 @@ final class Builder
         return self::combine($expressions, OrExpr::class, $dialect, $copy, $wrap);
     }
 
+    /**
+     * @param  list<Expression|string|null>  $expressions
+     */
+    public static function xor(array $expressions, string|Dialect|null $dialect = null, bool $copy = true, bool $wrap = true): Expression
+    {
+        return self::combine($expressions, XorExpr::class, $dialect, $copy, $wrap);
+    }
+
+    /**
+     * A binary node built like sqlglot's Python operators (a + b, a > b, a.eq(b)): copies of the
+     * operands, wrapped in parentheses when they're binary nodes of another kind.
+     *
+     * @param  class-string<Expression>  $class
+     */
+    public static function binop(string $class, mixed $left, mixed $right): Expression
+    {
+        $left = $left instanceof Expression ? $left->copy() : self::convert($left);
+        $right = $right instanceof Expression ? $right->copy() : self::convert($right);
+
+        if (! $left instanceof $class && ! $right instanceof $class) {
+            $left = self::wrap($left, Binary::class);
+            $right = self::wrap($right, Binary::class);
+        }
+
+        return new $class(['this' => $left, 'expression' => $right]);
+    }
+
     public static function not(Expression|string $expression, string|Dialect|null $dialect = null, bool $copy = true): Not
     {
         $this_ = self::condition($expression, $dialect, $copy);
@@ -316,13 +343,21 @@ final class Builder
      * @param  list<Expression>  $expressions
      * @return list<Expression>
      */
-    public static function applyIndexOffset(Expression $this_, array $expressions, int $offset): array
+    public static function applyIndexOffset(Expression $this_, array $expressions, int $offset, ?Dialect $dialect = null): array
     {
         if ($offset === 0 || count($expressions) !== 1) {
             return $expressions;
         }
 
-        if ($this_ instanceof Literal || $this_ instanceof Struct || $this_ instanceof Map) {
+        if ($dialect !== null) {
+            if ($this_->type() === null) {
+                $dialect->annotateTypes($this_);
+            }
+
+            if (! $this_->isType(DType::UNKNOWN, DType::ARRAY)) {
+                return $expressions;
+            }
+        } elseif ($this_ instanceof Literal || $this_ instanceof Struct || $this_ instanceof Map) {
             return $expressions;
         }
 

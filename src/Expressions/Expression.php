@@ -305,7 +305,8 @@ abstract class Expression implements Stringable
 
     public function isInt(): bool
     {
-        return $this->isNumber() && is_int($this->toPhp());
+        // Python's int(): leading zeros and integers too big for PHP still count
+        return $this->isNumber() && preg_match('/^\s*[+-]?\d+\s*$/', (string) ($this->args['this'] ?? '')) === 1;
     }
 
     public function isStar(): bool

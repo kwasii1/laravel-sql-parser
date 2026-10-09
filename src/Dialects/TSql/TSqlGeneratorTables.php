@@ -296,6 +296,8 @@ final class TSqlGeneratorTables
 
     public const bool RETURNING_END = false;
 
+    public const string SAFE_JSON_PATH_KEY_RE = '/^[_a-zA-Z][\\w]*$/u';
+
     public const array SELECT_KINDS = [];
 
     public const bool SEMI_ANTI_JOIN_WITH_SIDE = true;

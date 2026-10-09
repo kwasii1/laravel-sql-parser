@@ -20,6 +20,7 @@ arch('the parser core does not depend on Laravel')
         'LaravelSqlParser\LaravelSqlParser\Errors',
         'LaravelSqlParser\LaravelSqlParser\Expressions',
         'LaravelSqlParser\LaravelSqlParser\Generator',
+        'LaravelSqlParser\LaravelSqlParser\Optimizer',
         'LaravelSqlParser\LaravelSqlParser\Parser',
         'LaravelSqlParser\LaravelSqlParser\Support',
         'LaravelSqlParser\LaravelSqlParser\Tokenizer',

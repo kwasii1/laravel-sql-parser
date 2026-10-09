@@ -254,9 +254,10 @@ trait ParsesTables
 
         if (! $schema && ! $isDbReference && ! $consumePipe && ! $joins) {
             $index = $this->index;
-            $table = $this->parseTablePartsFast();
+            // Through parseTableParts(), so dialect overrides (e.g. BigQuery's) still apply
+            $table = $this->parseTableParts(fast: true);
 
-            if ($table !== null) {
+            if ($table instanceof Table) {
                 $currType = $this->curr;
                 $nextType = $this->next;
                 $fastTerminators = $this->t['TABLE_TERMINATORS'];

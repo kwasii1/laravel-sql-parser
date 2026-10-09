@@ -288,7 +288,7 @@ trait GeneratesStatements
     /**
      * @param  array<string, list<Expression>>  $locations
      */
-    protected function createableSql(Expression $expression, array $locations): string
+    protected function createableSql(Expression $expression, array &$locations): string
     {
         return $this->sql($expression, 'this');
     }

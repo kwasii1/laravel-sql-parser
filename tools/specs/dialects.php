@@ -16,4 +16,10 @@ return [
     'postgres' => 'Postgres',
     'sqlite' => 'Sqlite',
     'tsql' => 'TSql',
+    'redshift' => 'Redshift',
+    'oracle' => 'Oracle',
+    'clickhouse' => 'ClickHouse',
+    'bigquery' => 'BigQuery',
+    'snowflake' => 'Snowflake',
+    'duckdb' => 'DuckDB',
 ];

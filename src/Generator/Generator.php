@@ -459,6 +459,13 @@ class Generator
             $method = $handler[0];
             unset($handler[0]);
 
+            // An ['@literal' => text, 'is_string' => bool] entry stands for an exp.Literal
+            foreach ($handler as $name => $value) {
+                if (is_array($value) && isset($value['@literal'])) {
+                    $handler[$name] = $value['is_string'] === true ? Literal::string((string) $value['@literal']) : Literal::number((string) $value['@literal']);
+                }
+            }
+
             return $this->{$method}($expression, ...$handler);
         }
 

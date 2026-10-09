@@ -27,12 +27,16 @@ UNSUPPORTED = "__UNSUPPORTED__"
 def tree(value):
     """Canonical, comparison-friendly representation of an AST value."""
     from sqlglot import exp
+    from sqlglot.dialects.dialect import Dialect
 
     if isinstance(value, exp.Expr):
         node = {"k": value.key}
         args = {}
         for key, arg in value.args.items():
             if arg is None or arg is False or (isinstance(arg, list) and not arg):
+                continue
+            if isinstance(arg, Dialect):
+                # e.g. the dialect a DataType was built with: not part of the tree
                 continue
             args[key] = tree(arg)
         if args:

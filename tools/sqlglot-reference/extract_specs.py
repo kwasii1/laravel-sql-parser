@@ -304,6 +304,11 @@ def diff_value(base, value):
         key = lambda k: json.dumps(k, sort_keys=True)  # noqa: E731
         old = {key(k): v for k, v in base["@map"]}
         new = {key(k): (k, v) for k, v in value["@map"]}
+        # Some maps are ordered (e.g. AFTER_HAVING_MODIFIER_TRANSFORMS): a patch can't reorder keys
+        common_old = [kk for kk in old if kk in new]
+        common_new = [kk for kk in new if kk in old]
+        if common_old != common_new:
+            return value
         patch = [[k, v] for kk, (k, v) in new.items() if kk not in old or old[kk] != v]
         delete = [json.loads(kk) for kk in old if kk not in new]
         out = {"@patch": patch}

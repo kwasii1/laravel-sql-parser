@@ -22,4 +22,8 @@ class MySql extends Dialect
     public const string PARSER = MySqlParser::class;
 
     public const string GENERATOR = MySqlGenerator::class;
+
+    public const string TYPE_TABLES = MySqlTypeTables::class;
+
+    public const string TYPE_ANNOTATOR = MySqlTypeAnnotator::class;
 }

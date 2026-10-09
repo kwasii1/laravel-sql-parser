@@ -533,24 +533,6 @@ class TSqlParser extends Parser
         return $this->expression(new Extract(['this' => $name, 'expression' => $expression]));
     }
 
-    /**
-     * sqlglot map_date_part for the parser's dialect.
-     */
-    private function mapDatePart(?Expression $part): ?Expression
-    {
-        if ($part === null || ($part instanceof Column && count($part->parts()) !== 1)) {
-            return $part;
-        }
-
-        $mapped = $this->dialect->settings['DATE_PART_MAPPING'][strtoupper($part->name())] ?? null;
-
-        if (is_string($mapped) && $mapped !== '') {
-            return $part->isString() ? Literal::string($mapped) : Builder::var($mapped);
-        }
-
-        return $part;
-    }
-
     protected function parseAlterTableSet(): AlterSet
     {
         return $this->parseWrapped(fn (): AlterSet => parent::parseAlterTableSet());

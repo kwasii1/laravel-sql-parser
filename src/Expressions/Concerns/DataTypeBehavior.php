@@ -86,6 +86,37 @@ trait DataTypeBehavior
     /**
      * Whether this data type is one of the given types (DType names, SQL strings or DataTypes).
      */
+    /**
+     * isType() taking the Nullable type constructor into account (sqlglot is_type with
+     * check_nullable=True): Nullable(INT) only matches INT if neither side is nullable.
+     */
+    public function isTypeCheckNullable(string|DataType ...$types): bool
+    {
+        $selfIsNullable = $this->args['nullable'] ?? null;
+
+        foreach ($types as $type) {
+            $other = self::build($type, udt: true, copy: false);
+            $otherIsNullable = $other->args['nullable'] ?? null;
+
+            if (
+                $other->argList('expressions') !== []
+                || $selfIsNullable === true || $otherIsNullable === true
+                || ($this->args['this'] ?? null) === DType::USERDEFINED
+                || ($other->args['this'] ?? null) === DType::USERDEFINED
+            ) {
+                $matches = $this->equals($other);
+            } else {
+                $matches = ($this->args['this'] ?? null) === ($other->args['this'] ?? null);
+            }
+
+            if ($matches) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function isType(string|DataType ...$types): bool
     {
         $selfIsNullable = $this->args['nullable'] ?? null;

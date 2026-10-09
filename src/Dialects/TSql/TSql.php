@@ -22,4 +22,6 @@ class TSql extends Dialect
     public const string PARSER = TSqlParser::class;
 
     public const string GENERATOR = TSqlGenerator::class;
+
+    public const string TYPE_TABLES = TSqlTypeTables::class;
 }

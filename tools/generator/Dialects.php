@@ -183,6 +183,9 @@ final class Dialects
 
             [$path, $namespace, $tablesClass] = $this->location($name, $class, 'Generator');
             $files[$path] = $this->parserTables($name, $namespace, $tablesClass, 'generator');
+
+            [$path, $namespace, $tablesClass] = $this->location($name, $class, 'Type');
+            $files[$path] = $this->typeTables($name, $namespace, $tablesClass);
         }
 
         return $files;
@@ -196,6 +199,7 @@ final class Dialects
         if ($name === 'base') {
             $directory = match ($component) {
                 'Dialect' => 'Dialects',
+                'Type' => 'Optimizer',
                 'JsonPathTokenizer' => 'Tokenizer',
                 default => $component,
             };
@@ -631,6 +635,11 @@ final class Dialects
             return array_map(fn (mixed $item): mixed => $this->closureValue($table, $key, $variable, $item), $value);
         }
 
+        // An exp.Literal default, e.g. default_group=exp.Literal.number(0): rebuilt by callHandler()
+        if (is_array($value) && preg_match('/^Literal\(this=(.*), is_string=(True|False)\)$/s', (string) ($value['@repr'] ?? ''), $m) === 1) {
+            return ['@literal' => $m[1], 'is_string' => $m[2] === 'True'];
+        }
+
         $literal = $this->literal($value);
 
         if ($literal === self::NOT_LITERAL) {
@@ -690,6 +699,144 @@ final class Dialects
         }
 
         return $trie;
+    }
+
+    /**
+     * TypeAnnotator methods (sqlglot optimizer/annotate_types.py): a dialect helper named like one
+     * of these gets the dialect's name as a suffix, so it doesn't override the base method.
+     */
+    private const array ANNOTATOR_METHODS = [
+        'annotatebinary', 'annotateunary', 'annotateliteral', 'annotatebyargs', 'annotatetimeunit',
+        'annotatebracket', 'annotatediv', 'annotatedot', 'annotateexplode', 'annotateunnest',
+        'annotatesubquery', 'annotatestruct', 'annotatemap', 'annotatetomap', 'annotateextract',
+        'annotatewithingroup', 'annotatebyarrayelement',
+    ];
+
+    /**
+     * Type inference tables (sqlglot's EXPRESSION_METADATA and COERCES_TO): per expression class,
+     * the type it returns or the annotator that infers it. Annotators are a TypeAnnotator method
+     * name or a list of [method, ...named arguments].
+     */
+    private function typeTables(string $name, string $namespace, string $class): string
+    {
+        $spec = $this->effective($name);
+        $parent = $spec['parent'] !== null ? $this->effective($spec['parent']) : null;
+        $module = 'sqlglot.typing'.($name === 'base' ? '' : ".{$name}");
+        $parentEntries = [];
+        foreach ($parent['settings']['EXPRESSION_METADATA']['@map'] ?? [] as [$key, $entry]) {
+            $parentEntries[json_encode($key)] = $entry;
+        }
+
+        $metadata = [];
+        $handlers = [];
+        $overridden = [];
+
+        foreach ($spec['settings']['EXPRESSION_METADATA']['@map'] ?? [] as [$key, $entry]) {
+            $expression = (string) $key['@exp'];
+            $phpClass = Support::NAMESPACE.'\\Expressions\\'.Expressions::phpName($expression);
+            $out = [];
+
+            foreach ($entry['@map'] ?? [] as [$field, $value]) {
+                if ($field === 'returns') {
+                    $out['returns'] = (string) $this->literal($value);
+                } elseif ($field === 'annotator') {
+                    $handler = $this->annotatorHandler($expression, $value);
+                    $out['annotator'] = $handler;
+                    $method = is_array($handler) ? $handler[0] : $handler;
+                    $handlers[$method] = true;
+
+                    if ($parent !== null && ($parentEntries[json_encode($key)] ?? null) !== $entry && self::isLambda($value) && ! is_array($handler) && str_starts_with($method, 'annotate'.ucfirst(self::camel($expression)))) {
+                        $overridden[$method] = true;
+                    }
+                }
+            }
+
+            $metadata[$phpClass] = $out;
+        }
+
+        ksort($metadata);
+        ksort($handlers);
+        ksort($overridden);
+
+        $coercesTo = [];
+        foreach ($this->literal($spec['settings']['COERCES_TO'] ?? ['@map' => []]) ?: [] as $type => $targets) {
+            $coercesTo[(string) $type] = is_array($targets) ? $targets : [];
+        }
+
+        $body = '    public const array METADATA = '.Support::export($metadata, 2).';
+
+';
+        $body .= "    /**\n     * The types each type can be coerced into; empty means the TypeAnnotator default.\n     */\n";
+        $body .= '    public const array COERCES_TO = '.Support::export($coercesTo, 2).";\n\n";
+        $body .= "    /**\n     * Every annotator method METADATA refers to.\n     */\n";
+        $body .= '    public const array HANDLERS = '.Support::export($handlers, 2).";\n\n";
+        $body .= "    /**\n     * Annotators whose sqlglot lambda differs from the parent dialect's, so this dialect's type\n     * annotator must declare them itself.\n     */\n";
+        $body .= '    public const array OVERRIDDEN_HANDLERS = '.Support::export($overridden, 2).";\n\n";
+
+        return Support::fileHeader($namespace, "sqlglot {$module} EXPRESSION_METADATA ({$name})")."\n"
+            ."/**\n * Literal type inference tables for the {$name} dialect.\n */\n"
+            ."final class {$class}\n{\n"
+            .rtrim($body)."\n}\n";
+    }
+
+    /**
+     * @return string|list<mixed>
+     */
+    private function annotatorHandler(string $expression, mixed $entry): string|array
+    {
+        $fn = (string) ($entry['@fn'] ?? '');
+        $module = (string) ($entry['module'] ?? '');
+
+        if (! str_ends_with($fn, '<lambda>')) {
+            // A module helper, e.g. sqlglot.typing.snowflake._annotate_median
+            $method = self::camel(ltrim($fn, '_'));
+            $dialect = substr(strrchr($module, '.') ?: $module, 1);
+
+            return in_array(strtolower($method), self::ANNOTATOR_METHODS, true) ? $method.ucfirst(self::camel($dialect)) : $method;
+        }
+
+        $body = (string) preg_replace('/\s+/', ' ', self::lambdaBody((string) ($entry['source'] ?? '')));
+        $body = (string) preg_replace('/\)\s*\}?\s*,?\s*$/', ')', $body);
+
+        if (preg_match('/^lambda self, e: self\._annotate_by_args\(\s*e,\s*((?:"[a-z_]+",?\s*)+?)\s*(?:,\s*promote=(True))?\s*(?:,\s*array=(True))?\s*,?\s*\)$/', $body, $m) === 1) {
+            preg_match_all('/"([a-z_]+)"/', $m[1], $args);
+            $handler = ['annotateByArgs', 'args' => $args[1]];
+
+            if (($m[2] ?? '') === 'True') {
+                $handler['promote'] = true;
+            }
+
+            if (($m[3] ?? '') === 'True') {
+                $handler['array'] = true;
+            }
+
+            return $handler;
+        }
+
+        if (preg_match('/^lambda self, e: self\._annotate_([a-z_]+)\(e\)$/', $body, $m) === 1) {
+            return 'annotate'.ucfirst(self::camel($m[1]));
+        }
+
+        if (preg_match('/^lambda self, e: _annotate_([a-z_]+)\(self, e\)$/', $body, $m) === 1) {
+            $method = 'annotate'.ucfirst(self::camel($m[1]));
+            $dialect = substr(strrchr($module, '.') ?: $module, 1);
+
+            return in_array(strtolower($method), self::ANNOTATOR_METHODS, true) ? $method.ucfirst(self::camel($dialect)) : $method;
+        }
+
+        if (preg_match('/^lambda self, e: self\._set_type\( ?e, exp\.DataType\.(?:from_str|build)\("([^"]+)"(?:, dialect="([a-z]+)")?\) ?\)$/', $body, $m) === 1) {
+            return ['setTypeFrom', 'type' => $m[1], 'dialect' => ($m[2] ?? '') !== '' ? $m[2] : null];
+        }
+
+        if (preg_match('/^lambda self, e: self\._set_type\(e, e\.args\["([a-z_]+)"\]\)$/', $body, $m) === 1) {
+            return ['setTypeFromArg', 'arg' => $m[1]];
+        }
+
+        if (preg_match('/^lambda _, e: e$/', $body) === 1) {
+            return 'annotateNothing';
+        }
+
+        return 'annotate'.ucfirst(self::camel($expression));
     }
 
     /** Settings that only matter to the optimizer, or are rebuilt here from other settings. */
@@ -764,6 +911,11 @@ final class Dialects
             }
 
             return $out;
+        }
+
+        // A compiled Python regex, re.compile('pattern'): a PCRE pattern string
+        if (preg_match("/^re\\.compile\\('(.*)'\\)$/s", (string) ($value['@repr'] ?? ''), $m) === 1) {
+            return '/'.str_replace(['\\\\', "\\'", '/'], ['\\', "'", '\\/'], $m[1]).'/u';
         }
 
         if (isset($value['@fn']) || isset($value['@repr'])) {

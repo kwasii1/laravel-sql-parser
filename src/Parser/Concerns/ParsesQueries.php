@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LaravelSqlParser\LaravelSqlParser\Parser\Concerns;
 
 use LaravelSqlParser\LaravelSqlParser\Errors\ParseError;
+use LaravelSqlParser\LaravelSqlParser\Expressions\Alias;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Column;
 use LaravelSqlParser\LaravelSqlParser\Expressions\CTE;
@@ -546,9 +547,66 @@ trait ParsesQueries
         return false;
     }
 
+    /**
+     * Dialects with implicit unnesting (BigQuery, Redshift) read a comma join on a path rooted in
+     * an earlier source, e.g. `FROM t AS c, c.orders AS o`, as UNNEST(c.orders) AS o.
+     */
     protected function implicitUnnestsToExplicit(Expression $this_): Expression
     {
+        $from = $this_->args['from_'] ?? null;
+        $first = $from instanceof Expression ? ($from->args['this'] ?? null) : null;
+        $refs = $first instanceof Expression ? [$this->normalizeIdentifiers($first->copy())->aliasOrName() => true] : [];
+
+        foreach ($this_->argList('joins') as $join) {
+            $table = $join->args['this'] ?? null;
+
+            if (! $table instanceof Expression) {
+                continue;
+            }
+
+            $normalized = $table->copy();
+            $normalized->meta['maybe_column'] = true;
+            $normalized = $this->normalizeIdentifiers($normalized);
+
+            if ($table instanceof Table && ! $join->flag('on')) {
+                $parts = $normalized instanceof Table ? $normalized->parts() : [];
+
+                if (count($parts) > 1 && isset($refs[$parts[0]->name()])) {
+                    $tableAsColumn = $table->toColumn();
+                    $unnest = new Unnest(['expressions' => [$tableAsColumn]]);
+
+                    // Table::toColumn() wraps the column in an Alias; the alias goes on the Unnest
+                    // as a TableAlias instead, matching what the parser builds
+                    $alias = $table->args['alias'] ?? null;
+
+                    if ($alias instanceof TableAlias && $tableAsColumn instanceof Alias) {
+                        $unnest = new Unnest(['expressions' => [$tableAsColumn->args['this']]]);
+                        $unnest->set('alias', new TableAlias(['columns' => [$alias->args['this'] ?? null]]));
+                    }
+
+                    $table->replace($unnest);
+                }
+            }
+
+            $refs[$normalized->aliasOrName()] = true;
+        }
+
         return $this_;
+    }
+
+    /**
+     * sqlglot's normalize_identifiers optimizer step, as far as the parser needs it: every
+     * identifier normalized the way the dialect resolves it.
+     */
+    private function normalizeIdentifiers(Expression $expression): Expression
+    {
+        foreach ($expression->walk() as $node) {
+            if ($node instanceof Identifier) {
+                $this->dialect->normalizeIdentifier($node);
+            }
+        }
+
+        return $expression;
     }
 
     protected function parseHintFallbackToString(): ?Hint

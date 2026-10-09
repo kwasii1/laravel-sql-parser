@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace LaravelSqlParser\LaravelSqlParser\Generator\Concerns;
 
 use LaravelSqlParser\LaravelSqlParser\Expressions\All;
-use LaravelSqlParser\LaravelSqlParser\Expressions\AndExpr;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Any;
 use LaravelSqlParser\LaravelSqlParser\Expressions\ArrayExpr;
 use LaravelSqlParser\LaravelSqlParser\Expressions\AutoRefreshProperty;
@@ -36,7 +35,6 @@ use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
 use LaravelSqlParser\LaravelSqlParser\Expressions\NEQ;
 use LaravelSqlParser\LaravelSqlParser\Expressions\NullExpr;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Nullif;
-use LaravelSqlParser\LaravelSqlParser\Expressions\OrExpr;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Paren;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Pivot;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Query;
@@ -102,7 +100,7 @@ trait GeneratesExpressions
         $offset = is_int($offset) ? $offset : (int) $this->truthy($offset);
         $base = $indexOffset !== null && $indexOffset !== 0 ? $indexOffset : (int) $this->dialect->settings['INDEX_OFFSET'];
 
-        return Builder::applyIndexOffset($expression->argExpr('this') ?? new NullExpr, $expressions, $base - $offset);
+        return Builder::applyIndexOffset($expression->argExpr('this') ?? new NullExpr, $expressions, $base - $offset, $this->dialect);
     }
 
     protected function bracketSql(Expression $expression): string
@@ -1394,8 +1392,8 @@ trait GeneratesExpressions
 
             foreach (array_slice($exprs, 1) as $expr) {
                 $likeExpr = $rhs instanceof Any
-                    ? new OrExpr(['this' => $likeExpr, 'expression' => $makeLike($expr)])
-                    : new AndExpr(['this' => $likeExpr, 'expression' => $makeLike($expr)]);
+                    ? Builder::or([$likeExpr, $makeLike($expr)], copy: false)
+                    : Builder::and([$likeExpr, $makeLike($expr)], copy: false);
             }
 
             $parent = $escape !== null ? $escape->parent : $expression->parent;

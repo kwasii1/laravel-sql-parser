@@ -153,6 +153,24 @@ use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenType;
 trait HandlesTables
 {
     /**
+     * A dispatch table handler's named arguments, with ['@literal' => text, 'is_string' => bool]
+     * entries (an exp.Literal closure variable) rebuilt as Literals.
+     *
+     * @param  array<array-key, mixed>  $arguments
+     * @return array<array-key, mixed>
+     */
+    protected static function handlerArguments(array $arguments): array
+    {
+        foreach ($arguments as $name => $value) {
+            if (is_array($value) && isset($value['@literal'])) {
+                $arguments[$name] = $value['is_string'] === true ? Literal::string((string) $value['@literal']) : Literal::number((string) $value['@literal']);
+            }
+        }
+
+        return $arguments;
+    }
+
+    /**
      * Call a table handler: a method name, or [method, ...extra arguments].
      *
      * @param  string|array<int|string, mixed>  $handler
@@ -163,8 +181,8 @@ trait HandlesTables
             $method = $handler[0];
             unset($handler[0]);
 
-            // The remaining entries are named arguments (sqlglot closure variables).
-            return $this->{$method}(...$args, ...$handler);
+            // The remaining entries are named arguments (sqlglot closure variables)
+            return $this->{$method}(...$args, ...self::handlerArguments($handler));
         }
 
         return $this->{$handler}(...$args);
@@ -195,13 +213,28 @@ trait HandlesTables
     }
 
     /**
+     * sqlglot has two build_like helpers: parser.build_like (LIKE(pattern, string), as in SQLite)
+     * and the dialect.build_like(expr_type, not_like) factory (LIKE(string, pattern)), which passes
+     * $exprType.
+     *
      * @param  list<mixed>  $args
+     * @param  class-string<Expression>|null  $exprType
      */
-    protected function buildLike(array $args): Expression
+    protected function buildLike(array $args, ?string $exprType = null, bool $notLike = false): Expression
     {
-        $like = new Like(['this' => $args[1] ?? null, 'expression' => $args[0] ?? null]);
+        if ($exprType === null) {
+            $like = new Like(['this' => $args[1] ?? null, 'expression' => $args[0] ?? null]);
 
-        return count($args) > 2 ? new Escape(['this' => $like, 'expression' => $args[2]]) : $like;
+            return count($args) > 2 ? new Escape(['this' => $like, 'expression' => $args[2]]) : $like;
+        }
+
+        $like = new $exprType(['this' => $args[0] ?? null, 'expression' => $args[1] ?? null]);
+
+        if (($args[2] ?? null) instanceof Expression) {
+            $like = new Escape(['this' => $like, 'expression' => $args[2]]);
+        }
+
+        return $notLike ? new Not(['this' => $like]) : $like;
     }
 
     /**
@@ -1026,7 +1059,7 @@ trait HandlesTables
         return $this->parsePropertyAssignment(FileFormatProperty::class);
     }
 
-    protected function propertyGlobal(): Expression
+    protected function propertyGlobal(): ?Expression
     {
         return $this->expression(new GlobalProperty);
     }
@@ -1186,7 +1219,7 @@ trait HandlesTables
         return $this->expression(new TransformModelProperty(['expressions' => $this->parseWrappedCsv(fn (): ?Expression => $this->parseExpression())]));
     }
 
-    protected function propertyUsing(): Expression
+    protected function propertyUsing(): ?Expression
     {
         return $this->parsePropertyAssignment(FileFormatProperty::class);
     }

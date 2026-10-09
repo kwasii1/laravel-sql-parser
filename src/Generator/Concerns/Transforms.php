@@ -7,10 +7,13 @@ namespace LaravelSqlParser\LaravelSqlParser\Generator\Concerns;
 use InvalidArgumentException;
 use LaravelSqlParser\LaravelSqlParser\Errors\UnsupportedError;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Alias;
+use LaravelSqlParser\LaravelSqlParser\Expressions\Aliases;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Any;
 use LaravelSqlParser\LaravelSqlParser\Expressions\ApproxQuantile;
 use LaravelSqlParser\LaravelSqlParser\Expressions\ArrayExpr;
+use LaravelSqlParser\LaravelSqlParser\Expressions\ArraySize;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Binary;
+use LaravelSqlParser\LaravelSqlParser\Expressions\Bracket;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
 use LaravelSqlParser\LaravelSqlParser\Expressions\CaseExpr;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Cast;
@@ -25,11 +28,15 @@ use LaravelSqlParser\LaravelSqlParser\Expressions\DataTypeParam;
 use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
 use LaravelSqlParser\LaravelSqlParser\Expressions\EQ;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Exists;
+use LaravelSqlParser\LaravelSqlParser\Expressions\Explode;
+use LaravelSqlParser\LaravelSqlParser\Expressions\ExplodeOuter;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
 use LaravelSqlParser\LaravelSqlParser\Expressions\From;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Func;
 use LaravelSqlParser\LaravelSqlParser\Expressions\GenerateDateArray;
 use LaravelSqlParser\LaravelSqlParser\Expressions\GenerateSeries;
+use LaravelSqlParser\LaravelSqlParser\Expressions\Greatest;
+use LaravelSqlParser\LaravelSqlParser\Expressions\GT;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Having;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Identifier;
 use LaravelSqlParser\LaravelSqlParser\Expressions\IfExpr;
@@ -48,6 +55,7 @@ use LaravelSqlParser\LaravelSqlParser\Expressions\Ordered;
 use LaravelSqlParser\LaravelSqlParser\Expressions\PercentileCont;
 use LaravelSqlParser\LaravelSqlParser\Expressions\PercentileDisc;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Pivot;
+use LaravelSqlParser\LaravelSqlParser\Expressions\Posexplode;
 use LaravelSqlParser\LaravelSqlParser\Expressions\PropertyEQ;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Qualify;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Query;
@@ -56,6 +64,7 @@ use LaravelSqlParser\LaravelSqlParser\Expressions\Select;
 use LaravelSqlParser\LaravelSqlParser\Expressions\SetOperation;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Star;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Struct;
+use LaravelSqlParser\LaravelSqlParser\Expressions\Sub;
 use LaravelSqlParser\LaravelSqlParser\Expressions\SubqueryPredicate;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Table;
 use LaravelSqlParser\LaravelSqlParser\Expressions\TableAlias;
@@ -136,6 +145,217 @@ trait Transforms
         }
 
         return $this->{$transform}($expression);
+    }
+
+    /**
+     * Convert EXPLODE / POSEXPLODE projections into unnests (sqlglot transforms
+     * explode_projection_to_unnest): the exploded arrays are cross joined with a position
+     * series, and each projection picks the element whose position matches.
+     */
+    public function explodeProjectionToUnnest(Expression $expression, int $indexOffset = 0, bool $unnestMap = false): Expression
+    {
+        if (! $expression instanceof Select) {
+            return $expression;
+        }
+
+        $takenSelectNames = array_fill_keys($expression->namedSelects(), true);
+        $takenSourceNames = [];
+
+        foreach ((new Scope($expression))->references() as [$name]) {
+            $takenSourceNames[$name] = true;
+        }
+
+        $newName = static function (array &$names, string $name): string {
+            $name = self::findNewName(array_map('strval', array_keys($names)), $name);
+            $names[$name] = true;
+
+            return $name;
+        };
+
+        $arrays = [];
+        $seriesAlias = $newName($takenSelectNames, 'pos');
+        $series = Builder::alias(
+            new Unnest(['expressions' => [new GenerateSeries(['start' => Literal::number($indexOffset)])]]),
+            $newName($takenSourceNames, '_u'),
+            table: [$seriesAlias],
+        );
+        $seriesTableAlias = $series->args['alias']->args['this'];
+        $seriesColumn = static fn (): Expression => Builder::column($seriesAlias, $seriesTableAlias);
+
+        // A copy of the list, since the projections are replaced inside the loop
+        foreach ($expression->selects() as $select) {
+            $explode = $select->find(Explode::class);
+
+            if ($explode === null) {
+                continue;
+            }
+
+            if (
+                $unnestMap
+                && $explode::class === Explode::class
+                && ($explode->args['this'] ?? null) instanceof Expression
+                && $explode->args['this']->isType(DType::MAP)
+                && ($select === $explode || $select instanceof Aliases)
+            ) {
+                if ($select instanceof Aliases) {
+                    [$mapKeyAlias, $mapValueAlias] = array_map(static fn (Expression $a): string => $a->name(), $select->argList('expressions'));
+                } else {
+                    $mapKeyAlias = $newName($takenSelectNames, 'key');
+                    $mapValueAlias = $newName($takenSelectNames, 'value');
+                }
+
+                $mapUnnestSource = $newName($takenSourceNames, '_u');
+                $mapKeySelect = $select->replace(Builder::alias(Builder::column($mapKeyAlias, $mapUnnestSource), $mapKeyAlias));
+                $expressions = $expression->argList('expressions');
+                $position = array_search($mapKeySelect, $expressions, true);
+                array_splice($expressions, $position === false ? count($expressions) : $position + 1, 0, [Builder::alias(Builder::column($mapValueAlias, $mapUnnestSource), $mapValueAlias)]);
+                $expression->set('expressions', $expressions);
+
+                $unnest = Builder::alias(new Unnest(['expressions' => [$explode->args['this']->copy()]]), $mapUnnestSource, table: [$mapKeyAlias, $mapValueAlias]);
+                self::joinOrFrom($expression, $unnest);
+
+                continue;
+            }
+
+            $posAlias = '';
+            $explodeAlias = '';
+
+            if ($select instanceof Alias) {
+                $explodeAlias = $select->args['alias'] ?? '';
+                $alias = $select;
+            } elseif ($select instanceof Aliases) {
+                [$posAlias, $explodeAlias] = $select->argList('expressions');
+                $alias = $select->replace(Builder::alias($select->args['this'], '', copy: false));
+            } else {
+                $alias = $select->replace(Builder::alias($select, ''));
+                $explode = $alias->find(Explode::class);
+            }
+
+            if ($explode === null) {
+                continue;
+            }
+
+            $isPosexplode = $explode instanceof Posexplode;
+            $explodeArg = $explode->args['this'] ?? null;
+
+            if (! $explodeArg instanceof Expression) {
+                continue;
+            }
+
+            if ($explode instanceof ExplodeOuter) {
+                $bracket = new Bracket(['this' => $explodeArg->copy(), 'expressions' => [Literal::number(0)], 'safe' => true, 'offset' => true]);
+                $explodeArg = Builder::func('IF', [
+                    new EQ(['this' => Builder::func('ARRAY_SIZE', [Builder::func('COALESCE', [$explodeArg, new ArrayExpr(['expressions' => []])])]), 'expression' => Literal::number(0)]),
+                    new ArrayExpr(['expressions' => [$bracket]]),
+                    $explodeArg,
+                ]);
+            }
+
+            // Don't use [POS]EXPLODE's argument as a new projection name
+            if ($explodeArg instanceof Column) {
+                $takenSelectNames[$explodeArg->outputName()] = true;
+            }
+
+            $unnestSourceAlias = $newName($takenSourceNames, '_u');
+
+            if (self::aliasName($explodeAlias) === '') {
+                $explodeAlias = $newName($takenSelectNames, 'col');
+
+                if ($isPosexplode) {
+                    $posAlias = $newName($takenSelectNames, 'pos');
+                }
+            }
+
+            if (self::aliasName($posAlias) === '') {
+                $posAlias = $newName($takenSelectNames, 'pos');
+            }
+
+            $alias->set('alias', Builder::toIdentifier($explodeAlias instanceof Identifier ? $explodeAlias : self::aliasRef($explodeAlias)));
+
+            $posMatches = static fn (): Expression => Builder::binop(EQ::class, $seriesColumn(), Builder::column(self::aliasRef($posAlias), $unnestSourceAlias));
+            $explode->replace(new IfExpr(['this' => $posMatches(), 'true' => Builder::column(self::aliasRef($explodeAlias), $unnestSourceAlias)]));
+
+            if ($isPosexplode) {
+                $expressions = $expression->argList('expressions');
+                $position = array_search($alias, $expressions, true);
+                array_splice($expressions, $position === false ? count($expressions) : $position + 1, 0, [Builder::alias(
+                    new IfExpr(['this' => $posMatches(), 'true' => Builder::column(self::aliasRef($posAlias), $unnestSourceAlias)]),
+                    self::aliasRef($posAlias),
+                )]);
+                $expression->set('expressions', $expressions);
+            }
+
+            if ($arrays === []) {
+                self::joinOrFrom($expression, $series);
+            }
+
+            $size = new ArraySize(['this' => $explodeArg->copy()]);
+            $arrays[] = $size;
+
+            // Trino doesn't support LEFT JOIN UNNEST with ON conditions; if it did this would be
+            // much simpler
+            self::appendJoin($expression, new Join([
+                'this' => Builder::alias(
+                    new Unnest(['expressions' => [$explodeArg->copy()], 'offset' => Builder::toIdentifier(self::aliasRef($posAlias))]),
+                    $unnestSourceAlias,
+                    table: [self::aliasRef($explodeAlias)],
+                ),
+                'kind' => 'CROSS',
+            ]));
+
+            $sizeExpr = $indexOffset !== 1 ? Builder::binop(Sub::class, $size, Literal::number(1)) : $size;
+
+            self::addWhere($expression, Builder::or([
+                Builder::binop(EQ::class, $seriesColumn(), Builder::column(self::aliasRef($posAlias), $unnestSourceAlias)),
+                Builder::and([
+                    Builder::binop(GT::class, $seriesColumn(), $sizeExpr),
+                    Builder::binop(EQ::class, Builder::column(self::aliasRef($posAlias), $unnestSourceAlias), $sizeExpr),
+                ]),
+            ]));
+        }
+
+        if ($arrays !== []) {
+            $end = new Greatest(['this' => $arrays[0], 'expressions' => array_slice($arrays, 1)]);
+
+            if ($indexOffset !== 1) {
+                $end = Builder::binop(Sub::class, $end, Literal::number(1 - $indexOffset));
+            }
+
+            $series->argList('expressions')[0]->set('end', $end);
+        }
+
+        return $expression;
+    }
+
+    /**
+     * An alias as sqlglot passes it on: the identifier itself (keeping its quoting) or its name.
+     */
+    private static function aliasRef(mixed $alias): Identifier|string
+    {
+        return $alias instanceof Identifier ? $alias->copy() : self::aliasName($alias);
+    }
+
+    private static function aliasName(mixed $alias): string
+    {
+        return $alias instanceof Expression ? $alias->name() : (string) $alias;
+    }
+
+    /**
+     * Cross join a source onto a query, or make it the FROM if there's none (sqlglot
+     * Select.join(join_type="CROSS") / Select.from_).
+     */
+    private static function joinOrFrom(Select $query, Expression $source): void
+    {
+        if (($query->args['from_'] ?? null) instanceof From) {
+            self::appendJoin($query, new Join(['this' => $source, 'kind' => 'CROSS']));
+        } else {
+            $query->set('from_', new From(['this' => $source]));
+        }
+    }
+
+    private static function appendJoin(Select $query, Join $join): void
+    {
+        $query->append('joins', $join);
     }
 
     /**

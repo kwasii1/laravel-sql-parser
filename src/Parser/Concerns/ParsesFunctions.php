@@ -317,7 +317,7 @@ trait ParsesFunctions
             $method = $function[0];
             unset($function[0]);
 
-            return $this->{$method}($args, ...$function);
+            return $this->{$method}($args, ...self::handlerArguments($function));
         }
 
         return $this->{$function}($args);
@@ -602,7 +602,7 @@ trait ParsesFunctions
                 return $this->buildArrayConstructor($constructorType, $expressions, $bracketKind);
             }
 
-            $expressions = Builder::applyIndexOffset($this_, $expressions, -(int) $this->dialect->settings['INDEX_OFFSET']);
+            $expressions = Builder::applyIndexOffset($this_, $expressions, -(int) $this->dialect->settings['INDEX_OFFSET'], $this->dialect);
             $this_ = $this->expression(new Bracket(['this' => $this_, 'expressions' => $expressions]), null, $this_->popComments());
         }
 
