@@ -7,3 +7,6 @@ parameters:
     # The parser and generator are cursor / state based: calling match(), matchTexts() or sql()
     # twice with the same arguments can return different results.
     rememberPossiblyImpureFunctionValues: false
+    # The package's own config directory, where env() calls belong
+    configDirectories:
+        - config

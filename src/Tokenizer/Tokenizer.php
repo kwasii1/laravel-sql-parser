@@ -190,8 +190,11 @@ final class Tokenizer
     {
         $this->sql = $sql;
         $this->size = strlen($sql);
-        $this->start = 0;
-        $this->current = 0;
+        // Skip a leading UTF-8 byte order mark (never part of the SQL); offsets stay byte offsets
+        // into the original string
+        $offset = str_starts_with($sql, "\u{FEFF}") ? 3 : 0;
+        $this->start = $offset;
+        $this->current = $offset;
         $this->char = '';
         $this->peek = '';
         $this->end = false;
