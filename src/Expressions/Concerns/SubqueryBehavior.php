@@ -1,0 +1,101 @@
+<?php
+
+declare(strict_types=1);
+
+namespace LaravelSqlParser\LaravelSqlParser\Expressions\Concerns;
+
+use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
+use LaravelSqlParser\LaravelSqlParser\Expressions\Query;
+use LaravelSqlParser\LaravelSqlParser\Expressions\SetOperation;
+use LaravelSqlParser\LaravelSqlParser\Expressions\Subquery;
+
+/**
+ * @mixin Subquery
+ */
+trait SubqueryBehavior
+{
+    /**
+     * Strip all wrapping subqueries.
+     */
+    public function unnest(): Expression
+    {
+        $expression = $this;
+
+        while ($expression instanceof Subquery && ($expression->args['this'] ?? null) instanceof Expression) {
+            $expression = $expression->args['this'];
+        }
+
+        return $expression;
+    }
+
+    public function unwrap(): Subquery
+    {
+        $expression = $this;
+
+        while ($expression->sameParent() && $expression->isWrapper() && $expression->parent instanceof Subquery) {
+            $expression = $expression->parent;
+        }
+
+        return $expression;
+    }
+
+    /**
+     * Whether this subquery only wraps another query (it has no alias, modifiers, ...).
+     */
+    public function isWrapper(): bool
+    {
+        foreach ($this->args as $key => $value) {
+            if ($key !== 'this' && $value !== null) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function outputName(): string
+    {
+        return $this->alias();
+    }
+
+    /**
+     * Whether the query projects a star (sqlglot _is_star).
+     */
+    public function isStar(): bool
+    {
+        $stack = [$this];
+
+        while ($stack !== []) {
+            $node = array_pop($stack);
+
+            if ($node instanceof SetOperation) {
+                $stack[] = $node->args['this'] ?? null;
+                $stack[] = $node->args['expression'] ?? null;
+            } elseif ($node instanceof Subquery) {
+                $stack[] = $node->args['this'] ?? null;
+            } elseif ($node instanceof Expression && $node->isStar()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return list<Expression>
+     */
+    public function selects(): array
+    {
+        $this_ = $this->args['this'] ?? null;
+
+        return $this_ instanceof Query ? $this_->selects() : [];
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function namedSelects(): array
+    {
+        return array_map(static fn (Expression $e): string => $e->outputName(), $this->selects());
+    }
+}

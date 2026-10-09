@@ -68,6 +68,12 @@
         "analyse": [
             "vendor/bin/phpstan analyse"
         ],
+        "generate": [
+            "@php tools/generate.php"
+        ],
+        "generate:check": [
+            "@php tools/generate.php --check"
+        ],
         "test:types": [
             "vendor/bin/pest --type-coverage --min=100"
         ],
@@ -77,11 +83,16 @@
         "test": [
             "@analyse",
             "@lint:check",
+            "@generate:check",
             "@test:types",
             "@test:unit"
         ],
         "clear": [
             "@php vendor/bin/testbench package:purge-skeleton --ansi"
+        ],
+        "bench": [
+            "Composer\\Config::disableProcessTimeout",
+            "@php -d opcache.enable_cli=1 benchmarks/run.php"
         ]
     },
     "extra": {
