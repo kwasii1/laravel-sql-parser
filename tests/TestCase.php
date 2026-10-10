@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Tests;
+namespace Kwasii\LaravelSqlParser\Tests;
 
-use LaravelSqlParser\LaravelSqlParser\LaravelSqlParserServiceProvider;
+use Kwasii\LaravelSqlParser\LaravelSqlParserServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra

@@ -52,7 +52,10 @@ jobs:
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress --no-scripts
           composer run prepare
 
+      # Static analysis gives the same result on every OS. On Windows, Larastan's parallel
+      # workers race to write Laravel's bootstrap cache and fail with "Access is denied".
       - name: PHPStan
+        if: runner.os != 'Windows'
         run: composer analyse
 
       - name: Linter

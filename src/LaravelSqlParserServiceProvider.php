@@ -2,10 +2,14 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser;
+namespace Kwasii\LaravelSqlParser;
 
+use Illuminate\Database\Connection;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\ServiceProvider;
-use LaravelSqlParser\LaravelSqlParser\Console\Commands\LaravelSqlParserCommand;
+use Kwasii\LaravelSqlParser\Console\Commands\TranspileCommand;
 
 class LaravelSqlParserServiceProvider extends ServiceProvider
 {
@@ -24,38 +28,61 @@ class LaravelSqlParserServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->loadRoutesFrom(__DIR__.'/../routes/laravel-sql-parser.php');
-
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'laravel-sql-parser');
-
-        $this->loadTranslationsFrom(__DIR__.'/../lang', 'laravel-sql-parser');
+        if ($this->app->make('config')->get('laravel-sql-parser.macros', true) === true) {
+            $this->registerMacros();
+        }
 
         if (! $this->app->runningInConsole()) {
             return;
         }
 
+        $this->commands([TranspileCommand::class]);
+
         $this->publishes([
             __DIR__.'/../config/laravel-sql-parser.php' => config_path('laravel-sql-parser.php'),
         ], ['laravel-sql-parser', 'laravel-sql-parser-config']);
+    }
 
-        $this->publishes([
-            __DIR__.'/../resources/views' => resource_path('views/vendor/laravel-sql-parser'),
-        ], ['laravel-sql-parser', 'laravel-sql-parser-views']);
+    /**
+     * toSqlFor(), toRawSqlFor() and bindingsFor() transpile a query from its connection's dialect.
+     * Eloquent gets its own copies because it doesn't return what forwarded calls return.
+     */
+    private function registerMacros(): void
+    {
+        $transpile = static function (QueryBuilder $query, string $dialect, bool $pretty): array {
+            $connection = $query->getConnection();
 
-        $this->publishes([
-            __DIR__.'/../lang' => $this->app->langPath('vendor/laravel-sql-parser'),
-        ], ['laravel-sql-parser', 'laravel-sql-parser-lang']);
+            return app(LaravelSqlParser::class)->transpileQuery(
+                $query->toSql(),
+                $query->getBindings(),
+                $connection instanceof Connection ? $connection->getDriverName() : null,
+                $dialect,
+                $pretty,
+            );
+        };
 
-        $this->publishes([
-            __DIR__.'/../public' => public_path('vendor/laravel-sql-parser'),
-        ], ['laravel-sql-parser', 'laravel-sql-parser-assets']);
+        QueryBuilder::macro('toSqlFor', function (string $dialect, bool $pretty = false) use ($transpile): string {
+            /** @var QueryBuilder $this */
+            return $transpile($this, $dialect, $pretty)['sql'];
+        });
 
-        $this->publishesMigrations([
-            __DIR__.'/../database/migrations' => database_path('migrations'),
-        ], ['laravel-sql-parser', 'laravel-sql-parser-migrations']);
+        QueryBuilder::macro('bindingsFor', function (string $dialect) use ($transpile): array {
+            /** @var QueryBuilder $this */
+            return $transpile($this, $dialect, false)['bindings'];
+        });
 
-        $this->commands([
-            LaravelSqlParserCommand::class,
-        ]);
+        QueryBuilder::macro('toRawSqlFor', function (string $dialect, bool $pretty = false) use ($transpile): string {
+            /** @var QueryBuilder $this */
+            ['sql' => $sql, 'bindings' => $bindings] = $transpile($this, $dialect, $pretty);
+
+            return $this->grammar->substituteBindingsIntoRawSql($sql, $this->connection->prepareBindings($bindings));
+        });
+
+        foreach (['toSqlFor', 'bindingsFor', 'toRawSqlFor'] as $method) {
+            EloquentBuilder::macro($method, function (mixed ...$arguments) use ($method): mixed {
+                /** @var EloquentBuilder<Model> $this */
+                return $this->toBase()->__call($method, $arguments);
+            });
+        }
     }
 }
