@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Expressions\Concerns;
+namespace Kwasii\LaravelSqlParser\Expressions\Concerns;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\TableColumn;
+use Kwasii\LaravelSqlParser\Expressions\TableColumn;
 
 /**
  * @mixin TableColumn

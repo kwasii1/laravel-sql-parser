@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\RisingWave;
+namespace Kwasii\LaravelSqlParser\Dialects\RisingWave;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Postgres\Postgres;
+use Kwasii\LaravelSqlParser\Dialects\Postgres\Postgres;
 
 /**
  * The RisingWave dialect (sqlglot dialects/risingwave.py).

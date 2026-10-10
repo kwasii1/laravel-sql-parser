@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Dax;
+namespace Kwasii\LaravelSqlParser\Dialects\Dax;
 
-use LaravelSqlParser\LaravelSqlParser\Generator\Generator;
+use Kwasii\LaravelSqlParser\Generator\Generator;
 
 /**
  * DAX generator (sqlglot generators/dax.py).

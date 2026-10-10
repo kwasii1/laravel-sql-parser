@@ -2,29 +2,29 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Prql;
+namespace Kwasii\LaravelSqlParser\Dialects\Prql;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\Alias;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Column;
-use LaravelSqlParser\LaravelSqlParser\Expressions\EQ;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Except;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Intersect;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Is;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Limit;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Expressions\NEQ;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Not;
-use LaravelSqlParser\LaravelSqlParser\Expressions\NullExpr;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Order;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Ordered;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Query;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Sum;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Union;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Where;
-use LaravelSqlParser\LaravelSqlParser\Parser\Parser;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenType;
+use Kwasii\LaravelSqlParser\Expressions\Alias;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\Column;
+use Kwasii\LaravelSqlParser\Expressions\EQ;
+use Kwasii\LaravelSqlParser\Expressions\Except;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Intersect;
+use Kwasii\LaravelSqlParser\Expressions\Is;
+use Kwasii\LaravelSqlParser\Expressions\Limit;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Expressions\NEQ;
+use Kwasii\LaravelSqlParser\Expressions\Not;
+use Kwasii\LaravelSqlParser\Expressions\NullExpr;
+use Kwasii\LaravelSqlParser\Expressions\Order;
+use Kwasii\LaravelSqlParser\Expressions\Ordered;
+use Kwasii\LaravelSqlParser\Expressions\Query;
+use Kwasii\LaravelSqlParser\Expressions\Sum;
+use Kwasii\LaravelSqlParser\Expressions\Union;
+use Kwasii\LaravelSqlParser\Expressions\Where;
+use Kwasii\LaravelSqlParser\Parser\Parser;
+use Kwasii\LaravelSqlParser\Tokenizer\TokenType;
 
 /**
  * PRQL parser (sqlglot parsers/prql.py): a pipeline of transforms applied to `from <table>`.

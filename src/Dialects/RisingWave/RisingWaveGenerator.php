@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\RisingWave;
+namespace Kwasii\LaravelSqlParser\Dialects\RisingWave;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Postgres\PostgresGenerator;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Generator\Generator;
+use Kwasii\LaravelSqlParser\Dialects\Postgres\PostgresGenerator;
+use Kwasii\LaravelSqlParser\Expressions\DataType;
+use Kwasii\LaravelSqlParser\Expressions\DType;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Generator\Generator;
 
 /**
  * RisingWave generator (sqlglot generators/risingwave.py).

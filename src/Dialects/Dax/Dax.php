@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Dax;
+namespace Kwasii\LaravelSqlParser\Dialects\Dax;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
 
 /**
  * The DAX dialect (sqlglot dialects/dax.py).

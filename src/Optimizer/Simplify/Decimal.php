@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Optimizer\Simplify;
+namespace Kwasii\LaravelSqlParser\Optimizer\Simplify;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
 
 /**
  * The numbers simplify folds: Python ints (arbitrary precision) and decimal.Decimal values with

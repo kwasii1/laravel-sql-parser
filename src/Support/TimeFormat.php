@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Support;
+namespace Kwasii\LaravelSqlParser\Support;
 
 /**
  * Converts time format strings between dialects (sqlglot time.format_time).

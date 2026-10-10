@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Expressions\Concerns;
+namespace Kwasii\LaravelSqlParser\Expressions\Concerns;
 
 use InvalidArgumentException;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Dot;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Dot;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
 
 /**
  * @mixin Dot

@@ -2,31 +2,31 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Optimizer;
+namespace Kwasii\LaravelSqlParser\Optimizer;
 
 use Generator;
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
-use LaravelSqlParser\LaravelSqlParser\Errors\OptimizeError;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Column;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Explode;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Identifier;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Join;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Lateral;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Query;
-use LaravelSqlParser\LaravelSqlParser\Expressions\QueryTransform;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Select;
-use LaravelSqlParser\LaravelSqlParser\Expressions\SetOperation;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Subquery;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Table;
-use LaravelSqlParser\LaravelSqlParser\Expressions\UDTF;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Unnest;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Values;
-use LaravelSqlParser\LaravelSqlParser\Schema\Schema;
-use LaravelSqlParser\LaravelSqlParser\Support\Scope;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Errors\OptimizeError;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\Column;
+use Kwasii\LaravelSqlParser\Expressions\DataType;
+use Kwasii\LaravelSqlParser\Expressions\DType;
+use Kwasii\LaravelSqlParser\Expressions\Explode;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Identifier;
+use Kwasii\LaravelSqlParser\Expressions\Join;
+use Kwasii\LaravelSqlParser\Expressions\Lateral;
+use Kwasii\LaravelSqlParser\Expressions\Query;
+use Kwasii\LaravelSqlParser\Expressions\QueryTransform;
+use Kwasii\LaravelSqlParser\Expressions\Select;
+use Kwasii\LaravelSqlParser\Expressions\SetOperation;
+use Kwasii\LaravelSqlParser\Expressions\Subquery;
+use Kwasii\LaravelSqlParser\Expressions\Table;
+use Kwasii\LaravelSqlParser\Expressions\UDTF;
+use Kwasii\LaravelSqlParser\Expressions\Unnest;
+use Kwasii\LaravelSqlParser\Expressions\Values;
+use Kwasii\LaravelSqlParser\Schema\Schema;
+use Kwasii\LaravelSqlParser\Support\Scope;
 
 /**
  * Resolves the sources of columns in a scope (sqlglot optimizer/resolver.py).

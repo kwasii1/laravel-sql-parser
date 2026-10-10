@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Expressions\Concerns;
+namespace Kwasii\LaravelSqlParser\Expressions\Concerns;
 
 use InvalidArgumentException;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ExpressionRegistry;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TimeUnitExpression;
+use Kwasii\LaravelSqlParser\Expressions\DataType;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\ExpressionRegistry;
+use Kwasii\LaravelSqlParser\Expressions\TimeUnitExpression;
 
 /**
  * JSON-serializable dumps of expression trees (sqlglot serde.py).

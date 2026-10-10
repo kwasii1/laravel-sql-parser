@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Fabric;
+namespace Kwasii\LaravelSqlParser\Dialects\Fabric;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\TSql\TSqlGenerator;
-use LaravelSqlParser\LaravelSqlParser\Expressions\AtTimeZone;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Cast;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ColumnDef;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Create;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataTypeParam;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DateAdd;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Mul;
-use LaravelSqlParser\LaravelSqlParser\Expressions\NullExpr;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Schema;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Select;
-use LaravelSqlParser\LaravelSqlParser\Support\Scope;
+use Kwasii\LaravelSqlParser\Dialects\TSql\TSqlGenerator;
+use Kwasii\LaravelSqlParser\Expressions\AtTimeZone;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\Cast;
+use Kwasii\LaravelSqlParser\Expressions\ColumnDef;
+use Kwasii\LaravelSqlParser\Expressions\Create;
+use Kwasii\LaravelSqlParser\Expressions\DataType;
+use Kwasii\LaravelSqlParser\Expressions\DataTypeParam;
+use Kwasii\LaravelSqlParser\Expressions\DateAdd;
+use Kwasii\LaravelSqlParser\Expressions\DType;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Expressions\Mul;
+use Kwasii\LaravelSqlParser\Expressions\NullExpr;
+use Kwasii\LaravelSqlParser\Expressions\Schema;
+use Kwasii\LaravelSqlParser\Expressions\Select;
+use Kwasii\LaravelSqlParser\Support\Scope;
 
 /**
  * Microsoft Fabric generator (sqlglot generators/fabric.py).

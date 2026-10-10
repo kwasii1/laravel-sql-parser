@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Expressions;
+namespace Kwasii\LaravelSqlParser\Expressions;
 
 use Generator;
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
 use LogicException;
 use Stringable;
 

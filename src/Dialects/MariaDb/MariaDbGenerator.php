@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\MariaDb;
+namespace Kwasii\LaravelSqlParser\Dialects\MariaDb;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\MySql\MySqlGenerator;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONExtractScalar;
+use Kwasii\LaravelSqlParser\Dialects\MySql\MySqlGenerator;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\JSONExtractScalar;
 
 /**
  * MariaDB generator: MySQL's, except where MariaDB lacks MySQL syntax.

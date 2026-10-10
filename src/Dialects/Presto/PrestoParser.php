@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Presto;
+namespace Kwasii\LaravelSqlParser\Dialects\Presto;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\ApproxQuantile;
-use LaravelSqlParser\LaravelSqlParser\Expressions\BitwiseNot;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Bracket;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DateAdd;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DateDiff;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Decode;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Encode;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONFormat;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Expressions\RegexpReplace;
-use LaravelSqlParser\LaravelSqlParser\Expressions\SHA2Digest;
-use LaravelSqlParser\LaravelSqlParser\Expressions\StrPosition;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TimeToStr;
-use LaravelSqlParser\LaravelSqlParser\Expressions\UnixToTime;
-use LaravelSqlParser\LaravelSqlParser\Parser\Parser;
+use Kwasii\LaravelSqlParser\Expressions\ApproxQuantile;
+use Kwasii\LaravelSqlParser\Expressions\BitwiseNot;
+use Kwasii\LaravelSqlParser\Expressions\Bracket;
+use Kwasii\LaravelSqlParser\Expressions\DateAdd;
+use Kwasii\LaravelSqlParser\Expressions\DateDiff;
+use Kwasii\LaravelSqlParser\Expressions\Decode;
+use Kwasii\LaravelSqlParser\Expressions\Encode;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\JSONFormat;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Expressions\RegexpReplace;
+use Kwasii\LaravelSqlParser\Expressions\SHA2Digest;
+use Kwasii\LaravelSqlParser\Expressions\StrPosition;
+use Kwasii\LaravelSqlParser\Expressions\TimeToStr;
+use Kwasii\LaravelSqlParser\Expressions\UnixToTime;
+use Kwasii\LaravelSqlParser\Parser\Parser;
 
 /**
  * Presto parser (sqlglot parsers/presto.py).

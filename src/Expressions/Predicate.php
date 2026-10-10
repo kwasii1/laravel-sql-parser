@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Expressions;
+namespace Kwasii\LaravelSqlParser\Expressions;
 
 /**
  * Marks predicates (comparisons, IN, LIKE, ...).

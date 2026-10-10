@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Postgres;
+namespace Kwasii\LaravelSqlParser\Dialects\Postgres;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
 
 /**
  * The PostgreSQL dialect (sqlglot dialects/postgres.py).

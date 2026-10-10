@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Materialize;
+namespace Kwasii\LaravelSqlParser\Dialects\Materialize;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Postgres\Postgres;
+use Kwasii\LaravelSqlParser\Dialects\Postgres\Postgres;
 
 /**
  * The Materialize dialect (sqlglot dialects/materialize.py).

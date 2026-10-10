@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Fabric;
+namespace Kwasii\LaravelSqlParser\Dialects\Fabric;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\TSql\TSqlParser;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ColumnDef;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Create;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Schema;
+use Kwasii\LaravelSqlParser\Dialects\TSql\TSqlParser;
+use Kwasii\LaravelSqlParser\Expressions\ColumnDef;
+use Kwasii\LaravelSqlParser\Expressions\Create;
+use Kwasii\LaravelSqlParser\Expressions\DataType;
+use Kwasii\LaravelSqlParser\Expressions\DType;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Expressions\Schema;
 
 /**
  * Microsoft Fabric parser (sqlglot parsers/fabric.py).

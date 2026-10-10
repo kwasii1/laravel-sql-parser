@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\DuckDB;
+namespace Kwasii\LaravelSqlParser\Dialects\DuckDB;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
 
 /**
  * The DuckDB dialect (sqlglot dialects/duckdb.py).

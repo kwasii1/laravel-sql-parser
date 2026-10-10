@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\ClickHouse;
+namespace Kwasii\LaravelSqlParser\Dialects\ClickHouse;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Identifier;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Tuple;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Identifier;
+use Kwasii\LaravelSqlParser\Expressions\Tuple;
 
 /**
  * The ClickHouse dialect (sqlglot dialects/clickhouse.py).

@@ -2,40 +2,40 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Presto;
+namespace Kwasii\LaravelSqlParser\Dialects\Presto;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Hive\HiveDialectTables;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Add;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ArrayExpr;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Column;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ColumnDef;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DateTrunc;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Dot;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Encode;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Explode;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Func;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Identifier;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Inline;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Interval;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Expressions\MatchRecognize;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Mul;
-use LaravelSqlParser\LaravelSqlParser\Expressions\PartitionedByProperty;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Property;
-use LaravelSqlParser\LaravelSqlParser\Expressions\PropertyEQ;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Schema;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Select;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Star;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Table;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TableAlias;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TimeToUnix;
-use LaravelSqlParser\LaravelSqlParser\Expressions\WeekStart;
-use LaravelSqlParser\LaravelSqlParser\Generator\Generator;
-use LaravelSqlParser\LaravelSqlParser\Support\Scope;
+use Kwasii\LaravelSqlParser\Dialects\Hive\HiveDialectTables;
+use Kwasii\LaravelSqlParser\Expressions\Add;
+use Kwasii\LaravelSqlParser\Expressions\ArrayExpr;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\Column;
+use Kwasii\LaravelSqlParser\Expressions\ColumnDef;
+use Kwasii\LaravelSqlParser\Expressions\DataType;
+use Kwasii\LaravelSqlParser\Expressions\DateTrunc;
+use Kwasii\LaravelSqlParser\Expressions\Dot;
+use Kwasii\LaravelSqlParser\Expressions\DType;
+use Kwasii\LaravelSqlParser\Expressions\Encode;
+use Kwasii\LaravelSqlParser\Expressions\Explode;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Func;
+use Kwasii\LaravelSqlParser\Expressions\Identifier;
+use Kwasii\LaravelSqlParser\Expressions\Inline;
+use Kwasii\LaravelSqlParser\Expressions\Interval;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Expressions\MatchRecognize;
+use Kwasii\LaravelSqlParser\Expressions\Mul;
+use Kwasii\LaravelSqlParser\Expressions\PartitionedByProperty;
+use Kwasii\LaravelSqlParser\Expressions\Property;
+use Kwasii\LaravelSqlParser\Expressions\PropertyEQ;
+use Kwasii\LaravelSqlParser\Expressions\Schema;
+use Kwasii\LaravelSqlParser\Expressions\Select;
+use Kwasii\LaravelSqlParser\Expressions\Star;
+use Kwasii\LaravelSqlParser\Expressions\Table;
+use Kwasii\LaravelSqlParser\Expressions\TableAlias;
+use Kwasii\LaravelSqlParser\Expressions\TimeToUnix;
+use Kwasii\LaravelSqlParser\Expressions\WeekStart;
+use Kwasii\LaravelSqlParser\Generator\Generator;
+use Kwasii\LaravelSqlParser\Support\Scope;
 
 /**
  * Presto generator (sqlglot generators/presto.py).

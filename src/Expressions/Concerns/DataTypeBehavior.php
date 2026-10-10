@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Expressions\Concerns;
+namespace Kwasii\LaravelSqlParser\Expressions\Concerns;
 
 use InvalidArgumentException;
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
-use LaravelSqlParser\LaravelSqlParser\Errors\ErrorLevel;
-use LaravelSqlParser\LaravelSqlParser\Errors\ParseError;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Dot;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Identifier;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Errors\ErrorLevel;
+use Kwasii\LaravelSqlParser\Errors\ParseError;
+use Kwasii\LaravelSqlParser\Expressions\DataType;
+use Kwasii\LaravelSqlParser\Expressions\Dot;
+use Kwasii\LaravelSqlParser\Expressions\DType;
+use Kwasii\LaravelSqlParser\Expressions\Identifier;
 
 /**
  * @mixin DataType

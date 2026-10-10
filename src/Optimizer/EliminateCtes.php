@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Optimizer;
+namespace Kwasii\LaravelSqlParser\Optimizer;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Support\Scope;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Support\Scope;
 
 /**
  * Remove unused CTEs (sqlglot optimizer/eliminate_ctes.py).

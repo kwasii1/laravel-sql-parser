@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Tests\Support;
+namespace Kwasii\LaravelSqlParser\Tests\Support;
 
 use Closure;
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Schema\MappingSchema;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Expressions\DataType;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Schema\MappingSchema;
 use RuntimeException;
 
 /**
@@ -21,7 +21,7 @@ use RuntimeException;
  */
 final class OptimizerReference
 {
-    private const string OPTIMIZER = 'LaravelSqlParser\\LaravelSqlParser\\Optimizer\\';
+    private const string OPTIMIZER = 'Kwasii\\LaravelSqlParser\\Optimizer\\';
 
     /** @var array<string, mixed>|null */
     private static ?array $fixture = null;

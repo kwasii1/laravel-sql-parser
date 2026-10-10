@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Expressions\Concerns;
+namespace Kwasii\LaravelSqlParser\Expressions\Concerns;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\Execute;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Execute;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
 
 /**
  * @mixin Execute

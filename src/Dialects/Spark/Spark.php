@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Spark;
+namespace Kwasii\LaravelSqlParser\Dialects\Spark;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Spark2\Spark2;
+use Kwasii\LaravelSqlParser\Dialects\Spark2\Spark2;
 
 /**
  * The Apache Spark dialect (sqlglot dialects/spark.py).

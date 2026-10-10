@@ -2,26 +2,26 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Trino;
+namespace Kwasii\LaravelSqlParser\Dialects\Trino;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Presto\PrestoParser;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Block;
-use LaravelSqlParser\LaravelSqlParser\Expressions\CaseStatement;
-use LaravelSqlParser\LaravelSqlParser\Expressions\EndStatement;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\FunctionSpecification;
-use LaravelSqlParser\LaravelSqlParser\Expressions\IfBlock;
-use LaravelSqlParser\LaravelSqlParser\Expressions\IfExpr;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Iterate;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONExtract;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONExtractQuote;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Leave;
-use LaravelSqlParser\LaravelSqlParser\Expressions\LoopBlock;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Properties;
-use LaravelSqlParser\LaravelSqlParser\Expressions\RepeatBlock;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ReturnExpr;
-use LaravelSqlParser\LaravelSqlParser\Expressions\WhileBlock;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenType;
+use Kwasii\LaravelSqlParser\Dialects\Presto\PrestoParser;
+use Kwasii\LaravelSqlParser\Expressions\Block;
+use Kwasii\LaravelSqlParser\Expressions\CaseStatement;
+use Kwasii\LaravelSqlParser\Expressions\EndStatement;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\FunctionSpecification;
+use Kwasii\LaravelSqlParser\Expressions\IfBlock;
+use Kwasii\LaravelSqlParser\Expressions\IfExpr;
+use Kwasii\LaravelSqlParser\Expressions\Iterate;
+use Kwasii\LaravelSqlParser\Expressions\JSONExtract;
+use Kwasii\LaravelSqlParser\Expressions\JSONExtractQuote;
+use Kwasii\LaravelSqlParser\Expressions\Leave;
+use Kwasii\LaravelSqlParser\Expressions\LoopBlock;
+use Kwasii\LaravelSqlParser\Expressions\Properties;
+use Kwasii\LaravelSqlParser\Expressions\RepeatBlock;
+use Kwasii\LaravelSqlParser\Expressions\ReturnExpr;
+use Kwasii\LaravelSqlParser\Expressions\WhileBlock;
+use Kwasii\LaravelSqlParser\Tokenizer\TokenType;
 
 /**
  * Trino parser (sqlglot parsers/trino.py).

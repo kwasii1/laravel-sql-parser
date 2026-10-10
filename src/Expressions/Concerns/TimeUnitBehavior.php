@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Expressions\Concerns;
+namespace Kwasii\LaravelSqlParser\Expressions\Concerns;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\Column;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TimeUnit;
-use LaravelSqlParser\LaravelSqlParser\Expressions\VarExpr;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Week;
+use Kwasii\LaravelSqlParser\Expressions\Column;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Expressions\TimeUnit;
+use Kwasii\LaravelSqlParser\Expressions\VarExpr;
+use Kwasii\LaravelSqlParser\Expressions\Week;
 
 /**
  * Behavior of expressions with a time unit (sqlglot exp.TimeUnit): the unit is normalized to an

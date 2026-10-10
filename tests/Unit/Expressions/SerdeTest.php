@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Tests\Support\Reference;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Tests\Support\Reference;
 
 /*
  * Port of sqlglot's tests/test_serde.py: dump() / load() round-trip trees through plain JSON.

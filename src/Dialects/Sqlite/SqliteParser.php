@@ -2,31 +2,31 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Sqlite;
+namespace Kwasii\LaravelSqlParser\Dialects\Sqlite;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\Anonymous;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Attach;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Collate;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ComputedColumnConstraint;
-use LaravelSqlParser\LaravelSqlParser\Expressions\CurrentTimestamp;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Detach;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Dot;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DPipe;
-use LaravelSqlParser\LaravelSqlParser\Expressions\EQ;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\GeneratedAsIdentityColumnConstraint;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONExtract;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONExtractScalar;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONObjectAgg;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ModuleProperty;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Paren;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Pragma;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TimeToStr;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TsOrDsToTimestamp;
-use LaravelSqlParser\LaravelSqlParser\Expressions\UniqueColumnConstraint;
-use LaravelSqlParser\LaravelSqlParser\Expressions\VirtualProperty;
-use LaravelSqlParser\LaravelSqlParser\Parser\Parser;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenType;
+use Kwasii\LaravelSqlParser\Expressions\Anonymous;
+use Kwasii\LaravelSqlParser\Expressions\Attach;
+use Kwasii\LaravelSqlParser\Expressions\Collate;
+use Kwasii\LaravelSqlParser\Expressions\ComputedColumnConstraint;
+use Kwasii\LaravelSqlParser\Expressions\CurrentTimestamp;
+use Kwasii\LaravelSqlParser\Expressions\Detach;
+use Kwasii\LaravelSqlParser\Expressions\Dot;
+use Kwasii\LaravelSqlParser\Expressions\DPipe;
+use Kwasii\LaravelSqlParser\Expressions\EQ;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\GeneratedAsIdentityColumnConstraint;
+use Kwasii\LaravelSqlParser\Expressions\JSONExtract;
+use Kwasii\LaravelSqlParser\Expressions\JSONExtractScalar;
+use Kwasii\LaravelSqlParser\Expressions\JSONObjectAgg;
+use Kwasii\LaravelSqlParser\Expressions\ModuleProperty;
+use Kwasii\LaravelSqlParser\Expressions\Paren;
+use Kwasii\LaravelSqlParser\Expressions\Pragma;
+use Kwasii\LaravelSqlParser\Expressions\TimeToStr;
+use Kwasii\LaravelSqlParser\Expressions\TsOrDsToTimestamp;
+use Kwasii\LaravelSqlParser\Expressions\UniqueColumnConstraint;
+use Kwasii\LaravelSqlParser\Expressions\VirtualProperty;
+use Kwasii\LaravelSqlParser\Parser\Parser;
+use Kwasii\LaravelSqlParser\Tokenizer\TokenType;
 
 /**
  * SQLite parser (sqlglot parsers/sqlite.py).

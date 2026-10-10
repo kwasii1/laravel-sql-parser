@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\BigQuery;
+namespace Kwasii\LaravelSqlParser\Dialects\BigQuery;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Dot;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Identifier;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Table;
-use LaravelSqlParser\LaravelSqlParser\Expressions\UserDefinedFunction;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Expressions\Dot;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Identifier;
+use Kwasii\LaravelSqlParser\Expressions\Table;
+use Kwasii\LaravelSqlParser\Expressions\UserDefinedFunction;
 
 /**
  * The Google BigQuery dialect (sqlglot dialects/bigquery.py).

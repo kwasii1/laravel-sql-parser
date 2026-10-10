@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Generator\Concerns;
+namespace Kwasii\LaravelSqlParser\Generator\Concerns;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\AggFunc;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Alias;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Column;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\From;
-use LaravelSqlParser\LaravelSqlParser\Expressions\IgnoreNulls;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Limit;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Ordered;
-use LaravelSqlParser\LaravelSqlParser\Expressions\PropertyEQ;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Rand;
-use LaravelSqlParser\LaravelSqlParser\Expressions\RespectNulls;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Select;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Star;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Struct;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Window;
+use Kwasii\LaravelSqlParser\Expressions\AggFunc;
+use Kwasii\LaravelSqlParser\Expressions\Alias;
+use Kwasii\LaravelSqlParser\Expressions\Column;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\From;
+use Kwasii\LaravelSqlParser\Expressions\IgnoreNulls;
+use Kwasii\LaravelSqlParser\Expressions\Limit;
+use Kwasii\LaravelSqlParser\Expressions\Ordered;
+use Kwasii\LaravelSqlParser\Expressions\PropertyEQ;
+use Kwasii\LaravelSqlParser\Expressions\Rand;
+use Kwasii\LaravelSqlParser\Expressions\RespectNulls;
+use Kwasii\LaravelSqlParser\Expressions\Select;
+use Kwasii\LaravelSqlParser\Expressions\Star;
+use Kwasii\LaravelSqlParser\Expressions\Struct;
+use Kwasii\LaravelSqlParser\Expressions\Window;
 
 /**
  * SELECT and its clauses: ordering, windows, subqueries, UNNEST, stars and placeholders

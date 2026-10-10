@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Expressions\Concerns;
+namespace Kwasii\LaravelSqlParser\Expressions\Concerns;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataTypeParam;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\DataTypeParam;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
 
 /**
  * @mixin DataTypeParam

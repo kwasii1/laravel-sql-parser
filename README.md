@@ -3,11 +3,11 @@
 </div>
 
 <p align="center">
-    <a href="https://packagist.org/packages/kwasii1/laravel-sql-parser"><img src="https://img.shields.io/packagist/v/kwasii1/laravel-sql-parser.svg?style=flat-square" alt="Packagist"></a>
-    <a href="https://packagist.org/packages/kwasii1/laravel-sql-parser"><img src="https://img.shields.io/packagist/php-v/kwasii1/laravel-sql-parser.svg?style=flat-square" alt="PHP from Packagist"></a>
-    <a href="https://packagist.org/packages/kwasii1/laravel-sql-parser"><img src="https://badge.laravel.cloud/badge/kwasii1/laravel-sql-parser?style=flat" alt="Laravel versions"></a>
-    <a href="https://github.com/kwasii1/laravel-sql-parser/actions"><img alt="GitHub Workflow Status (main)" src="https://img.shields.io/github/actions/workflow/status/kwasii1/laravel-sql-parser/tests.yml?branch=main&label=Tests&style=flat-square"></a>
-    <a href="https://packagist.org/packages/kwasii1/laravel-sql-parser"><img src="https://img.shields.io/packagist/dt/kwasii1/laravel-sql-parser.svg?style=flat-square" alt="Total Downloads"></a>
+    <a href="https://packagist.org/packages/kwasii/laravel-sql-parser"><img src="https://img.shields.io/packagist/v/kwasii/laravel-sql-parser.svg?style=flat-square" alt="Packagist"></a>
+    <a href="https://packagist.org/packages/kwasii/laravel-sql-parser"><img src="https://img.shields.io/packagist/php-v/kwasii/laravel-sql-parser.svg?style=flat-square" alt="PHP from Packagist"></a>
+    <a href="https://packagist.org/packages/kwasii/laravel-sql-parser"><img src="https://badge.laravel.cloud/badge/kwasii/laravel-sql-parser?style=flat" alt="Laravel versions"></a>
+    <a href="https://github.com/kwasii1/laravel-sql-parser/actions"><img alt="GitHub Workflow Status (main)" src="https://img.shields.io/github/actions/workflow/status/kwasii/laravel-sql-parser/tests.yml?branch=main&label=Tests&style=flat-square"></a>
+    <a href="https://packagist.org/packages/kwasii/laravel-sql-parser"><img src="https://img.shields.io/packagist/dt/kwasii/laravel-sql-parser.svg?style=flat-square" alt="Total Downloads"></a>
 </p>
 
 A fast SQL parser and transpiler for Laravel, written in pure PHP. It parses SQL into a syntax tree and writes it back out in another dialect: MySQL to SQL Server, Postgres to SQLite, and so on. It is a port of [sqlglot](https://github.com/tobymao/sqlglot) (v30.21.0) and passes sqlglot's own test cases for every supported dialect.
@@ -25,7 +25,7 @@ A fast SQL parser and transpiler for Laravel, written in pure PHP. It parses SQL
 ## Installation
 
 ```bash
-composer require kwasii1/laravel-sql-parser
+composer require kwasii/laravel-sql-parser
 ```
 
 Optionally publish the config file:
@@ -39,7 +39,7 @@ php artisan vendor:publish --tag="laravel-sql-parser-config"
 ### Transpiling SQL
 
 ```php
-use LaravelSqlParser\LaravelSqlParser\Facades\LaravelSqlParser as Sql;
+use Kwasii\LaravelSqlParser\Facades\LaravelSqlParser as Sql;
 
 Sql::transpile('SELECT IFNULL(a, 1) FROM t LIMIT 5', from: 'mysql', to: 'tsql');
 // ['SELECT TOP 5 COALESCE(a, 1) FROM t']
@@ -67,8 +67,8 @@ Some rewrites move or repeat placeholders: SQL Server puts the limit first as `T
 ### Parsing
 
 ```php
-use LaravelSqlParser\LaravelSqlParser\Expressions\Column;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Table;
+use Kwasii\LaravelSqlParser\Expressions\Column;
+use Kwasii\LaravelSqlParser\Expressions\Table;
 
 $select = Sql::parseOne('SELECT u.id, u.name FROM users AS u JOIN posts ON posts.user_id = u.id', 'mysql');
 
@@ -78,14 +78,14 @@ array_map(fn ($column) => $column->name(), $select->findAll(Column::class)); // 
 $select->sql('postgres'); // generate SQL for any dialect from the tree
 ```
 
-`Sql::parse()` returns one tree per statement, and `Sql::tokenize()` returns the tokens. Invalid SQL throws a `LaravelSqlParser\LaravelSqlParser\Errors\ParseError` with the line, column and surrounding text.
+`Sql::parse()` returns one tree per statement, and `Sql::tokenize()` returns the tokens. Invalid SQL throws a `Kwasii\LaravelSqlParser\Errors\ParseError` with the line, column and surrounding text.
 
 ### Building queries
 
 `Builder` ports sqlglot's fluent builders. Strings are parsed as SQL (pass `dialect:` to choose the dialect), every call returns a copy unless you pass `copy: false`, and list methods append unless you pass `append: false`:
 
 ```php
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
 
 $query = Builder::select('id', 'name')
     ->from('users')
@@ -107,7 +107,7 @@ Also available: `Builder::from()`, `insert()`, `delete()`, `merge()`, `union()`,
 `Optimizer::optimize()` ports sqlglot's optimizer: it qualifies tables and columns (expanding `*` from the schema), simplifies expressions, pushes predicates and projections down, merges and unnests subqueries and removes unused joins and CTEs. It takes a SQL string or a tree and returns a new tree:
 
 ```php
-use LaravelSqlParser\LaravelSqlParser\Optimizer\Optimizer;
+use Kwasii\LaravelSqlParser\Optimizer\Optimizer;
 
 $schema = ['x' => ['a' => 'INT', 'b' => 'INT']];
 
@@ -124,7 +124,7 @@ Pass `dialect:` for dialect-specific SQL, and `rules:` to run only some steps. E
 `dump()` turns a tree into a JSON-serializable array and `Expression::load()` rebuilds it, in the same format as sqlglot's `dump()`/`load()`:
 
 ```php
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
 
 $json = json_encode($query->dump());
 $copy = Expression::load(json_decode($json, true));
@@ -146,7 +146,7 @@ php artisan sql:transpile "SELECT 1" --ast
 The parser core has no Laravel dependency:
 
 ```php
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
 
 Dialect::transpile('SELECT IFNULL(a, 1)', read: 'mysql', write: 'postgres');
 Dialect::get('mysql')->parseOne('SELECT 1');
@@ -221,7 +221,7 @@ Against pure-Python sqlglot it is 2.5–4.4x faster on average (geometric mean) 
 - **Preload the parser core** to skip loading about 1,100 classes per request. It cut the first transpile in a request from about 0.9 ms to about 0.45 ms:
 
   ```ini
-  opcache.preload=/path/to/app/vendor/kwasii1/laravel-sql-parser/preload.php
+  opcache.preload=/path/to/app/vendor/kwasii/laravel-sql-parser/preload.php
   opcache.preload_user=www-data
   ```
 

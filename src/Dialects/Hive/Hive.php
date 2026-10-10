@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Hive;
+namespace Kwasii\LaravelSqlParser\Dialects\Hive;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
 
 /**
  * The Apache Hive dialect (sqlglot dialects/hive.py).

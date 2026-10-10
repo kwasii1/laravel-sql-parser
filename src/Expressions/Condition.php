@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Expressions;
+namespace Kwasii\LaravelSqlParser\Expressions;
 
 /**
  * Marks expressions that can be used as boolean conditions.

@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Doris;
+namespace Kwasii\LaravelSqlParser\Dialects\Doris;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\MySql\MySqlParser;
-use LaravelSqlParser\LaravelSqlParser\Expressions\BuildProperty;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Interval;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Partition;
-use LaravelSqlParser\LaravelSqlParser\Expressions\PartitionByRangeProperty;
-use LaravelSqlParser\LaravelSqlParser\Expressions\PartitionByRangePropertyDynamic;
-use LaravelSqlParser\LaravelSqlParser\Expressions\PartitionRange;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Property;
-use LaravelSqlParser\LaravelSqlParser\Expressions\RefreshTriggerProperty;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TimestampTrunc;
-use LaravelSqlParser\LaravelSqlParser\Expressions\UniqueKeyProperty;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenType;
+use Kwasii\LaravelSqlParser\Dialects\MySql\MySqlParser;
+use Kwasii\LaravelSqlParser\Expressions\BuildProperty;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Interval;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Expressions\Partition;
+use Kwasii\LaravelSqlParser\Expressions\PartitionByRangeProperty;
+use Kwasii\LaravelSqlParser\Expressions\PartitionByRangePropertyDynamic;
+use Kwasii\LaravelSqlParser\Expressions\PartitionRange;
+use Kwasii\LaravelSqlParser\Expressions\Property;
+use Kwasii\LaravelSqlParser\Expressions\RefreshTriggerProperty;
+use Kwasii\LaravelSqlParser\Expressions\TimestampTrunc;
+use Kwasii\LaravelSqlParser\Expressions\UniqueKeyProperty;
+use Kwasii\LaravelSqlParser\Tokenizer\TokenType;
 
 /**
  * Apache Doris parser (sqlglot parsers/doris.py).

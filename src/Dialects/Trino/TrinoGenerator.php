@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Trino;
+namespace Kwasii\LaravelSqlParser\Dialects\Trino;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Presto\PrestoGenerator;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ArrayConcat;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ArrayExpr;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Boolean;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\IfBlock;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONPath;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Expressions\NullExpr;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Properties;
+use Kwasii\LaravelSqlParser\Dialects\Presto\PrestoGenerator;
+use Kwasii\LaravelSqlParser\Expressions\ArrayConcat;
+use Kwasii\LaravelSqlParser\Expressions\ArrayExpr;
+use Kwasii\LaravelSqlParser\Expressions\Boolean;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\DType;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\IfBlock;
+use Kwasii\LaravelSqlParser\Expressions\JSONPath;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Expressions\NullExpr;
+use Kwasii\LaravelSqlParser\Expressions\Properties;
 
 /**
  * Trino generator (sqlglot generators/trino.py).

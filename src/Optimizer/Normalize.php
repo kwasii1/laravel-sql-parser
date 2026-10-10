@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Optimizer;
+namespace Kwasii\LaravelSqlParser\Optimizer;
 
 use Closure;
 use Generator;
-use LaravelSqlParser\LaravelSqlParser\Errors\OptimizeError;
-use LaravelSqlParser\LaravelSqlParser\Expressions\AndExpr;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Connector;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\OrExpr;
-use LaravelSqlParser\LaravelSqlParser\Support\Scope;
+use Kwasii\LaravelSqlParser\Errors\OptimizeError;
+use Kwasii\LaravelSqlParser\Expressions\AndExpr;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\Connector;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\OrExpr;
+use Kwasii\LaravelSqlParser\Support\Scope;
 
 /**
  * Port of sqlglot's optimizer/normalize.py: rewrite conditions into conjunctive (CNF) or

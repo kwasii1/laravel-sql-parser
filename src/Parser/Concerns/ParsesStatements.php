@@ -2,30 +2,30 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Parser\Concerns;
+namespace Kwasii\LaravelSqlParser\Parser\Concerns;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\Block;
-use LaravelSqlParser\LaravelSqlParser\Expressions\CloneExpr;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Comment;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Create;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Drop;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\MergeTreeTTL;
-use LaravelSqlParser\LaravelSqlParser\Expressions\MergeTreeTTLAction;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Properties;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ReturnExpr;
-use LaravelSqlParser\LaravelSqlParser\Expressions\SequenceProperties;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Subquery;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ToTableProperty;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TriggerEvent;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TriggerExecute;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TriggerProperties;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TriggerReferencing;
-use LaravelSqlParser\LaravelSqlParser\Expressions\UserDefinedFunction;
-use LaravelSqlParser\LaravelSqlParser\Expressions\WhileBlock;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenType;
+use Kwasii\LaravelSqlParser\Expressions\Block;
+use Kwasii\LaravelSqlParser\Expressions\CloneExpr;
+use Kwasii\LaravelSqlParser\Expressions\Comment;
+use Kwasii\LaravelSqlParser\Expressions\Create;
+use Kwasii\LaravelSqlParser\Expressions\DataType;
+use Kwasii\LaravelSqlParser\Expressions\Drop;
+use Kwasii\LaravelSqlParser\Expressions\DType;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\MergeTreeTTL;
+use Kwasii\LaravelSqlParser\Expressions\MergeTreeTTLAction;
+use Kwasii\LaravelSqlParser\Expressions\Properties;
+use Kwasii\LaravelSqlParser\Expressions\ReturnExpr;
+use Kwasii\LaravelSqlParser\Expressions\SequenceProperties;
+use Kwasii\LaravelSqlParser\Expressions\Subquery;
+use Kwasii\LaravelSqlParser\Expressions\ToTableProperty;
+use Kwasii\LaravelSqlParser\Expressions\TriggerEvent;
+use Kwasii\LaravelSqlParser\Expressions\TriggerExecute;
+use Kwasii\LaravelSqlParser\Expressions\TriggerProperties;
+use Kwasii\LaravelSqlParser\Expressions\TriggerReferencing;
+use Kwasii\LaravelSqlParser\Expressions\UserDefinedFunction;
+use Kwasii\LaravelSqlParser\Expressions\WhileBlock;
+use Kwasii\LaravelSqlParser\Tokenizer\TokenType;
 
 /**
  * Statement-level grammar: statement dispatch, COMMENT, DROP, CREATE and triggers

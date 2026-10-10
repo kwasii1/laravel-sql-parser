@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\TSql;
+namespace Kwasii\LaravelSqlParser\Dialects\TSql;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
 
 /**
  * The T-SQL dialect (sqlglot dialects/tsql.py).

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Optimizer;
+namespace Kwasii\LaravelSqlParser\Optimizer;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Column;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Dot;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Identifier;
-use LaravelSqlParser\LaravelSqlParser\Schema\MappingSchema;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Expressions\Column;
+use Kwasii\LaravelSqlParser\Expressions\Dot;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Identifier;
+use Kwasii\LaravelSqlParser\Schema\MappingSchema;
 
 /**
  * Normalize identifiers by converting them to lower or upper case, the way the dialect resolves

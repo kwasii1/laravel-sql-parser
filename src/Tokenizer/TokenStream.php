@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Tokenizer;
+namespace Kwasii\LaravelSqlParser\Tokenizer;
 
 /**
  * The tokenizer's output, stored as parallel arrays (struct-of-arrays) instead of one object

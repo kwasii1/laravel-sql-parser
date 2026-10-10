@@ -2,31 +2,31 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Expressions\Concerns;
+namespace Kwasii\LaravelSqlParser\Expressions\Concerns;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
-use LaravelSqlParser\LaravelSqlParser\Errors\ParseError;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Aliases;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Cluster;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Create;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Distinct;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\From;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Group;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Having;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Hint;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Identifier;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Join;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Lateral;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Lock;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Properties;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Qualify;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Select;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Sort;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Table;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Tuple;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Window;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Errors\ParseError;
+use Kwasii\LaravelSqlParser\Expressions\Aliases;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\Cluster;
+use Kwasii\LaravelSqlParser\Expressions\Create;
+use Kwasii\LaravelSqlParser\Expressions\Distinct;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\From;
+use Kwasii\LaravelSqlParser\Expressions\Group;
+use Kwasii\LaravelSqlParser\Expressions\Having;
+use Kwasii\LaravelSqlParser\Expressions\Hint;
+use Kwasii\LaravelSqlParser\Expressions\Identifier;
+use Kwasii\LaravelSqlParser\Expressions\Join;
+use Kwasii\LaravelSqlParser\Expressions\Lateral;
+use Kwasii\LaravelSqlParser\Expressions\Lock;
+use Kwasii\LaravelSqlParser\Expressions\Properties;
+use Kwasii\LaravelSqlParser\Expressions\Qualify;
+use Kwasii\LaravelSqlParser\Expressions\Select;
+use Kwasii\LaravelSqlParser\Expressions\Sort;
+use Kwasii\LaravelSqlParser\Expressions\Table;
+use Kwasii\LaravelSqlParser\Expressions\Tuple;
+use Kwasii\LaravelSqlParser\Expressions\Window;
 
 /**
  * @mixin Select

@@ -61,7 +61,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | Extra dialects by name, each a class extending
-    | LaravelSqlParser\LaravelSqlParser\Dialects\Dialect.
+    | Kwasii\LaravelSqlParser\Dialects\Dialect.
     |
     */
 

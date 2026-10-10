@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Athena;
+namespace Kwasii\LaravelSqlParser\Dialects\Athena;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
-use LaravelSqlParser\LaravelSqlParser\Dialects\Hive\Hive;
-use LaravelSqlParser\LaravelSqlParser\Dialects\Trino\Trino;
-use LaravelSqlParser\LaravelSqlParser\Errors\ErrorLevel;
-use LaravelSqlParser\LaravelSqlParser\Errors\ParseError;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Alter;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Create;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Describe;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Drop;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ExternalProperty;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Query;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Show;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\Token;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\Tokenizer;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenStream;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenType;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Dialects\Hive\Hive;
+use Kwasii\LaravelSqlParser\Dialects\Trino\Trino;
+use Kwasii\LaravelSqlParser\Errors\ErrorLevel;
+use Kwasii\LaravelSqlParser\Errors\ParseError;
+use Kwasii\LaravelSqlParser\Expressions\Alter;
+use Kwasii\LaravelSqlParser\Expressions\Create;
+use Kwasii\LaravelSqlParser\Expressions\Describe;
+use Kwasii\LaravelSqlParser\Expressions\Drop;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\ExternalProperty;
+use Kwasii\LaravelSqlParser\Expressions\Query;
+use Kwasii\LaravelSqlParser\Expressions\Show;
+use Kwasii\LaravelSqlParser\Tokenizer\Token;
+use Kwasii\LaravelSqlParser\Tokenizer\Tokenizer;
+use Kwasii\LaravelSqlParser\Tokenizer\TokenStream;
+use Kwasii\LaravelSqlParser\Tokenizer\TokenType;
 
 /**
  * The Amazon Athena dialect (sqlglot dialects/athena.py).

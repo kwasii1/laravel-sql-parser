@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Tests\Support\OptimizerReference;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Tests\Support\OptimizerReference;
 
 /**
  * sqlglot's optimizer fixtures (tests/fixtures/optimizer/*.sql), replayed through the PHP port.

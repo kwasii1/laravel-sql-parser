@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\BigQuery;
+namespace Kwasii\LaravelSqlParser\Dialects\BigQuery;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\ColumnDef;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DateAdd;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DateSub;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DatetimeTrunc;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DateTrunc;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Query;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Select;
-use LaravelSqlParser\LaravelSqlParser\Expressions\SetOperation;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TimestampTrunc;
-use LaravelSqlParser\LaravelSqlParser\Optimizer\TypeAnnotator;
+use Kwasii\LaravelSqlParser\Expressions\ColumnDef;
+use Kwasii\LaravelSqlParser\Expressions\DataType;
+use Kwasii\LaravelSqlParser\Expressions\DateAdd;
+use Kwasii\LaravelSqlParser\Expressions\DateSub;
+use Kwasii\LaravelSqlParser\Expressions\DatetimeTrunc;
+use Kwasii\LaravelSqlParser\Expressions\DateTrunc;
+use Kwasii\LaravelSqlParser\Expressions\DType;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Expressions\Query;
+use Kwasii\LaravelSqlParser\Expressions\Select;
+use Kwasii\LaravelSqlParser\Expressions\SetOperation;
+use Kwasii\LaravelSqlParser\Expressions\TimestampTrunc;
+use Kwasii\LaravelSqlParser\Optimizer\TypeAnnotator;
 
 /**
  * BigQuery type inference (sqlglot typing/bigquery.py).

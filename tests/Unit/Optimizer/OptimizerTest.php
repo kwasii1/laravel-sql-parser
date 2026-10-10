@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Optimizer\MergeSubqueries;
-use LaravelSqlParser\LaravelSqlParser\Optimizer\Optimizer;
-use LaravelSqlParser\LaravelSqlParser\Optimizer\QualifyColumns;
-use LaravelSqlParser\LaravelSqlParser\Optimizer\QualifyTables;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Optimizer\MergeSubqueries;
+use Kwasii\LaravelSqlParser\Optimizer\Optimizer;
+use Kwasii\LaravelSqlParser\Optimizer\QualifyColumns;
+use Kwasii\LaravelSqlParser\Optimizer\QualifyTables;
 
 it('optimizes a SQL string with a schema', function (): void {
     $optimized = Optimizer::optimize('SELECT a FROM (SELECT x.a FROM x) AS y', schema: ['x' => ['a' => 'INT']]);

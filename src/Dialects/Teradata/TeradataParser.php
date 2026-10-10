@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Teradata;
+namespace Kwasii\LaravelSqlParser\Dialects\Teradata;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\FormatPhrase;
-use LaravelSqlParser\LaravelSqlParser\Expressions\IndexParameters;
-use LaravelSqlParser\LaravelSqlParser\Expressions\LockingStatement;
-use LaravelSqlParser\LaravelSqlParser\Expressions\QueryBand;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Rand;
-use LaravelSqlParser\LaravelSqlParser\Expressions\RangeN;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TranslateCharacters;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Update;
-use LaravelSqlParser\LaravelSqlParser\Expressions\UseExpr;
-use LaravelSqlParser\LaravelSqlParser\Expressions\VarExpr;
-use LaravelSqlParser\LaravelSqlParser\Parser\Parser;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenType;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\FormatPhrase;
+use Kwasii\LaravelSqlParser\Expressions\IndexParameters;
+use Kwasii\LaravelSqlParser\Expressions\LockingStatement;
+use Kwasii\LaravelSqlParser\Expressions\QueryBand;
+use Kwasii\LaravelSqlParser\Expressions\Rand;
+use Kwasii\LaravelSqlParser\Expressions\RangeN;
+use Kwasii\LaravelSqlParser\Expressions\TranslateCharacters;
+use Kwasii\LaravelSqlParser\Expressions\Update;
+use Kwasii\LaravelSqlParser\Expressions\UseExpr;
+use Kwasii\LaravelSqlParser\Expressions\VarExpr;
+use Kwasii\LaravelSqlParser\Parser\Parser;
+use Kwasii\LaravelSqlParser\Tokenizer\TokenType;
 
 /**
  * Teradata parser (sqlglot parsers/teradata.py).

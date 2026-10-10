@@ -2,26 +2,26 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Generator;
+namespace Kwasii\LaravelSqlParser\Generator;
 
 use Closure;
 use InvalidArgumentException;
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
-use LaravelSqlParser\LaravelSqlParser\Errors\ErrorLevel;
-use LaravelSqlParser\LaravelSqlParser\Errors\UnsupportedError;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Fetch;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Func;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Limit;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Properties;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Property;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Select;
-use LaravelSqlParser\LaravelSqlParser\Expressions\SetOperation;
-use LaravelSqlParser\LaravelSqlParser\Expressions\With;
-use LaravelSqlParser\LaravelSqlParser\Optimizer\Simplify;
-use LaravelSqlParser\LaravelSqlParser\Parser\Parser;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenType;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Errors\ErrorLevel;
+use Kwasii\LaravelSqlParser\Errors\UnsupportedError;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Fetch;
+use Kwasii\LaravelSqlParser\Expressions\Func;
+use Kwasii\LaravelSqlParser\Expressions\Limit;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Expressions\Properties;
+use Kwasii\LaravelSqlParser\Expressions\Property;
+use Kwasii\LaravelSqlParser\Expressions\Select;
+use Kwasii\LaravelSqlParser\Expressions\SetOperation;
+use Kwasii\LaravelSqlParser\Expressions\With;
+use Kwasii\LaravelSqlParser\Optimizer\Simplify;
+use Kwasii\LaravelSqlParser\Parser\Parser;
+use Kwasii\LaravelSqlParser\Tokenizer\TokenType;
 use ReflectionClass;
 
 /**

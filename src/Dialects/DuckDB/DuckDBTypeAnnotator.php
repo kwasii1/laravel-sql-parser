@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\DuckDB;
+namespace Kwasii\LaravelSqlParser\Dialects\DuckDB;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Optimizer\TypeAnnotator;
+use Kwasii\LaravelSqlParser\Expressions\DType;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Optimizer\TypeAnnotator;
 
 /**
  * DuckDB type inference (sqlglot typing/duckdb.py).

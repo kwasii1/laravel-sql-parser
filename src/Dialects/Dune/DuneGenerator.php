@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Dune;
+namespace Kwasii\LaravelSqlParser\Dialects\Dune;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Trino\TrinoGenerator;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Dialects\Trino\TrinoGenerator;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
 
 /**
  * Dune generator (sqlglot generators/dune.py).

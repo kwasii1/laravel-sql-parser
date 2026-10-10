@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Expressions\Concerns;
+namespace Kwasii\LaravelSqlParser\Expressions\Concerns;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Delete;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Table;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Where;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\Delete;
+use Kwasii\LaravelSqlParser\Expressions\Table;
+use Kwasii\LaravelSqlParser\Expressions\Where;
 
 /**
  * @mixin Delete

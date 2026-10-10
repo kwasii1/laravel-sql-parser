@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
-use LaravelSqlParser\LaravelSqlParser\Tests\Support\Reference;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenType;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Tests\Support\Reference;
+use Kwasii\LaravelSqlParser\Tokenizer\TokenType;
 
 /**
  * @return array<int, array{0: string, 1: list<array{0: string, 1: string}>}>

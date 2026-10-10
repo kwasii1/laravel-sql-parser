@@ -2,26 +2,26 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\MySql;
+namespace Kwasii\LaravelSqlParser\Dialects\MySql;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Create;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DateAdd;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Div;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Interval;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Kwarg;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Expressions\PartitionByListProperty;
-use LaravelSqlParser\LaravelSqlParser\Expressions\PartitionByRangeProperty;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Properties;
-use LaravelSqlParser\LaravelSqlParser\Expressions\SqlSecurityProperty;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Sub;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TimestampDiff;
-use LaravelSqlParser\LaravelSqlParser\Expressions\WeekStart;
-use LaravelSqlParser\LaravelSqlParser\Generator\Generator;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\Create;
+use Kwasii\LaravelSqlParser\Expressions\DataType;
+use Kwasii\LaravelSqlParser\Expressions\DateAdd;
+use Kwasii\LaravelSqlParser\Expressions\Div;
+use Kwasii\LaravelSqlParser\Expressions\DType;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Interval;
+use Kwasii\LaravelSqlParser\Expressions\Kwarg;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Expressions\PartitionByListProperty;
+use Kwasii\LaravelSqlParser\Expressions\PartitionByRangeProperty;
+use Kwasii\LaravelSqlParser\Expressions\Properties;
+use Kwasii\LaravelSqlParser\Expressions\SqlSecurityProperty;
+use Kwasii\LaravelSqlParser\Expressions\Sub;
+use Kwasii\LaravelSqlParser\Expressions\TimestampDiff;
+use Kwasii\LaravelSqlParser\Expressions\WeekStart;
+use Kwasii\LaravelSqlParser\Generator\Generator;
 
 /**
  * MySQL generator (sqlglot generators/mysql.py).

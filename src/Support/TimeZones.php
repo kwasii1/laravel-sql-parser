@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Support;
+namespace Kwasii\LaravelSqlParser\Support;
 
 /**
  * Lowercased time zone names (sqlglot time.TIMEZONES, v30.21.0).

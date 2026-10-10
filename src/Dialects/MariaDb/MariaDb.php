@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\MariaDb;
+namespace Kwasii\LaravelSqlParser\Dialects\MariaDb;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\MySql\MySql;
+use Kwasii\LaravelSqlParser\Dialects\MySql\MySql;
 
 /**
  * The MariaDB dialect. sqlglot has no MariaDB dialect, so this is MySQL with MariaDB's

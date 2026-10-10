@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Prql;
+namespace Kwasii\LaravelSqlParser\Dialects\Prql;
 
-use LaravelSqlParser\LaravelSqlParser\Generator\Generator;
+use Kwasii\LaravelSqlParser\Generator\Generator;
 
 /**
  * PRQL generator (sqlglot generators/prql.py).

@@ -2,37 +2,37 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Parser\Concerns;
+namespace Kwasii\LaravelSqlParser\Parser\Concerns;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Cache;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Column;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ConditionalInsert;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Delete;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Describe;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Directory;
-use LaravelSqlParser\LaravelSqlParser\Expressions\EQ;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Insert;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Kill;
-use LaravelSqlParser\LaravelSqlParser\Expressions\LoadData;
-use LaravelSqlParser\LaravelSqlParser\Expressions\MultitableInserts;
-use LaravelSqlParser\LaravelSqlParser\Expressions\OnConflict;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Partition;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Properties;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Returning;
-use LaravelSqlParser\LaravelSqlParser\Expressions\RowFormatDelimitedProperty;
-use LaravelSqlParser\LaravelSqlParser\Expressions\RowFormatSerdeProperty;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Schema;
-use LaravelSqlParser\LaravelSqlParser\Expressions\SerdeProperties;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Subquery;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Table;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Tuple;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Uncache;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Update;
-use LaravelSqlParser\LaravelSqlParser\Expressions\UseExpr;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Values;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenType;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\Cache;
+use Kwasii\LaravelSqlParser\Expressions\Column;
+use Kwasii\LaravelSqlParser\Expressions\ConditionalInsert;
+use Kwasii\LaravelSqlParser\Expressions\Delete;
+use Kwasii\LaravelSqlParser\Expressions\Describe;
+use Kwasii\LaravelSqlParser\Expressions\Directory;
+use Kwasii\LaravelSqlParser\Expressions\EQ;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Insert;
+use Kwasii\LaravelSqlParser\Expressions\Kill;
+use Kwasii\LaravelSqlParser\Expressions\LoadData;
+use Kwasii\LaravelSqlParser\Expressions\MultitableInserts;
+use Kwasii\LaravelSqlParser\Expressions\OnConflict;
+use Kwasii\LaravelSqlParser\Expressions\Partition;
+use Kwasii\LaravelSqlParser\Expressions\Properties;
+use Kwasii\LaravelSqlParser\Expressions\Returning;
+use Kwasii\LaravelSqlParser\Expressions\RowFormatDelimitedProperty;
+use Kwasii\LaravelSqlParser\Expressions\RowFormatSerdeProperty;
+use Kwasii\LaravelSqlParser\Expressions\Schema;
+use Kwasii\LaravelSqlParser\Expressions\SerdeProperties;
+use Kwasii\LaravelSqlParser\Expressions\Subquery;
+use Kwasii\LaravelSqlParser\Expressions\Table;
+use Kwasii\LaravelSqlParser\Expressions\Tuple;
+use Kwasii\LaravelSqlParser\Expressions\Uncache;
+use Kwasii\LaravelSqlParser\Expressions\Update;
+use Kwasii\LaravelSqlParser\Expressions\UseExpr;
+use Kwasii\LaravelSqlParser\Expressions\Values;
+use Kwasii\LaravelSqlParser\Tokenizer\TokenType;
 
 /**
  * DESCRIBE, INSERT, UPDATE, DELETE, LOAD, USE, CACHE and VALUES

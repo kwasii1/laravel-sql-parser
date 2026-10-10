@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Snowflake;
+namespace Kwasii\LaravelSqlParser\Dialects\Snowflake;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Order;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Ordered;
-use LaravelSqlParser\LaravelSqlParser\Expressions\PercentileCont;
-use LaravelSqlParser\LaravelSqlParser\Expressions\PercentileDisc;
-use LaravelSqlParser\LaravelSqlParser\Optimizer\TypeAnnotator;
+use Kwasii\LaravelSqlParser\Expressions\DataType;
+use Kwasii\LaravelSqlParser\Expressions\DType;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Order;
+use Kwasii\LaravelSqlParser\Expressions\Ordered;
+use Kwasii\LaravelSqlParser\Expressions\PercentileCont;
+use Kwasii\LaravelSqlParser\Expressions\PercentileDisc;
+use Kwasii\LaravelSqlParser\Optimizer\TypeAnnotator;
 
 /**
  * Snowflake type inference (sqlglot typing/snowflake.py).

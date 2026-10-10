@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Solr;
+namespace Kwasii\LaravelSqlParser\Dialects\Solr;
 
-use LaravelSqlParser\LaravelSqlParser\Parser\Parser;
+use Kwasii\LaravelSqlParser\Parser\Parser;
 
 /**
  * Apache Solr parser (sqlglot parsers/solr.py).

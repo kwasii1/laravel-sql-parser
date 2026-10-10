@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
-use LaravelSqlParser\LaravelSqlParser\Tests\Support\Reference;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Tests\Support\Reference;
 
 /**
  * Generate every statement in $sql with the base dialect, the way sqlglot's transpile() does.

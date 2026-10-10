@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Optimizer;
+namespace Kwasii\LaravelSqlParser\Optimizer;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\Alias;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Column;
-use LaravelSqlParser\LaravelSqlParser\Expressions\CTE;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Identifier;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Lateral;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Query;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Select;
-use LaravelSqlParser\LaravelSqlParser\Expressions\SetOperation;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Subquery;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Table;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TableColumn;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Unnest;
-use LaravelSqlParser\LaravelSqlParser\Expressions\With;
-use LaravelSqlParser\LaravelSqlParser\Support\Scope;
+use Kwasii\LaravelSqlParser\Expressions\Alias;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\Column;
+use Kwasii\LaravelSqlParser\Expressions\CTE;
+use Kwasii\LaravelSqlParser\Expressions\DType;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Identifier;
+use Kwasii\LaravelSqlParser\Expressions\Lateral;
+use Kwasii\LaravelSqlParser\Expressions\Query;
+use Kwasii\LaravelSqlParser\Expressions\Select;
+use Kwasii\LaravelSqlParser\Expressions\SetOperation;
+use Kwasii\LaravelSqlParser\Expressions\Subquery;
+use Kwasii\LaravelSqlParser\Expressions\Table;
+use Kwasii\LaravelSqlParser\Expressions\TableColumn;
+use Kwasii\LaravelSqlParser\Expressions\Unnest;
+use Kwasii\LaravelSqlParser\Expressions\With;
+use Kwasii\LaravelSqlParser\Support\Scope;
 
 /**
  * Rewrite a qualified query to a canonical structural form (sqlglot

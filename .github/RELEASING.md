@@ -32,7 +32,7 @@ A release is a `vX.Y.Z` tag on `main`, a GitHub release for it, and Packagist pi
    with notes generated from the merged pull requests (grouped by label, see
    `.github/release.yml`), adds those notes to `CHANGELOG.md`, and notifies Packagist.
 
-Users can then `composer require kwasii1/laravel-sql-parser` and get the new version.
+Users can then `composer require kwasii/laravel-sql-parser` and get the new version.
 
 ## Release notes
 

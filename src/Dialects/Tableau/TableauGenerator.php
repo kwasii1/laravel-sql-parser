@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Tableau;
+namespace Kwasii\LaravelSqlParser\Dialects\Tableau;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\Distinct;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Generator\Generator;
+use Kwasii\LaravelSqlParser\Expressions\Distinct;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Generator\Generator;
 
 /**
  * Tableau generator (sqlglot generators/tableau.py).

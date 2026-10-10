@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Teradata;
+namespace Kwasii\LaravelSqlParser\Dialects\Teradata;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
 
 /**
  * The Teradata dialect (sqlglot dialects/teradata.py).

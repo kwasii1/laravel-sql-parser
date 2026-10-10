@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\DuckDB\Concerns;
+namespace Kwasii\LaravelSqlParser\Dialects\DuckDB\Concerns;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\ArrayCompact;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ArrayExpr;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ArrayPosition;
-use LaravelSqlParser\LaravelSqlParser\Expressions\AtTimeZone;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Decode;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\EQ;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Extract;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Expressions\NullSafeEQ;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Schema;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Sub;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Unhex;
-use LaravelSqlParser\LaravelSqlParser\Expressions\VarExpr;
+use Kwasii\LaravelSqlParser\Expressions\ArrayCompact;
+use Kwasii\LaravelSqlParser\Expressions\ArrayExpr;
+use Kwasii\LaravelSqlParser\Expressions\ArrayPosition;
+use Kwasii\LaravelSqlParser\Expressions\AtTimeZone;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\DataType;
+use Kwasii\LaravelSqlParser\Expressions\Decode;
+use Kwasii\LaravelSqlParser\Expressions\DType;
+use Kwasii\LaravelSqlParser\Expressions\EQ;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Extract;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Expressions\NullSafeEQ;
+use Kwasii\LaravelSqlParser\Expressions\Schema;
+use Kwasii\LaravelSqlParser\Expressions\Sub;
+use Kwasii\LaravelSqlParser\Expressions\Unhex;
+use Kwasii\LaravelSqlParser\Expressions\VarExpr;
 
 /**
  * The lambdas of DuckDBGenerator.TRANSFORMS (sqlglot generators/duckdb.py).

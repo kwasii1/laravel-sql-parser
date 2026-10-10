@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Doris;
+namespace Kwasii\LaravelSqlParser\Dialects\Doris;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\MySql\MySql;
+use Kwasii\LaravelSqlParser\Dialects\MySql\MySql;
 
 /**
  * The Apache Doris dialect (sqlglot dialects/doris.py).

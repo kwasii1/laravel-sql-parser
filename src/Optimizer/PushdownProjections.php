@@ -2,37 +2,37 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Optimizer;
+namespace Kwasii\LaravelSqlParser\Optimizer;
 
-use LaravelSqlParser\LaravelSqlParser\Errors\OptimizeError;
-use LaravelSqlParser\LaravelSqlParser\Expressions\AggFunc;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Alias;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Anonymous;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Column;
-use LaravelSqlParser\LaravelSqlParser\Expressions\CTE;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Cube;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Except;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ExplodingGenerateSeries;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\GroupingSets;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Intersect;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Max;
-use LaravelSqlParser\LaravelSqlParser\Expressions\NullExpr;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Paren;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Query;
-use LaravelSqlParser\LaravelSqlParser\Expressions\QueryTransform;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Rollup;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Select;
-use LaravelSqlParser\LaravelSqlParser\Expressions\SetOperation;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Subquery;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Table;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Tuple;
-use LaravelSqlParser\LaravelSqlParser\Expressions\UDTF;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Window;
-use LaravelSqlParser\LaravelSqlParser\Expressions\With;
-use LaravelSqlParser\LaravelSqlParser\Support\Scope;
+use Kwasii\LaravelSqlParser\Errors\OptimizeError;
+use Kwasii\LaravelSqlParser\Expressions\AggFunc;
+use Kwasii\LaravelSqlParser\Expressions\Alias;
+use Kwasii\LaravelSqlParser\Expressions\Anonymous;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\Column;
+use Kwasii\LaravelSqlParser\Expressions\CTE;
+use Kwasii\LaravelSqlParser\Expressions\Cube;
+use Kwasii\LaravelSqlParser\Expressions\Except;
+use Kwasii\LaravelSqlParser\Expressions\ExplodingGenerateSeries;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\GroupingSets;
+use Kwasii\LaravelSqlParser\Expressions\Intersect;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Expressions\Max;
+use Kwasii\LaravelSqlParser\Expressions\NullExpr;
+use Kwasii\LaravelSqlParser\Expressions\Paren;
+use Kwasii\LaravelSqlParser\Expressions\Query;
+use Kwasii\LaravelSqlParser\Expressions\QueryTransform;
+use Kwasii\LaravelSqlParser\Expressions\Rollup;
+use Kwasii\LaravelSqlParser\Expressions\Select;
+use Kwasii\LaravelSqlParser\Expressions\SetOperation;
+use Kwasii\LaravelSqlParser\Expressions\Subquery;
+use Kwasii\LaravelSqlParser\Expressions\Table;
+use Kwasii\LaravelSqlParser\Expressions\Tuple;
+use Kwasii\LaravelSqlParser\Expressions\UDTF;
+use Kwasii\LaravelSqlParser\Expressions\Window;
+use Kwasii\LaravelSqlParser\Expressions\With;
+use Kwasii\LaravelSqlParser\Support\Scope;
 
 /**
  * Remove unused projections and CTEs while preserving all outermost outputs

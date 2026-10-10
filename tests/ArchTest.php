@@ -11,29 +11,29 @@ arch('it will not use dd(), ddd(), env(), or exit()')
     ->each->not->toBeUsed();
 
 arch('the package source declares strict types')
-    ->expect('LaravelSqlParser\LaravelSqlParser')
+    ->expect('Kwasii\LaravelSqlParser')
     ->toUseStrictTypes();
 
 arch('the parser core does not depend on Laravel')
     ->expect([
-        'LaravelSqlParser\LaravelSqlParser\Dialects',
-        'LaravelSqlParser\LaravelSqlParser\Errors',
-        'LaravelSqlParser\LaravelSqlParser\Expressions',
-        'LaravelSqlParser\LaravelSqlParser\Generator',
-        'LaravelSqlParser\LaravelSqlParser\Optimizer',
-        'LaravelSqlParser\LaravelSqlParser\Parser',
-        'LaravelSqlParser\LaravelSqlParser\Support',
-        'LaravelSqlParser\LaravelSqlParser\Tokenizer',
+        'Kwasii\LaravelSqlParser\Dialects',
+        'Kwasii\LaravelSqlParser\Errors',
+        'Kwasii\LaravelSqlParser\Expressions',
+        'Kwasii\LaravelSqlParser\Generator',
+        'Kwasii\LaravelSqlParser\Optimizer',
+        'Kwasii\LaravelSqlParser\Parser',
+        'Kwasii\LaravelSqlParser\Support',
+        'Kwasii\LaravelSqlParser\Tokenizer',
     ])
     ->not->toUse('Illuminate');
 
 arch('expression nodes extend Expression')
-    ->expect('LaravelSqlParser\LaravelSqlParser\Expressions')
+    ->expect('Kwasii\LaravelSqlParser\Expressions')
     ->classes()
-    ->toExtend('LaravelSqlParser\LaravelSqlParser\Expressions\Expression')
+    ->toExtend('Kwasii\LaravelSqlParser\Expressions\Expression')
     ->ignoring([
-        'LaravelSqlParser\LaravelSqlParser\Expressions\Expression',
-        'LaravelSqlParser\LaravelSqlParser\Expressions\Builder',
-        'LaravelSqlParser\LaravelSqlParser\Expressions\DType',
-        'LaravelSqlParser\LaravelSqlParser\Expressions\ExpressionRegistry',
+        'Kwasii\LaravelSqlParser\Expressions\Expression',
+        'Kwasii\LaravelSqlParser\Expressions\Builder',
+        'Kwasii\LaravelSqlParser\Expressions\DType',
+        'Kwasii\LaravelSqlParser\Expressions\ExpressionRegistry',
     ]);

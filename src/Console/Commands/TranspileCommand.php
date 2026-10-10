@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Console\Commands;
+namespace Kwasii\LaravelSqlParser\Console\Commands;
 
 use Illuminate\Console\Command;
 use InvalidArgumentException;
-use LaravelSqlParser\LaravelSqlParser\Errors\SqlParserException;
-use LaravelSqlParser\LaravelSqlParser\LaravelSqlParser;
+use Kwasii\LaravelSqlParser\Errors\SqlParserException;
+use Kwasii\LaravelSqlParser\LaravelSqlParser;
 
 class TranspileCommand extends Command
 {

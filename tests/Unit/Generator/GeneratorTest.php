@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
-use LaravelSqlParser\LaravelSqlParser\Errors\ErrorLevel;
-use LaravelSqlParser\LaravelSqlParser\Errors\UnsupportedError;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Column;
-use LaravelSqlParser\LaravelSqlParser\Parser\Parser;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Errors\ErrorLevel;
+use Kwasii\LaravelSqlParser\Errors\UnsupportedError;
+use Kwasii\LaravelSqlParser\Expressions\Column;
+use Kwasii\LaravelSqlParser\Parser\Parser;
 
 /**
  * @param  array<string, mixed>  $options

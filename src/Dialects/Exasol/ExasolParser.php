@@ -2,28 +2,28 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Exasol;
+namespace Kwasii\LaravelSqlParser\Dialects\Exasol;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\All;
-use LaravelSqlParser\LaravelSqlParser\Expressions\BitwiseNot;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Column;
-use LaravelSqlParser\LaravelSqlParser\Expressions\CommentColumnConstraint;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ConvertTimezone;
-use LaravelSqlParser\LaravelSqlParser\Expressions\EQ;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Identifier;
-use LaravelSqlParser\LaravelSqlParser\Expressions\IfExpr;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Is;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONExtract;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Expressions\NullExpr;
-use LaravelSqlParser\LaravelSqlParser\Expressions\RegexpLike;
-use LaravelSqlParser\LaravelSqlParser\Expressions\RegexpReplace;
-use LaravelSqlParser\LaravelSqlParser\Expressions\SHA2;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TimestampTrunc;
-use LaravelSqlParser\LaravelSqlParser\Expressions\UseExpr;
-use LaravelSqlParser\LaravelSqlParser\Parser\Parser;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenType;
+use Kwasii\LaravelSqlParser\Expressions\All;
+use Kwasii\LaravelSqlParser\Expressions\BitwiseNot;
+use Kwasii\LaravelSqlParser\Expressions\Column;
+use Kwasii\LaravelSqlParser\Expressions\CommentColumnConstraint;
+use Kwasii\LaravelSqlParser\Expressions\ConvertTimezone;
+use Kwasii\LaravelSqlParser\Expressions\EQ;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Identifier;
+use Kwasii\LaravelSqlParser\Expressions\IfExpr;
+use Kwasii\LaravelSqlParser\Expressions\Is;
+use Kwasii\LaravelSqlParser\Expressions\JSONExtract;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Expressions\NullExpr;
+use Kwasii\LaravelSqlParser\Expressions\RegexpLike;
+use Kwasii\LaravelSqlParser\Expressions\RegexpReplace;
+use Kwasii\LaravelSqlParser\Expressions\SHA2;
+use Kwasii\LaravelSqlParser\Expressions\TimestampTrunc;
+use Kwasii\LaravelSqlParser\Expressions\UseExpr;
+use Kwasii\LaravelSqlParser\Parser\Parser;
+use Kwasii\LaravelSqlParser\Tokenizer\TokenType;
 
 /**
  * Exasol parser (sqlglot parsers/exasol.py).

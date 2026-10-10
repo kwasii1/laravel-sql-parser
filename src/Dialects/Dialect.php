@@ -2,28 +2,28 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects;
+namespace Kwasii\LaravelSqlParser\Dialects;
 
 use InvalidArgumentException;
-use LaravelSqlParser\LaravelSqlParser\Errors\ErrorLevel;
-use LaravelSqlParser\LaravelSqlParser\Errors\ParseError;
-use LaravelSqlParser\LaravelSqlParser\Errors\TokenError;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Block;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Func;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Identifier;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Generator\Generator;
-use LaravelSqlParser\LaravelSqlParser\Optimizer\TypeAnnotator;
-use LaravelSqlParser\LaravelSqlParser\Optimizer\TypeTables;
-use LaravelSqlParser\LaravelSqlParser\Parser\Parser;
-use LaravelSqlParser\LaravelSqlParser\Support\JsonPath;
-use LaravelSqlParser\LaravelSqlParser\Support\TimeFormat;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\JsonPathTokenizerTables;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\Token;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\Tokenizer;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenizerTables;
+use Kwasii\LaravelSqlParser\Errors\ErrorLevel;
+use Kwasii\LaravelSqlParser\Errors\ParseError;
+use Kwasii\LaravelSqlParser\Errors\TokenError;
+use Kwasii\LaravelSqlParser\Expressions\Block;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Func;
+use Kwasii\LaravelSqlParser\Expressions\Identifier;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Generator\Generator;
+use Kwasii\LaravelSqlParser\Optimizer\TypeAnnotator;
+use Kwasii\LaravelSqlParser\Optimizer\TypeTables;
+use Kwasii\LaravelSqlParser\Parser\Parser;
+use Kwasii\LaravelSqlParser\Support\JsonPath;
+use Kwasii\LaravelSqlParser\Support\TimeFormat;
+use Kwasii\LaravelSqlParser\Tokenizer\JsonPathTokenizerTables;
+use Kwasii\LaravelSqlParser\Tokenizer\Token;
+use Kwasii\LaravelSqlParser\Tokenizer\Tokenizer;
+use Kwasii\LaravelSqlParser\Tokenizer\TokenizerTables;
 use ReflectionClass;
 
 /**

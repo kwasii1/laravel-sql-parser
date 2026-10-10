@@ -2,38 +2,38 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Parser\Concerns;
+namespace Kwasii\LaravelSqlParser\Parser\Concerns;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
-use LaravelSqlParser\LaravelSqlParser\Errors\ParseError;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Anonymous;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Cast;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Column;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DateTrunc;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Interval;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Is;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONBContainsTopKey;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONBExtract;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONBExtractScalar;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONExtract;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONExtractScalar;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONPath;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONPathKey;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONPathRoot;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONPathSubscript;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Expressions\NullExpr;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Paren;
-use LaravelSqlParser\LaravelSqlParser\Expressions\RegexpExtract;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Replace;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TimestampTrunc;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TimeToStr;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ToChar;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Trunc;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Errors\ParseError;
+use Kwasii\LaravelSqlParser\Expressions\Anonymous;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\Cast;
+use Kwasii\LaravelSqlParser\Expressions\Column;
+use Kwasii\LaravelSqlParser\Expressions\DataType;
+use Kwasii\LaravelSqlParser\Expressions\DateTrunc;
+use Kwasii\LaravelSqlParser\Expressions\DType;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Interval;
+use Kwasii\LaravelSqlParser\Expressions\Is;
+use Kwasii\LaravelSqlParser\Expressions\JSONBContainsTopKey;
+use Kwasii\LaravelSqlParser\Expressions\JSONBExtract;
+use Kwasii\LaravelSqlParser\Expressions\JSONBExtractScalar;
+use Kwasii\LaravelSqlParser\Expressions\JSONExtract;
+use Kwasii\LaravelSqlParser\Expressions\JSONExtractScalar;
+use Kwasii\LaravelSqlParser\Expressions\JSONPath;
+use Kwasii\LaravelSqlParser\Expressions\JSONPathKey;
+use Kwasii\LaravelSqlParser\Expressions\JSONPathRoot;
+use Kwasii\LaravelSqlParser\Expressions\JSONPathSubscript;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Expressions\NullExpr;
+use Kwasii\LaravelSqlParser\Expressions\Paren;
+use Kwasii\LaravelSqlParser\Expressions\RegexpExtract;
+use Kwasii\LaravelSqlParser\Expressions\Replace;
+use Kwasii\LaravelSqlParser\Expressions\TimestampTrunc;
+use Kwasii\LaravelSqlParser\Expressions\TimeToStr;
+use Kwasii\LaravelSqlParser\Expressions\ToChar;
+use Kwasii\LaravelSqlParser\Expressions\Trunc;
 
 /**
  * Function builders shared by dialects (sqlglot dialects/dialect.py build_* helpers). FUNCTIONS

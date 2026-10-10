@@ -2,37 +2,37 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\SingleStore;
+namespace Kwasii\LaravelSqlParser\Dialects\SingleStore;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
-use LaravelSqlParser\LaravelSqlParser\Dialects\MySql\MySqlParser;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Add;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ApproxQuantile;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Cast;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DateBin;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DayOfWeek;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONArray;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONArrayAgg;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONArrayContains;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONExists;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONExtract;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONExtractScalar;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONKeys;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONObject;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONPath;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Mod;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Reduce;
-use LaravelSqlParser\LaravelSqlParser\Expressions\RegexpExtract;
-use LaravelSqlParser\LaravelSqlParser\Expressions\RegexpExtractAll;
-use LaravelSqlParser\LaravelSqlParser\Expressions\RenameColumn;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TimestampDiff;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TimeToStr;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TryCast;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Dialects\MySql\MySqlParser;
+use Kwasii\LaravelSqlParser\Expressions\Add;
+use Kwasii\LaravelSqlParser\Expressions\ApproxQuantile;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\Cast;
+use Kwasii\LaravelSqlParser\Expressions\DataType;
+use Kwasii\LaravelSqlParser\Expressions\DateBin;
+use Kwasii\LaravelSqlParser\Expressions\DayOfWeek;
+use Kwasii\LaravelSqlParser\Expressions\DType;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\JSONArray;
+use Kwasii\LaravelSqlParser\Expressions\JSONArrayAgg;
+use Kwasii\LaravelSqlParser\Expressions\JSONArrayContains;
+use Kwasii\LaravelSqlParser\Expressions\JSONExists;
+use Kwasii\LaravelSqlParser\Expressions\JSONExtract;
+use Kwasii\LaravelSqlParser\Expressions\JSONExtractScalar;
+use Kwasii\LaravelSqlParser\Expressions\JSONKeys;
+use Kwasii\LaravelSqlParser\Expressions\JSONObject;
+use Kwasii\LaravelSqlParser\Expressions\JSONPath;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Expressions\Mod;
+use Kwasii\LaravelSqlParser\Expressions\Reduce;
+use Kwasii\LaravelSqlParser\Expressions\RegexpExtract;
+use Kwasii\LaravelSqlParser\Expressions\RegexpExtractAll;
+use Kwasii\LaravelSqlParser\Expressions\RenameColumn;
+use Kwasii\LaravelSqlParser\Expressions\TimestampDiff;
+use Kwasii\LaravelSqlParser\Expressions\TimeToStr;
+use Kwasii\LaravelSqlParser\Expressions\TryCast;
 
 /**
  * SingleStore parser (sqlglot parsers/singlestore.py).

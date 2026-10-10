@@ -2,32 +2,32 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Parser\Concerns;
+namespace Kwasii\LaravelSqlParser\Parser\Concerns;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\Alias;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\CTE;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Distinct;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Except;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\From;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Group;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Intersect;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Limit;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Offset;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Order;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Ordered;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Query;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Select;
-use LaravelSqlParser\LaravelSqlParser\Expressions\SetOperation;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Star;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Subquery;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TableAlias;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Union;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Where;
-use LaravelSqlParser\LaravelSqlParser\Expressions\With;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenType;
+use Kwasii\LaravelSqlParser\Expressions\Alias;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\CTE;
+use Kwasii\LaravelSqlParser\Expressions\Distinct;
+use Kwasii\LaravelSqlParser\Expressions\Except;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\From;
+use Kwasii\LaravelSqlParser\Expressions\Group;
+use Kwasii\LaravelSqlParser\Expressions\Intersect;
+use Kwasii\LaravelSqlParser\Expressions\Limit;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Expressions\Offset;
+use Kwasii\LaravelSqlParser\Expressions\Order;
+use Kwasii\LaravelSqlParser\Expressions\Ordered;
+use Kwasii\LaravelSqlParser\Expressions\Query;
+use Kwasii\LaravelSqlParser\Expressions\Select;
+use Kwasii\LaravelSqlParser\Expressions\SetOperation;
+use Kwasii\LaravelSqlParser\Expressions\Star;
+use Kwasii\LaravelSqlParser\Expressions\Subquery;
+use Kwasii\LaravelSqlParser\Expressions\TableAlias;
+use Kwasii\LaravelSqlParser\Expressions\Union;
+use Kwasii\LaravelSqlParser\Expressions\Where;
+use Kwasii\LaravelSqlParser\Expressions\With;
+use Kwasii\LaravelSqlParser\Tokenizer\TokenType;
 
 /**
  * Pipe syntax (FROM t |> WHERE ... |> AGGREGATE ...): each operator wraps the query built so far

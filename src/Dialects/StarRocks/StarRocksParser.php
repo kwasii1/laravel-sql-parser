@@ -2,28 +2,28 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\StarRocks;
+namespace Kwasii\LaravelSqlParser\Dialects\StarRocks;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\MySql\MySqlParser;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Create;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DateDiff;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Expressions\PartitionByRangeProperty;
-use LaravelSqlParser\LaravelSqlParser\Expressions\PartitionByRangePropertyDynamic;
-use LaravelSqlParser\LaravelSqlParser\Expressions\PartitionedByProperty;
-use LaravelSqlParser\LaravelSqlParser\Expressions\PrimaryKey;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Properties;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Property;
-use LaravelSqlParser\LaravelSqlParser\Expressions\RefreshTriggerProperty;
-use LaravelSqlParser\LaravelSqlParser\Expressions\RollupIndex;
-use LaravelSqlParser\LaravelSqlParser\Expressions\RollupProperty;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Schema;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TableAlias;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TableFromRows;
-use LaravelSqlParser\LaravelSqlParser\Expressions\UniqueKeyProperty;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Unnest;
+use Kwasii\LaravelSqlParser\Dialects\MySql\MySqlParser;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\Create;
+use Kwasii\LaravelSqlParser\Expressions\DateDiff;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Expressions\PartitionByRangeProperty;
+use Kwasii\LaravelSqlParser\Expressions\PartitionByRangePropertyDynamic;
+use Kwasii\LaravelSqlParser\Expressions\PartitionedByProperty;
+use Kwasii\LaravelSqlParser\Expressions\PrimaryKey;
+use Kwasii\LaravelSqlParser\Expressions\Properties;
+use Kwasii\LaravelSqlParser\Expressions\Property;
+use Kwasii\LaravelSqlParser\Expressions\RefreshTriggerProperty;
+use Kwasii\LaravelSqlParser\Expressions\RollupIndex;
+use Kwasii\LaravelSqlParser\Expressions\RollupProperty;
+use Kwasii\LaravelSqlParser\Expressions\Schema;
+use Kwasii\LaravelSqlParser\Expressions\TableAlias;
+use Kwasii\LaravelSqlParser\Expressions\TableFromRows;
+use Kwasii\LaravelSqlParser\Expressions\UniqueKeyProperty;
+use Kwasii\LaravelSqlParser\Expressions\Unnest;
 
 /**
  * StarRocks parser (sqlglot parsers/starrocks.py).

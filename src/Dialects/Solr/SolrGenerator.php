@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Solr;
+namespace Kwasii\LaravelSqlParser\Dialects\Solr;
 
-use LaravelSqlParser\LaravelSqlParser\Generator\Generator;
+use Kwasii\LaravelSqlParser\Generator\Generator;
 
 /**
  * Apache Solr generator (sqlglot generators/solr.py).

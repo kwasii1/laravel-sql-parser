@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Spark;
+namespace Kwasii\LaravelSqlParser\Dialects\Spark;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Spark2\Spark2Parser;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ArrayInsert;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Bracket;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ComputedColumnConstraint;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DateDiff;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Placeholder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TimestampAdd;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TsOrDsAdd;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TsOrDsToDate;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenType;
+use Kwasii\LaravelSqlParser\Dialects\Spark2\Spark2Parser;
+use Kwasii\LaravelSqlParser\Expressions\ArrayInsert;
+use Kwasii\LaravelSqlParser\Expressions\Bracket;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\ComputedColumnConstraint;
+use Kwasii\LaravelSqlParser\Expressions\DateDiff;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Expressions\Placeholder;
+use Kwasii\LaravelSqlParser\Expressions\TimestampAdd;
+use Kwasii\LaravelSqlParser\Expressions\TsOrDsAdd;
+use Kwasii\LaravelSqlParser\Expressions\TsOrDsToDate;
+use Kwasii\LaravelSqlParser\Tokenizer\TokenType;
 
 /**
  * Spark 3 parser (sqlglot parsers/spark.py).

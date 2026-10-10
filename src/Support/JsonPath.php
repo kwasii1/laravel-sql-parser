@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Support;
+namespace Kwasii\LaravelSqlParser\Support;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
-use LaravelSqlParser\LaravelSqlParser\Errors\ParseError;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONPath as JSONPathExpression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONPathFilter;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONPathKey;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONPathRecursive;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONPathRoot;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONPathScript;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONPathSelector;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONPathSlice;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONPathSubscript;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONPathUnion;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONPathWildcard;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenStream;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenType;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Errors\ParseError;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\JSONPath as JSONPathExpression;
+use Kwasii\LaravelSqlParser\Expressions\JSONPathFilter;
+use Kwasii\LaravelSqlParser\Expressions\JSONPathKey;
+use Kwasii\LaravelSqlParser\Expressions\JSONPathRecursive;
+use Kwasii\LaravelSqlParser\Expressions\JSONPathRoot;
+use Kwasii\LaravelSqlParser\Expressions\JSONPathScript;
+use Kwasii\LaravelSqlParser\Expressions\JSONPathSelector;
+use Kwasii\LaravelSqlParser\Expressions\JSONPathSlice;
+use Kwasii\LaravelSqlParser\Expressions\JSONPathSubscript;
+use Kwasii\LaravelSqlParser\Expressions\JSONPathUnion;
+use Kwasii\LaravelSqlParser\Expressions\JSONPathWildcard;
+use Kwasii\LaravelSqlParser\Tokenizer\TokenStream;
+use Kwasii\LaravelSqlParser\Tokenizer\TokenType;
 
 /**
  * Parses JSONPath strings such as `$.a[0].b` into JSONPath expressions (sqlglot jsonpath.parse).

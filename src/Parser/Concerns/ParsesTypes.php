@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Parser\Concerns;
+namespace Kwasii\LaravelSqlParser\Parser\Concerns;
 
-use LaravelSqlParser\LaravelSqlParser\Errors\TokenError;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ArrayExpr;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Column;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ColumnDef;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\EQ;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Identifier;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Interval;
-use LaravelSqlParser\LaravelSqlParser\Expressions\IntervalSpan;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ObjectIdentifier;
-use LaravelSqlParser\LaravelSqlParser\Expressions\PseudoType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\SkipJSONColumn;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Struct;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenType;
+use Kwasii\LaravelSqlParser\Errors\TokenError;
+use Kwasii\LaravelSqlParser\Expressions\ArrayExpr;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\Column;
+use Kwasii\LaravelSqlParser\Expressions\ColumnDef;
+use Kwasii\LaravelSqlParser\Expressions\DataType;
+use Kwasii\LaravelSqlParser\Expressions\DType;
+use Kwasii\LaravelSqlParser\Expressions\EQ;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Identifier;
+use Kwasii\LaravelSqlParser\Expressions\Interval;
+use Kwasii\LaravelSqlParser\Expressions\IntervalSpan;
+use Kwasii\LaravelSqlParser\Expressions\ObjectIdentifier;
+use Kwasii\LaravelSqlParser\Expressions\PseudoType;
+use Kwasii\LaravelSqlParser\Expressions\SkipJSONColumn;
+use Kwasii\LaravelSqlParser\Expressions\Struct;
+use Kwasii\LaravelSqlParser\Tokenizer\TokenType;
 
 /**
  * Data types (sqlglot parser.py, from _parse_types to _parse_struct_types).

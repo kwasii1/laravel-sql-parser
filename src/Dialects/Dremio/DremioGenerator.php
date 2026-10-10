@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Dremio;
+namespace Kwasii\LaravelSqlParser\Dialects\Dremio;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\AtTimeZone;
-use LaravelSqlParser\LaravelSqlParser\Expressions\CurrentTimestamp;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Generator\Generator;
+use Kwasii\LaravelSqlParser\Expressions\AtTimeZone;
+use Kwasii\LaravelSqlParser\Expressions\CurrentTimestamp;
+use Kwasii\LaravelSqlParser\Expressions\DataType;
+use Kwasii\LaravelSqlParser\Expressions\DType;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Generator\Generator;
 
 /**
  * Dremio generator (sqlglot generators/dremio.py).

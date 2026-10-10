@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Tokenizer;
+namespace Kwasii\LaravelSqlParser\Tokenizer;
 
 /**
  * A single token, as returned by the public tokenize() API.

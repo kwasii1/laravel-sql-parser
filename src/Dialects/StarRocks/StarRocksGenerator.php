@@ -2,26 +2,26 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\StarRocks;
+namespace Kwasii\LaravelSqlParser\Dialects\StarRocks;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\MySql\MySqlGenerator;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Between;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Column;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Create;
-use LaravelSqlParser\LaravelSqlParser\Expressions\EngineProperty;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\FirstValue;
-use LaravelSqlParser\LaravelSqlParser\Expressions\GTE;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Identifier;
-use LaravelSqlParser\LaravelSqlParser\Expressions\IgnoreNulls;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Lag;
-use LaravelSqlParser\LaravelSqlParser\Expressions\LastValue;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Lead;
-use LaravelSqlParser\LaravelSqlParser\Expressions\LTE;
-use LaravelSqlParser\LaravelSqlParser\Expressions\PrimaryKey;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Properties;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Schema;
+use Kwasii\LaravelSqlParser\Dialects\MySql\MySqlGenerator;
+use Kwasii\LaravelSqlParser\Expressions\Between;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\Column;
+use Kwasii\LaravelSqlParser\Expressions\Create;
+use Kwasii\LaravelSqlParser\Expressions\EngineProperty;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\FirstValue;
+use Kwasii\LaravelSqlParser\Expressions\GTE;
+use Kwasii\LaravelSqlParser\Expressions\Identifier;
+use Kwasii\LaravelSqlParser\Expressions\IgnoreNulls;
+use Kwasii\LaravelSqlParser\Expressions\Lag;
+use Kwasii\LaravelSqlParser\Expressions\LastValue;
+use Kwasii\LaravelSqlParser\Expressions\Lead;
+use Kwasii\LaravelSqlParser\Expressions\LTE;
+use Kwasii\LaravelSqlParser\Expressions\PrimaryKey;
+use Kwasii\LaravelSqlParser\Expressions\Properties;
+use Kwasii\LaravelSqlParser\Expressions\Schema;
 
 /**
  * StarRocks generator (sqlglot generators/starrocks.py).

@@ -2,27 +2,27 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Optimizer;
+namespace Kwasii\LaravelSqlParser\Optimizer;
 
 use Closure;
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ColumnDef;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Create;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\From;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Func;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Identifier;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Join;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Pivot;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Query;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Subquery;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Table;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TableAlias;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TableFromRows;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Values;
-use LaravelSqlParser\LaravelSqlParser\Schema\MappingSchema;
-use LaravelSqlParser\LaravelSqlParser\Support\Scope;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\ColumnDef;
+use Kwasii\LaravelSqlParser\Expressions\Create;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\From;
+use Kwasii\LaravelSqlParser\Expressions\Func;
+use Kwasii\LaravelSqlParser\Expressions\Identifier;
+use Kwasii\LaravelSqlParser\Expressions\Join;
+use Kwasii\LaravelSqlParser\Expressions\Pivot;
+use Kwasii\LaravelSqlParser\Expressions\Query;
+use Kwasii\LaravelSqlParser\Expressions\Subquery;
+use Kwasii\LaravelSqlParser\Expressions\Table;
+use Kwasii\LaravelSqlParser\Expressions\TableAlias;
+use Kwasii\LaravelSqlParser\Expressions\TableFromRows;
+use Kwasii\LaravelSqlParser\Expressions\Values;
+use Kwasii\LaravelSqlParser\Schema\MappingSchema;
+use Kwasii\LaravelSqlParser\Support\Scope;
 
 /**
  * Rewrite the AST to have fully qualified tables (sqlglot optimizer/qualify_tables.py). Join

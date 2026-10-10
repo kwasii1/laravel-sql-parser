@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser;
+namespace Kwasii\LaravelSqlParser;
 
 use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\ServiceProvider;
-use LaravelSqlParser\LaravelSqlParser\Console\Commands\TranspileCommand;
+use Kwasii\LaravelSqlParser\Console\Commands\TranspileCommand;
 
 class LaravelSqlParserServiceProvider extends ServiceProvider
 {

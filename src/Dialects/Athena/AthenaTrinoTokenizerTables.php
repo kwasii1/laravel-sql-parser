@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Athena;
+namespace Kwasii\LaravelSqlParser\Dialects\Athena;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Trino\TrinoTokenizerTables as Trino;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenType;
+use Kwasii\LaravelSqlParser\Dialects\Trino\TrinoTokenizerTables as Trino;
+use Kwasii\LaravelSqlParser\Tokenizer\TokenType;
 
 /**
  * Athena extensions to the Trino tokenizer (sqlglot dialects/athena.py _TrinoTokenizer): Trino's

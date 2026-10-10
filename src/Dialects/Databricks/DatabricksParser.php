@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Databricks;
+namespace Kwasii\LaravelSqlParser\Dialects\Databricks;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Spark\SparkParser;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ClusterProperty;
-use LaravelSqlParser\LaravelSqlParser\Expressions\CurrentDate;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\RegrAvgx;
-use LaravelSqlParser\LaravelSqlParser\Expressions\RegrAvgy;
-use LaravelSqlParser\LaravelSqlParser\Expressions\RegrSxx;
-use LaravelSqlParser\LaravelSqlParser\Expressions\RegrSxy;
-use LaravelSqlParser\LaravelSqlParser\Expressions\RegrSyy;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TimeseriesKey;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Uniform;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenType;
+use Kwasii\LaravelSqlParser\Dialects\Spark\SparkParser;
+use Kwasii\LaravelSqlParser\Expressions\ClusterProperty;
+use Kwasii\LaravelSqlParser\Expressions\CurrentDate;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\RegrAvgx;
+use Kwasii\LaravelSqlParser\Expressions\RegrAvgy;
+use Kwasii\LaravelSqlParser\Expressions\RegrSxx;
+use Kwasii\LaravelSqlParser\Expressions\RegrSxy;
+use Kwasii\LaravelSqlParser\Expressions\RegrSyy;
+use Kwasii\LaravelSqlParser\Expressions\TimeseriesKey;
+use Kwasii\LaravelSqlParser\Expressions\Uniform;
+use Kwasii\LaravelSqlParser\Tokenizer\TokenType;
 
 /**
  * Databricks parser (sqlglot parsers/databricks.py).

@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser;
+namespace Kwasii\LaravelSqlParser;
 
 use Composer\InstalledVersions;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Config\Repository as Config;
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
-use LaravelSqlParser\LaravelSqlParser\Errors\ErrorLevel;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\Token;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenType;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Errors\ErrorLevel;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Tokenizer\Token;
+use Kwasii\LaravelSqlParser\Tokenizer\TokenType;
 
 class LaravelSqlParser
 {
@@ -277,8 +277,8 @@ class LaravelSqlParser
      */
     private function version(): string
     {
-        return $this->version ??= class_exists(InstalledVersions::class) && InstalledVersions::isInstalled('kwasii1/laravel-sql-parser')
-            ? (string) InstalledVersions::getReference('kwasii1/laravel-sql-parser')
+        return $this->version ??= class_exists(InstalledVersions::class) && InstalledVersions::isInstalled('kwasii/laravel-sql-parser')
+            ? (string) InstalledVersions::getReference('kwasii/laravel-sql-parser')
             : 'dev';
     }
 }

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Oracle;
+namespace Kwasii\LaravelSqlParser\Dialects\Oracle;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\Anonymous;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\InOutColumnConstraint;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Generator\Generator;
+use Kwasii\LaravelSqlParser\Expressions\Anonymous;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\InOutColumnConstraint;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Generator\Generator;
 
 /**
  * Oracle generator (sqlglot generators/oracle.py).

@@ -3,12 +3,13 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Cache;
-use LaravelSqlParser\LaravelSqlParser\Dialects\MySql\MySql;
-use LaravelSqlParser\LaravelSqlParser\Dialects\Postgres\Postgres;
-use LaravelSqlParser\LaravelSqlParser\Dialects\Sqlite\Sqlite;
-use LaravelSqlParser\LaravelSqlParser\Errors\ParseError;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Select;
-use LaravelSqlParser\LaravelSqlParser\Facades\LaravelSqlParser as Sql;
+use Kwasii\LaravelSqlParser\Dialects\MySql\MySql;
+use Kwasii\LaravelSqlParser\Dialects\Postgres\Postgres;
+use Kwasii\LaravelSqlParser\Dialects\Sqlite\Sqlite;
+use Kwasii\LaravelSqlParser\Errors\ParseError;
+use Kwasii\LaravelSqlParser\Expressions\Select;
+use Kwasii\LaravelSqlParser\Facades\LaravelSqlParser as Sql;
+use Kwasii\LaravelSqlParser\LaravelSqlParser;
 
 it('transpiles between dialects through the facade', function (): void {
     expect(Sql::transpile('SELECT IFNULL(a, 1) FROM t LIMIT 5', 'mysql', 'tsql'))
@@ -92,7 +93,7 @@ it('repeats a binding when a rewrite repeats its placeholder', function (): void
 
 it('memoizes transpile results in the process when enabled', function (): void {
     config(['laravel-sql-parser.memo.enabled' => true]);
-    $parser = app(LaravelSqlParser\LaravelSqlParser\LaravelSqlParser::class);
+    $parser = app(LaravelSqlParser::class);
 
     $first = $parser->transpile('SELECT IFNULL(a, 1)', 'mysql', 'postgres');
 
@@ -118,7 +119,7 @@ it('stores long statements in the cache when enabled', function (): void {
 
 it('registers custom dialects from the config', function (): void {
     config(['laravel-sql-parser.dialects' => ['acme' => Postgres::class]]);
-    app()->forgetInstance(LaravelSqlParser\LaravelSqlParser\LaravelSqlParser::class);
+    app()->forgetInstance(LaravelSqlParser::class);
 
     expect(Sql::dialect('acme'))->toBeInstanceOf(Postgres::class);
 });

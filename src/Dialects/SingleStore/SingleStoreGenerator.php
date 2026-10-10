@@ -2,28 +2,28 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\SingleStore;
+namespace Kwasii\LaravelSqlParser\Dialects\SingleStore;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
-use LaravelSqlParser\LaravelSqlParser\Dialects\MySql\MySqlGenerator;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Add;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Cast;
-use LaravelSqlParser\LaravelSqlParser\Expressions\CurrentTimestamp;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Div;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONExtractScalar;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Lower;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Mul;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Order;
-use LaravelSqlParser\LaravelSqlParser\Expressions\PercentileCont;
-use LaravelSqlParser\LaravelSqlParser\Expressions\PercentileDisc;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Pow;
-use LaravelSqlParser\LaravelSqlParser\Expressions\RegexpLike;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Sub;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Dialects\MySql\MySqlGenerator;
+use Kwasii\LaravelSqlParser\Expressions\Add;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\Cast;
+use Kwasii\LaravelSqlParser\Expressions\CurrentTimestamp;
+use Kwasii\LaravelSqlParser\Expressions\DataType;
+use Kwasii\LaravelSqlParser\Expressions\Div;
+use Kwasii\LaravelSqlParser\Expressions\DType;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\JSONExtractScalar;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Expressions\Lower;
+use Kwasii\LaravelSqlParser\Expressions\Mul;
+use Kwasii\LaravelSqlParser\Expressions\Order;
+use Kwasii\LaravelSqlParser\Expressions\PercentileCont;
+use Kwasii\LaravelSqlParser\Expressions\PercentileDisc;
+use Kwasii\LaravelSqlParser\Expressions\Pow;
+use Kwasii\LaravelSqlParser\Expressions\RegexpLike;
+use Kwasii\LaravelSqlParser\Expressions\Sub;
 
 /**
  * SingleStore generator (sqlglot generators/singlestore.py).

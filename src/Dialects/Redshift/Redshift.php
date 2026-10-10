@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Redshift;
+namespace Kwasii\LaravelSqlParser\Dialects\Redshift;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Postgres\Postgres;
+use Kwasii\LaravelSqlParser\Dialects\Postgres\Postgres;
 
 /**
  * The Amazon Redshift dialect (sqlglot dialects/redshift.py).

@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Optimizer;
+namespace Kwasii\LaravelSqlParser\Optimizer;
 
-use LaravelSqlParser\LaravelSqlParser\Errors\OptimizeError;
-use LaravelSqlParser\LaravelSqlParser\Expressions\AndExpr;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\From;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Join;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Select;
+use Kwasii\LaravelSqlParser\Errors\OptimizeError;
+use Kwasii\LaravelSqlParser\Expressions\AndExpr;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\From;
+use Kwasii\LaravelSqlParser\Expressions\Join;
+use Kwasii\LaravelSqlParser\Expressions\Select;
 
 /**
  * Remove cross joins if possible and reorder joins by predicate dependencies

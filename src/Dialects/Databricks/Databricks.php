@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Databricks;
+namespace Kwasii\LaravelSqlParser\Dialects\Databricks;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Spark\Spark;
+use Kwasii\LaravelSqlParser\Dialects\Spark\Spark;
 
 /**
  * The Databricks dialect (sqlglot dialects/databricks.py).

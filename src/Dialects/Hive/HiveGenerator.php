@@ -2,32 +2,32 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Hive;
+namespace Kwasii\LaravelSqlParser\Dialects\Hive;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataTypeParam;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DateSub;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\EQ;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\InputOutputFormat;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONPathWildcard;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Mul;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Order;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Ordered;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Properties;
-use LaravelSqlParser\LaravelSqlParser\Expressions\PropertyEQ;
-use LaravelSqlParser\LaravelSqlParser\Expressions\SetItem;
-use LaravelSqlParser\LaravelSqlParser\Expressions\StrToDate;
-use LaravelSqlParser\LaravelSqlParser\Expressions\StrToTime;
-use LaravelSqlParser\LaravelSqlParser\Expressions\StrToUnix;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TimeStrToTime;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TsOrDsAdd;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TsOrDsToDate;
-use LaravelSqlParser\LaravelSqlParser\Generator\Generator;
-use LaravelSqlParser\LaravelSqlParser\Support\TimeFormat;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\DataType;
+use Kwasii\LaravelSqlParser\Expressions\DataTypeParam;
+use Kwasii\LaravelSqlParser\Expressions\DateSub;
+use Kwasii\LaravelSqlParser\Expressions\DType;
+use Kwasii\LaravelSqlParser\Expressions\EQ;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\InputOutputFormat;
+use Kwasii\LaravelSqlParser\Expressions\JSONPathWildcard;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Expressions\Mul;
+use Kwasii\LaravelSqlParser\Expressions\Order;
+use Kwasii\LaravelSqlParser\Expressions\Ordered;
+use Kwasii\LaravelSqlParser\Expressions\Properties;
+use Kwasii\LaravelSqlParser\Expressions\PropertyEQ;
+use Kwasii\LaravelSqlParser\Expressions\SetItem;
+use Kwasii\LaravelSqlParser\Expressions\StrToDate;
+use Kwasii\LaravelSqlParser\Expressions\StrToTime;
+use Kwasii\LaravelSqlParser\Expressions\StrToUnix;
+use Kwasii\LaravelSqlParser\Expressions\TimeStrToTime;
+use Kwasii\LaravelSqlParser\Expressions\TsOrDsAdd;
+use Kwasii\LaravelSqlParser\Expressions\TsOrDsToDate;
+use Kwasii\LaravelSqlParser\Generator\Generator;
+use Kwasii\LaravelSqlParser\Support\TimeFormat;
 
 /**
  * Apache Hive generator (sqlglot generators/hive.py).

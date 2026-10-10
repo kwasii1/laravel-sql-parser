@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Athena;
+namespace Kwasii\LaravelSqlParser\Dialects\Athena;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Trino\TrinoParser;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Dialects\Trino\TrinoParser;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
 
 /**
  * Athena parser for the Trino engine (sqlglot parsers/athena.py AthenaTrinoParser); statements

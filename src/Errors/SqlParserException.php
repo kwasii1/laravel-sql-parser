@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Errors;
+namespace Kwasii\LaravelSqlParser\Errors;
 
 use RuntimeException;
 

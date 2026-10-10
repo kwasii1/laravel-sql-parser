@@ -2,33 +2,33 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Spark2;
+namespace Kwasii\LaravelSqlParser\Dialects\Spark2;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Hive\HiveParser;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Alias;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ApproxQuantile;
-use LaravelSqlParser\LaravelSqlParser\Expressions\AtTimeZone;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Binary;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Bracket;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Cast;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DateTrunc;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DayOfMonth;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DayOfWeek;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DayOfYear;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Drop;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\FromTimeZone;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Identifier;
-use LaravelSqlParser\LaravelSqlParser\Expressions\IntDiv;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Paren;
-use LaravelSqlParser\LaravelSqlParser\Expressions\StrToTime;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TimestampTrunc;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TsOrDsToDate;
-use LaravelSqlParser\LaravelSqlParser\Expressions\VarExpr;
-use LaravelSqlParser\LaravelSqlParser\Expressions\WeekOfYear;
+use Kwasii\LaravelSqlParser\Dialects\Hive\HiveParser;
+use Kwasii\LaravelSqlParser\Expressions\Alias;
+use Kwasii\LaravelSqlParser\Expressions\ApproxQuantile;
+use Kwasii\LaravelSqlParser\Expressions\AtTimeZone;
+use Kwasii\LaravelSqlParser\Expressions\Binary;
+use Kwasii\LaravelSqlParser\Expressions\Bracket;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\Cast;
+use Kwasii\LaravelSqlParser\Expressions\DataType;
+use Kwasii\LaravelSqlParser\Expressions\DateTrunc;
+use Kwasii\LaravelSqlParser\Expressions\DayOfMonth;
+use Kwasii\LaravelSqlParser\Expressions\DayOfWeek;
+use Kwasii\LaravelSqlParser\Expressions\DayOfYear;
+use Kwasii\LaravelSqlParser\Expressions\Drop;
+use Kwasii\LaravelSqlParser\Expressions\DType;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\FromTimeZone;
+use Kwasii\LaravelSqlParser\Expressions\Identifier;
+use Kwasii\LaravelSqlParser\Expressions\IntDiv;
+use Kwasii\LaravelSqlParser\Expressions\Paren;
+use Kwasii\LaravelSqlParser\Expressions\StrToTime;
+use Kwasii\LaravelSqlParser\Expressions\TimestampTrunc;
+use Kwasii\LaravelSqlParser\Expressions\TsOrDsToDate;
+use Kwasii\LaravelSqlParser\Expressions\VarExpr;
+use Kwasii\LaravelSqlParser\Expressions\WeekOfYear;
 
 /**
  * Spark 2 parser (sqlglot parsers/spark2.py).

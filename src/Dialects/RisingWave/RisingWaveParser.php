@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\RisingWave;
+namespace Kwasii\LaravelSqlParser\Dialects\RisingWave;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Postgres\PostgresParser;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ColumnDef;
-use LaravelSqlParser\LaravelSqlParser\Expressions\EncodeProperty;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\IncludeProperty;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Properties;
-use LaravelSqlParser\LaravelSqlParser\Expressions\WatermarkColumnConstraint;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenType;
+use Kwasii\LaravelSqlParser\Dialects\Postgres\PostgresParser;
+use Kwasii\LaravelSqlParser\Expressions\ColumnDef;
+use Kwasii\LaravelSqlParser\Expressions\EncodeProperty;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\IncludeProperty;
+use Kwasii\LaravelSqlParser\Expressions\Properties;
+use Kwasii\LaravelSqlParser\Expressions\WatermarkColumnConstraint;
+use Kwasii\LaravelSqlParser\Tokenizer\TokenType;
 
 /**
  * RisingWave parser (sqlglot parsers/risingwave.py).

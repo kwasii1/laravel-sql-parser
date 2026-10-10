@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Trino;
+namespace Kwasii\LaravelSqlParser\Dialects\Trino;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Presto\Presto;
-use LaravelSqlParser\LaravelSqlParser\Dialects\Presto\PrestoTypeAnnotator;
+use Kwasii\LaravelSqlParser\Dialects\Presto\Presto;
+use Kwasii\LaravelSqlParser\Dialects\Presto\PrestoTypeAnnotator;
 
 /**
  * The Trino dialect (sqlglot dialects/trino.py).

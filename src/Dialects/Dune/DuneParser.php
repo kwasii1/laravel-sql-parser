@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Dune;
+namespace Kwasii\LaravelSqlParser\Dialects\Dune;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Trino\TrinoParser;
+use Kwasii\LaravelSqlParser\Dialects\Trino\TrinoParser;
 
 /**
  * Dune parser (sqlglot parsers/dune.py).

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Materialize;
+namespace Kwasii\LaravelSqlParser\Dialects\Materialize;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Postgres\PostgresGenerator;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Select;
+use Kwasii\LaravelSqlParser\Dialects\Postgres\PostgresGenerator;
+use Kwasii\LaravelSqlParser\Expressions\DataType;
+use Kwasii\LaravelSqlParser\Expressions\DType;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Select;
 
 /**
  * Materialize generator (sqlglot generators/materialize.py).

@@ -11,8 +11,8 @@ declare(strict_types=1);
  * median. With --baseline, prints the ratio against a previous --json run.
  */
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\Tokenizer;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Tokenizer\Tokenizer;
 
 require dirname(__DIR__).'/vendor/autoload.php';
 

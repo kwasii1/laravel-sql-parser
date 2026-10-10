@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Generator\Concerns;
+namespace Kwasii\LaravelSqlParser\Generator\Concerns;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\CurrentDate;
-use LaravelSqlParser\LaravelSqlParser\Expressions\CurrentTime;
-use LaravelSqlParser\LaravelSqlParser\Expressions\CurrentTimestamp;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Expressions\SetOperation;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\CurrentDate;
+use Kwasii\LaravelSqlParser\Expressions\CurrentTime;
+use Kwasii\LaravelSqlParser\Expressions\CurrentTimestamp;
+use Kwasii\LaravelSqlParser\Expressions\DType;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Expressions\SetOperation;
 
 /**
  * The base TRANSFORMS table's handlers (sqlglot's generator lambdas), plus the

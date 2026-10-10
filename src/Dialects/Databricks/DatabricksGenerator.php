@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Databricks;
+namespace Kwasii\LaravelSqlParser\Dialects\Databricks;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Spark\SparkGenerator;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Cast;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Distinct;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\GeneratedAsIdentityColumnConstraint;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONExtractScalar;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Mul;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ReturnExpr;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ReturnsProperty;
+use Kwasii\LaravelSqlParser\Dialects\Spark\SparkGenerator;
+use Kwasii\LaravelSqlParser\Expressions\Cast;
+use Kwasii\LaravelSqlParser\Expressions\DataType;
+use Kwasii\LaravelSqlParser\Expressions\Distinct;
+use Kwasii\LaravelSqlParser\Expressions\DType;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\GeneratedAsIdentityColumnConstraint;
+use Kwasii\LaravelSqlParser\Expressions\JSONExtractScalar;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Expressions\Mul;
+use Kwasii\LaravelSqlParser\Expressions\ReturnExpr;
+use Kwasii\LaravelSqlParser\Expressions\ReturnsProperty;
 
 /**
  * Databricks generator (sqlglot generators/databricks.py).

@@ -2,30 +2,30 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Redshift;
+namespace Kwasii\LaravelSqlParser\Dialects\Redshift;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Postgres\PostgresParser;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Alias;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ApproxDistinct;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ApproxQuantile;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ArrayContains;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Cast;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Count;
-use LaravelSqlParser\LaravelSqlParser\Expressions\CurrentTimestamp;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Distinct;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ObjectTransform;
-use LaravelSqlParser\LaravelSqlParser\Expressions\PercentileDisc;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Pivot;
-use LaravelSqlParser\LaravelSqlParser\Expressions\RegexpExtract;
-use LaravelSqlParser\LaravelSqlParser\Expressions\StringToArray;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TsOrDsAdd;
-use LaravelSqlParser\LaravelSqlParser\Expressions\WithinGroup;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenType;
+use Kwasii\LaravelSqlParser\Dialects\Postgres\PostgresParser;
+use Kwasii\LaravelSqlParser\Expressions\Alias;
+use Kwasii\LaravelSqlParser\Expressions\ApproxDistinct;
+use Kwasii\LaravelSqlParser\Expressions\ApproxQuantile;
+use Kwasii\LaravelSqlParser\Expressions\ArrayContains;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\Cast;
+use Kwasii\LaravelSqlParser\Expressions\Count;
+use Kwasii\LaravelSqlParser\Expressions\CurrentTimestamp;
+use Kwasii\LaravelSqlParser\Expressions\DataType;
+use Kwasii\LaravelSqlParser\Expressions\Distinct;
+use Kwasii\LaravelSqlParser\Expressions\DType;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Expressions\ObjectTransform;
+use Kwasii\LaravelSqlParser\Expressions\PercentileDisc;
+use Kwasii\LaravelSqlParser\Expressions\Pivot;
+use Kwasii\LaravelSqlParser\Expressions\RegexpExtract;
+use Kwasii\LaravelSqlParser\Expressions\StringToArray;
+use Kwasii\LaravelSqlParser\Expressions\TsOrDsAdd;
+use Kwasii\LaravelSqlParser\Expressions\WithinGroup;
+use Kwasii\LaravelSqlParser\Tokenizer\TokenType;
 
 /**
  * Amazon Redshift parser (sqlglot parsers/redshift.py).

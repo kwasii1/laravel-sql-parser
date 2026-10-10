@@ -1,6 +1,6 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "kwasii1/laravel-sql-parser",
+    "name": "kwasii/laravel-sql-parser",
     "description": "Fast SQL Parser for PHP Laravel",
     "keywords": [
         "laravel",
@@ -11,7 +11,7 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "kwasii1",
+            "name": "Kwasi Sakyi Baidoo",
             "email": "kesbijnr@gmail.com",
             "role": "Developer"
         }
@@ -34,12 +34,12 @@
     },
     "autoload": {
         "psr-4": {
-            "LaravelSqlParser\\LaravelSqlParser\\": "src/"
+            "Kwasii\\LaravelSqlParser\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "LaravelSqlParser\\LaravelSqlParser\\Tests\\": "tests/",
+            "Kwasii\\LaravelSqlParser\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/",
             "Workbench\\Database\\Factories\\": "workbench/database/factories/",
             "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
@@ -100,10 +100,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "LaravelSqlParser\\LaravelSqlParser\\LaravelSqlParserServiceProvider"
+                "Kwasii\\LaravelSqlParser\\LaravelSqlParserServiceProvider"
             ],
             "aliases": {
-                "LaravelSqlParser": "LaravelSqlParser\\LaravelSqlParser\\Facades\\LaravelSqlParser"
+                "LaravelSqlParser": "Kwasii\\LaravelSqlParser\\Facades\\LaravelSqlParser"
             }
         }
     },

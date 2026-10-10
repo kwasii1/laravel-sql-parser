@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Tableau;
+namespace Kwasii\LaravelSqlParser\Dialects\Tableau;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\Count;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Distinct;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\StrPosition;
-use LaravelSqlParser\LaravelSqlParser\Parser\Parser;
+use Kwasii\LaravelSqlParser\Expressions\Count;
+use Kwasii\LaravelSqlParser\Expressions\Distinct;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\StrPosition;
+use Kwasii\LaravelSqlParser\Parser\Parser;
 
 /**
  * Tableau parser (sqlglot parsers/tableau.py).

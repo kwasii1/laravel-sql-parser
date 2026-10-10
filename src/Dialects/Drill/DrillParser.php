@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Drill;
+namespace Kwasii\LaravelSqlParser\Dialects\Drill;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\Escape;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ILike;
-use LaravelSqlParser\LaravelSqlParser\Parser\Parser;
+use Kwasii\LaravelSqlParser\Expressions\Escape;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\ILike;
+use Kwasii\LaravelSqlParser\Parser\Parser;
 
 /**
  * Apache Drill parser (sqlglot parsers/drill.py).

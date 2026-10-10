@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\SingleStore;
+namespace Kwasii\LaravelSqlParser\Dialects\SingleStore;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\MySql\MySql;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Cast;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataTypeParam;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Dialects\MySql\MySql;
+use Kwasii\LaravelSqlParser\Expressions\Cast;
+use Kwasii\LaravelSqlParser\Expressions\DataType;
+use Kwasii\LaravelSqlParser\Expressions\DataTypeParam;
+use Kwasii\LaravelSqlParser\Expressions\DType;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
 
 /**
  * The SingleStore dialect (sqlglot dialects/singlestore.py).

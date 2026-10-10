@@ -2,7 +2,7 @@
 name: laravel-sql-parser-development
 description: >
   Parse SQL into a syntax tree and transpile it between MySQL, MariaDB, PostgreSQL, SQLite,
-  SQL Server, BigQuery, Snowflake, Oracle, Spark and 25 more dialects in Laravel applications with kwasii1/laravel-sql-parser: the LaravelSqlParser facade,
+  SQL Server, BigQuery, Snowflake, Oracle, Spark and 25 more dialects in Laravel applications with kwasii/laravel-sql-parser: the LaravelSqlParser facade,
   the toSqlFor()/bindingsFor()/toRawSqlFor() query builder macros and the sql:transpile command.
 license: MIT
 metadata:
@@ -15,13 +15,13 @@ Use this skill when a Laravel application needs to translate SQL from one databa
 
 ## Primary Goal
 
-- apply the `kwasii1/laravel-sql-parser` public API in the smallest correct way
+- apply the `kwasii/laravel-sql-parser` public API in the smallest correct way
 
 ## Workflow
 
 ### 1. Inspect the Laravel app context
 
-- confirm the package is installed (`composer require kwasii1/laravel-sql-parser`); the service provider and the `LaravelSqlParser` facade alias are auto-discovered
+- confirm the package is installed (`composer require kwasii/laravel-sql-parser`); the service provider and the `LaravelSqlParser` facade alias are auto-discovered
 - check which database drivers the app uses (`config/database.php`); with no dialect given, the package reads SQL in the default connection's dialect
 - supported dialects: `mysql`, `mariadb`, `postgres` (`pgsql`, `postgresql`), `sqlite`, `tsql` (`sqlsrv`, `mssql`), `bigquery`, `snowflake`, `redshift`, `databricks`, `clickhouse`, `exasol`, `teradata`, `fabric`, `hive`, `spark`, `spark2`, `presto`, `trino`, `athena`, `drill`, `druid`, `dremio`, `dune`, `oracle`, `duckdb`, `doris`, `starrocks`, `singlestore`, `materialize`, `risingwave`, `solr`, `tableau`, `dax`, `prql`; anything else throws `InvalidArgumentException`
 
@@ -31,11 +31,11 @@ Use this skill when a Laravel application needs to translate SQL from one databa
 - transpile a builder query: `$query->toSqlFor('sqlsrv')`, `$query->bindingsFor('sqlsrv')` and `$query->toRawSqlFor('mysql')` work on the query builder and on Eloquent builders, and read the query in its connection's dialect
 - always pair `toSqlFor()` with `bindingsFor()`, never with `getBindings()`: rewrites can move or repeat placeholders (SQL Server's `TOP (?)`, `ILIKE` becoming `LOWER(a) LIKE LOWER(?)`)
 - raw SQL with `?` bindings: `Sql::transpileQuery($sql, $bindings, $from, $to)` returns `['sql' => ..., 'bindings' => [...]]`
-- optimize or qualify SQL: `Optimizer::optimize($sql, schema: ['users' => ['id' => 'INT']], dialect: 'mysql')` and `Qualify::qualify($tree, schema: ..., dialect: ...)` from `LaravelSqlParser\LaravelSqlParser\Optimizer` (sqlglot's optimizer: qualification, simplification, pushdowns, subquery merging); `Builder::findTables($tree)` lists the tables a query reads, CTEs excluded
-- inspect SQL: `Sql::parseOne($sql, 'mysql')` returns an expression tree; use `findAll(Table::class)`, `findAll(Column::class)` and `->name()` from `LaravelSqlParser\LaravelSqlParser\Expressions`, and `->sql('postgres')` to write it back
-- build SQL: `Builder::select('a')->from('t')->where('x > 1')->orderBy('a')->limit(10)->sql('mysql')` (`LaravelSqlParser\LaravelSqlParser\Expressions\Builder`); also `Builder::insert/update/delete/merge/union/condition/case`, and `and()`, `or()`, `not()`, `as()`, `eq()`, `isin()` on any expression; strings are parsed with `dialect:`, calls copy unless `copy: false`, list methods append unless `append: false`; `from_`/`and_`/`with_` are `from()`/`and()`/`with()`, `Update::set_()` is `assign()`
+- optimize or qualify SQL: `Optimizer::optimize($sql, schema: ['users' => ['id' => 'INT']], dialect: 'mysql')` and `Qualify::qualify($tree, schema: ..., dialect: ...)` from `Kwasii\LaravelSqlParser\Optimizer` (sqlglot's optimizer: qualification, simplification, pushdowns, subquery merging); `Builder::findTables($tree)` lists the tables a query reads, CTEs excluded
+- inspect SQL: `Sql::parseOne($sql, 'mysql')` returns an expression tree; use `findAll(Table::class)`, `findAll(Column::class)` and `->name()` from `Kwasii\LaravelSqlParser\Expressions`, and `->sql('postgres')` to write it back
+- build SQL: `Builder::select('a')->from('t')->where('x > 1')->orderBy('a')->limit(10)->sql('mysql')` (`Kwasii\LaravelSqlParser\Expressions\Builder`); also `Builder::insert/update/delete/merge/union/condition/case`, and `and()`, `or()`, `not()`, `as()`, `eq()`, `isin()` on any expression; strings are parsed with `dialect:`, calls copy unless `copy: false`, list methods append unless `append: false`; `from_`/`and_`/`with_` are `from()`/`and()`/`with()`, `Update::set_()` is `assign()`
 - serialize a tree: `$tree->dump()` gives a JSON-safe array (sqlglot's format); `Expression::load($array)` rebuilds it
-- invalid SQL throws `LaravelSqlParser\LaravelSqlParser\Errors\ParseError` (a `SqlParserException`); catch it around user-supplied SQL
+- invalid SQL throws `Kwasii\LaravelSqlParser\Errors\ParseError` (a `SqlParserException`); catch it around user-supplied SQL
 - from the terminal: `php artisan sql:transpile "<sql>" --from=mysql --to=sqlsrv [--pretty] [--file=path] [--ast]`, or pipe SQL on standard input
 
 ### 3. Configure only when needed
@@ -43,7 +43,7 @@ Use this skill when a Laravel application needs to translate SQL from one databa
 - publish with `php artisan vendor:publish --tag="laravel-sql-parser-config"`
 - `SQL_PARSER_DIALECT` sets the default dialect; `SQL_PARSER_ERROR_LEVEL` is `immediate`, `raise`, `warn` or `ignore`
 - `SQL_PARSER_MEMO=true` keeps results in memory for Octane and queue workers; `SQL_PARSER_CACHE=true` (with `SQL_PARSER_CACHE_STORE`) caches statements of at least `cache.min_length` bytes
-- custom dialects go in the `dialects` config array as `name => class` extending `LaravelSqlParser\LaravelSqlParser\Dialects\Dialect`
+- custom dialects go in the `dialects` config array as `name => class` extending `Kwasii\LaravelSqlParser\Dialects\Dialect`
 
 ## Rules, References, and Templates
 
@@ -54,7 +54,7 @@ Read before executing:
 ## Examples
 
 ```php
-use LaravelSqlParser\LaravelSqlParser\Facades\LaravelSqlParser as Sql;
+use Kwasii\LaravelSqlParser\Facades\LaravelSqlParser as Sql;
 
 Sql::transpile('SELECT IFNULL(a, 1) FROM t LIMIT 5', 'mysql', 'tsql');
 // ['SELECT TOP 5 COALESCE(a, 1) FROM t']
@@ -64,7 +64,7 @@ DB::connection('sqlsrv')->select($query->toSqlFor('sqlsrv'), $query->bindingsFor
 ```
 
 ```php
-use LaravelSqlParser\LaravelSqlParser\Expressions\Table;
+use Kwasii\LaravelSqlParser\Expressions\Table;
 
 $tables = array_map(fn ($t) => $t->name(), Sql::parseOne($sql, 'pgsql')->findAll(Table::class));
 ```

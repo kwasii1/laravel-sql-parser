@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Drill;
+namespace Kwasii\LaravelSqlParser\Dialects\Drill;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\All;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Any;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ILike;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Interval;
-use LaravelSqlParser\LaravelSqlParser\Generator\Generator;
+use Kwasii\LaravelSqlParser\Expressions\All;
+use Kwasii\LaravelSqlParser\Expressions\Any;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\ILike;
+use Kwasii\LaravelSqlParser\Expressions\Interval;
+use Kwasii\LaravelSqlParser\Generator\Generator;
 
 /**
  * Apache Drill generator (sqlglot generators/drill.py).

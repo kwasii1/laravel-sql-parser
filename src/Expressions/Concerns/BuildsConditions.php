@@ -2,39 +2,39 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Expressions\Concerns;
+namespace Kwasii\LaravelSqlParser\Expressions\Concerns;
 
 use InvalidArgumentException;
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Add;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Between;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Binary;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Bracket;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Div;
-use LaravelSqlParser\LaravelSqlParser\Expressions\EQ;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\GT;
-use LaravelSqlParser\LaravelSqlParser\Expressions\GTE;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Identifier;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ILike;
-use LaravelSqlParser\LaravelSqlParser\Expressions\In;
-use LaravelSqlParser\LaravelSqlParser\Expressions\IntDiv;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Is;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Like;
-use LaravelSqlParser\LaravelSqlParser\Expressions\LT;
-use LaravelSqlParser\LaravelSqlParser\Expressions\LTE;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Mod;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Mul;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Neg;
-use LaravelSqlParser\LaravelSqlParser\Expressions\NEQ;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Not;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Ordered;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Pow;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Query;
-use LaravelSqlParser\LaravelSqlParser\Expressions\RegexpLike;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Sub;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Unnest;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Expressions\Add;
+use Kwasii\LaravelSqlParser\Expressions\Between;
+use Kwasii\LaravelSqlParser\Expressions\Binary;
+use Kwasii\LaravelSqlParser\Expressions\Bracket;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\Div;
+use Kwasii\LaravelSqlParser\Expressions\EQ;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\GT;
+use Kwasii\LaravelSqlParser\Expressions\GTE;
+use Kwasii\LaravelSqlParser\Expressions\Identifier;
+use Kwasii\LaravelSqlParser\Expressions\ILike;
+use Kwasii\LaravelSqlParser\Expressions\In;
+use Kwasii\LaravelSqlParser\Expressions\IntDiv;
+use Kwasii\LaravelSqlParser\Expressions\Is;
+use Kwasii\LaravelSqlParser\Expressions\Like;
+use Kwasii\LaravelSqlParser\Expressions\LT;
+use Kwasii\LaravelSqlParser\Expressions\LTE;
+use Kwasii\LaravelSqlParser\Expressions\Mod;
+use Kwasii\LaravelSqlParser\Expressions\Mul;
+use Kwasii\LaravelSqlParser\Expressions\Neg;
+use Kwasii\LaravelSqlParser\Expressions\NEQ;
+use Kwasii\LaravelSqlParser\Expressions\Not;
+use Kwasii\LaravelSqlParser\Expressions\Ordered;
+use Kwasii\LaravelSqlParser\Expressions\Pow;
+use Kwasii\LaravelSqlParser\Expressions\Query;
+use Kwasii\LaravelSqlParser\Expressions\RegexpLike;
+use Kwasii\LaravelSqlParser\Expressions\Sub;
+use Kwasii\LaravelSqlParser\Expressions\Unnest;
 
 /**
  * Condition builders available on every expression (sqlglot Expr.and_, or_, not_, as_, isin,

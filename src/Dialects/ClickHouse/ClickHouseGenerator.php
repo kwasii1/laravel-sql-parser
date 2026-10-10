@@ -2,33 +2,33 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\ClickHouse;
+namespace Kwasii\LaravelSqlParser\Dialects\ClickHouse;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\Add;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Any;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ArrayExpr;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Cast;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataTypeParam;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Div;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Fetch;
-use LaravelSqlParser\LaravelSqlParser\Expressions\In;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Interval;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Limit;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Not;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ParameterizedAgg;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Query;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Schema;
-use LaravelSqlParser\LaravelSqlParser\Expressions\SchemaCommentProperty;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Select;
-use LaravelSqlParser\LaravelSqlParser\Expressions\StrToDate;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TsOrDsToTimestamp;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Tuple;
-use LaravelSqlParser\LaravelSqlParser\Generator\Generator;
+use Kwasii\LaravelSqlParser\Expressions\Add;
+use Kwasii\LaravelSqlParser\Expressions\Any;
+use Kwasii\LaravelSqlParser\Expressions\ArrayExpr;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\Cast;
+use Kwasii\LaravelSqlParser\Expressions\DataType;
+use Kwasii\LaravelSqlParser\Expressions\DataTypeParam;
+use Kwasii\LaravelSqlParser\Expressions\Div;
+use Kwasii\LaravelSqlParser\Expressions\DType;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Fetch;
+use Kwasii\LaravelSqlParser\Expressions\In;
+use Kwasii\LaravelSqlParser\Expressions\Interval;
+use Kwasii\LaravelSqlParser\Expressions\Limit;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Expressions\Not;
+use Kwasii\LaravelSqlParser\Expressions\ParameterizedAgg;
+use Kwasii\LaravelSqlParser\Expressions\Query;
+use Kwasii\LaravelSqlParser\Expressions\Schema;
+use Kwasii\LaravelSqlParser\Expressions\SchemaCommentProperty;
+use Kwasii\LaravelSqlParser\Expressions\Select;
+use Kwasii\LaravelSqlParser\Expressions\StrToDate;
+use Kwasii\LaravelSqlParser\Expressions\TsOrDsToTimestamp;
+use Kwasii\LaravelSqlParser\Expressions\Tuple;
+use Kwasii\LaravelSqlParser\Generator\Generator;
 
 /**
  * ClickHouse generator (sqlglot generators/clickhouse.py).

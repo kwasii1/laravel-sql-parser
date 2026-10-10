@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\StarRocks;
+namespace Kwasii\LaravelSqlParser\Dialects\StarRocks;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\MySql\MySql;
+use Kwasii\LaravelSqlParser\Dialects\MySql\MySql;
 
 /**
  * The StarRocks dialect (sqlglot dialects/starrocks.py).

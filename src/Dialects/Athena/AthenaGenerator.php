@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Athena;
+namespace Kwasii\LaravelSqlParser\Dialects\Athena;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Trino\TrinoGenerator;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Properties;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Property;
+use Kwasii\LaravelSqlParser\Dialects\Trino\TrinoGenerator;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Properties;
+use Kwasii\LaravelSqlParser\Expressions\Property;
 
 /**
  * Athena generator for the Trino engine (sqlglot generators/athena.py AthenaTrinoGenerator);

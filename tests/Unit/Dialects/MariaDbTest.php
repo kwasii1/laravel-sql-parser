@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
-use LaravelSqlParser\LaravelSqlParser\Dialects\MariaDb\MariaDb;
-use LaravelSqlParser\LaravelSqlParser\Dialects\MySql\MySql;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Dialects\MariaDb\MariaDb;
+use Kwasii\LaravelSqlParser\Dialects\MySql\MySql;
 
 it('resolves the mariadb dialect as a MySQL dialect', function (): void {
     $dialect = Dialect::get('mariadb');

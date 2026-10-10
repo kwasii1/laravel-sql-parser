@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Spark;
+namespace Kwasii\LaravelSqlParser\Dialects\Spark;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Spark2\Spark2Generator;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ArrayAgg;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ArrayToString;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Block;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Drop;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Is;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Not;
-use LaravelSqlParser\LaravelSqlParser\Expressions\NullExpr;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ObjectId;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TsOrDsAdd;
-use LaravelSqlParser\LaravelSqlParser\Generator\Generator;
+use Kwasii\LaravelSqlParser\Dialects\Spark2\Spark2Generator;
+use Kwasii\LaravelSqlParser\Expressions\ArrayAgg;
+use Kwasii\LaravelSqlParser\Expressions\ArrayToString;
+use Kwasii\LaravelSqlParser\Expressions\Block;
+use Kwasii\LaravelSqlParser\Expressions\Builder;
+use Kwasii\LaravelSqlParser\Expressions\DataType;
+use Kwasii\LaravelSqlParser\Expressions\Drop;
+use Kwasii\LaravelSqlParser\Expressions\DType;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Is;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Expressions\Not;
+use Kwasii\LaravelSqlParser\Expressions\NullExpr;
+use Kwasii\LaravelSqlParser\Expressions\ObjectId;
+use Kwasii\LaravelSqlParser\Expressions\TsOrDsAdd;
+use Kwasii\LaravelSqlParser\Generator\Generator;
 
 /**
  * Spark 3 generator (sqlglot generators/spark.py).

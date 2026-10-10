@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Materialize;
+namespace Kwasii\LaravelSqlParser\Dialects\Materialize;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Postgres\PostgresParser;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Kwarg;
-use LaravelSqlParser\LaravelSqlParser\Expressions\PropertyEQ;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Struct;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ToMap;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenType;
+use Kwasii\LaravelSqlParser\Dialects\Postgres\PostgresParser;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Kwarg;
+use Kwasii\LaravelSqlParser\Expressions\PropertyEQ;
+use Kwasii\LaravelSqlParser\Expressions\Struct;
+use Kwasii\LaravelSqlParser\Expressions\ToMap;
+use Kwasii\LaravelSqlParser\Tokenizer\TokenType;
 
 /**
  * Materialize parser (sqlglot parsers/materialize.py).

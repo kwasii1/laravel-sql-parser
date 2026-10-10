@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Athena;
+namespace Kwasii\LaravelSqlParser\Dialects\Athena;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Hive\HiveGenerator;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Alter;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ColumnDef;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Schema;
+use Kwasii\LaravelSqlParser\Dialects\Hive\HiveGenerator;
+use Kwasii\LaravelSqlParser\Expressions\Alter;
+use Kwasii\LaravelSqlParser\Expressions\ColumnDef;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\Schema;
 
 /**
  * Athena generator for the Hive engine (sqlglot generators/athena.py _HiveGenerator).

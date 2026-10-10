@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Tokenizer;
+namespace Kwasii\LaravelSqlParser\Tokenizer;
 
-use LaravelSqlParser\LaravelSqlParser\Errors\TokenError;
+use Kwasii\LaravelSqlParser\Errors\TokenError;
 use Throwable;
 
 /**

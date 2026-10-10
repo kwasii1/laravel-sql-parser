@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
-use LaravelSqlParser\LaravelSqlParser\Errors\ErrorLevel;
-use LaravelSqlParser\LaravelSqlParser\Errors\UnsupportedError;
-use LaravelSqlParser\LaravelSqlParser\Tests\Support\Reference;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Errors\ErrorLevel;
+use Kwasii\LaravelSqlParser\Errors\UnsupportedError;
+use Kwasii\LaravelSqlParser\Tests\Support\Reference;
 
 /**
  * The recorded validate_identity / validate_all cases of a dialect, flattened to

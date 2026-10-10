@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Druid;
+namespace Kwasii\LaravelSqlParser\Dialects\Druid;
 
-use LaravelSqlParser\LaravelSqlParser\Parser\Parser;
+use Kwasii\LaravelSqlParser\Parser\Parser;
 
 /**
  * Apache Druid parser (sqlglot parsers/druid.py).

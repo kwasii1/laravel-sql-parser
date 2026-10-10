@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Fabric;
+namespace Kwasii\LaravelSqlParser\Dialects\Fabric;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\TSql\TSql;
+use Kwasii\LaravelSqlParser\Dialects\TSql\TSql;
 
 /**
  * The Microsoft Fabric dialect (sqlglot dialects/fabric.py).

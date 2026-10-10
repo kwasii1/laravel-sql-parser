@@ -2,26 +2,26 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\DuckDB;
+namespace Kwasii\LaravelSqlParser\Dialects\DuckDB;
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
-use LaravelSqlParser\LaravelSqlParser\Expressions\AggFunc;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\FirstValue;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Having;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Lag;
-use LaravelSqlParser\LaravelSqlParser\Expressions\LastValue;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Lead;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Neg;
-use LaravelSqlParser\LaravelSqlParser\Expressions\NthValue;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Order;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Select;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Seq1;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Seq2;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Seq4;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Seq8;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Where;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Expressions\AggFunc;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\FirstValue;
+use Kwasii\LaravelSqlParser\Expressions\Having;
+use Kwasii\LaravelSqlParser\Expressions\Lag;
+use Kwasii\LaravelSqlParser\Expressions\LastValue;
+use Kwasii\LaravelSqlParser\Expressions\Lead;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Expressions\Neg;
+use Kwasii\LaravelSqlParser\Expressions\NthValue;
+use Kwasii\LaravelSqlParser\Expressions\Order;
+use Kwasii\LaravelSqlParser\Expressions\Select;
+use Kwasii\LaravelSqlParser\Expressions\Seq1;
+use Kwasii\LaravelSqlParser\Expressions\Seq2;
+use Kwasii\LaravelSqlParser\Expressions\Seq4;
+use Kwasii\LaravelSqlParser\Expressions\Seq8;
+use Kwasii\LaravelSqlParser\Expressions\Where;
 
 /**
  * Module-level constants and SQL templates of sqlglot generators/duckdb.py, shared by the

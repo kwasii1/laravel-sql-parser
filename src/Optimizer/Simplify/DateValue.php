@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Optimizer\Simplify;
+namespace Kwasii\LaravelSqlParser\Optimizer\Simplify;
 
 /**
  * A Python datetime.date or datetime.datetime value, as simplify folds them.

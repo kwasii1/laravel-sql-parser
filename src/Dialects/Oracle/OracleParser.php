@@ -2,32 +2,32 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Dialects\Oracle;
+namespace Kwasii\LaravelSqlParser\Dialects\Oracle;
 
-use LaravelSqlParser\LaravelSqlParser\Expressions\Anonymous;
-use LaravelSqlParser\LaravelSqlParser\Expressions\CurrentTimestamp;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DataType;
-use LaravelSqlParser\LaravelSqlParser\Expressions\DateStrToDate;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ForceProperty;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Interval;
-use LaravelSqlParser\LaravelSqlParser\Expressions\IntervalSpan;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Into;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONArray;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONArrayAgg;
-use LaravelSqlParser\LaravelSqlParser\Expressions\JSONExists;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Pow;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Prior;
-use LaravelSqlParser\LaravelSqlParser\Expressions\QueryOption;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Rand;
-use LaravelSqlParser\LaravelSqlParser\Expressions\StrToTime;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Table;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TableAlias;
-use LaravelSqlParser\LaravelSqlParser\Expressions\TemporaryProperty;
-use LaravelSqlParser\LaravelSqlParser\Expressions\ToNumber;
-use LaravelSqlParser\LaravelSqlParser\Parser\Parser;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenType;
+use Kwasii\LaravelSqlParser\Expressions\Anonymous;
+use Kwasii\LaravelSqlParser\Expressions\CurrentTimestamp;
+use Kwasii\LaravelSqlParser\Expressions\DataType;
+use Kwasii\LaravelSqlParser\Expressions\DateStrToDate;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Expressions\ForceProperty;
+use Kwasii\LaravelSqlParser\Expressions\Interval;
+use Kwasii\LaravelSqlParser\Expressions\IntervalSpan;
+use Kwasii\LaravelSqlParser\Expressions\Into;
+use Kwasii\LaravelSqlParser\Expressions\JSONArray;
+use Kwasii\LaravelSqlParser\Expressions\JSONArrayAgg;
+use Kwasii\LaravelSqlParser\Expressions\JSONExists;
+use Kwasii\LaravelSqlParser\Expressions\Literal;
+use Kwasii\LaravelSqlParser\Expressions\Pow;
+use Kwasii\LaravelSqlParser\Expressions\Prior;
+use Kwasii\LaravelSqlParser\Expressions\QueryOption;
+use Kwasii\LaravelSqlParser\Expressions\Rand;
+use Kwasii\LaravelSqlParser\Expressions\StrToTime;
+use Kwasii\LaravelSqlParser\Expressions\Table;
+use Kwasii\LaravelSqlParser\Expressions\TableAlias;
+use Kwasii\LaravelSqlParser\Expressions\TemporaryProperty;
+use Kwasii\LaravelSqlParser\Expressions\ToNumber;
+use Kwasii\LaravelSqlParser\Parser\Parser;
+use Kwasii\LaravelSqlParser\Tokenizer\TokenType;
 
 /**
  * Oracle parser (sqlglot parsers/oracle.py).

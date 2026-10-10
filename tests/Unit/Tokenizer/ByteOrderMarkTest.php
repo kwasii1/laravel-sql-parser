@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
 
 it('skips a leading UTF-8 byte order mark, keeping byte offsets', function (string $dialect): void {
     $stream = Dialect::get($dialect)->tokenizer()->tokenize("\u{FEFF}DROP TABLE IF EXISTS t");

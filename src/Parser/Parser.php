@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace LaravelSqlParser\LaravelSqlParser\Parser;
+namespace Kwasii\LaravelSqlParser\Parser;
 
 use Closure;
-use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
-use LaravelSqlParser\LaravelSqlParser\Errors\ErrorLevel;
-use LaravelSqlParser\LaravelSqlParser\Errors\ParseError;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Command;
-use LaravelSqlParser\LaravelSqlParser\Expressions\EndStatement;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenStream;
-use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenType;
+use Kwasii\LaravelSqlParser\Dialects\Dialect;
+use Kwasii\LaravelSqlParser\Errors\ErrorLevel;
+use Kwasii\LaravelSqlParser\Errors\ParseError;
+use Kwasii\LaravelSqlParser\Expressions\Command;
+use Kwasii\LaravelSqlParser\Expressions\EndStatement;
+use Kwasii\LaravelSqlParser\Expressions\Expression;
+use Kwasii\LaravelSqlParser\Tokenizer\TokenStream;
+use Kwasii\LaravelSqlParser\Tokenizer\TokenType;
 use ReflectionClass;
 use TypeError;
 
