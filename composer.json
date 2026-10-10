@@ -78,7 +78,7 @@
             "@php tools/generate.php --check"
         ],
         "test:types": [
-            "vendor/bin/pest --type-coverage --min=100"
+            "vendor/bin/pest --type-coverage --min=100 --no-cache"
         ],
         "test:unit": [
             "vendor/bin/pest --parallel"
