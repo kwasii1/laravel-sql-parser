@@ -11,6 +11,8 @@ namespace LaravelSqlParser\LaravelSqlParser\Expressions;
  */
 class CaseExpr extends Expression implements Func
 {
+    use Concerns\CaseExprBehavior;
+
     public const string KEY = 'case';
 
     public const array ARG_TYPES = [

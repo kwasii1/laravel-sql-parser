@@ -57,8 +57,13 @@ it('parses identity.sql into the same trees as sqlglot', function (string $sql, 
     expect(jsonTree(Dialect::get()->parseOne($sql)->toTree()))->toEqual(jsonTree($ast));
 })->with(referenceAstCases('identity'));
 
-foreach (Reference::GENERATOR_DIALECTS as $dialect) {
+foreach (array_intersect(Reference::GENERATOR_DIALECTS, Reference::DIALECTS) as $dialect) {
+    // Some dialects' tests record no trees (e.g. DAX's are all validate_transpile cases)
+    if (($cases = referenceAstCases($dialect)) === []) {
+        continue;
+    }
+
     it("parses {$dialect} cases into the same trees as sqlglot", function (string $sql, array $ast) use ($dialect): void {
         expect(jsonTree(Dialect::get($dialect)->parseOne($sql)->toTree()))->toEqual(jsonTree($ast));
-    })->with(referenceAstCases($dialect));
+    })->with($cases);
 }

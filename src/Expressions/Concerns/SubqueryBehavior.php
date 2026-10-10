@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaravelSqlParser\LaravelSqlParser\Expressions\Concerns;
 
+use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Query;
 use LaravelSqlParser\LaravelSqlParser\Expressions\SetOperation;
@@ -104,5 +105,22 @@ trait SubqueryBehavior
     public function namedSelects(): array
     {
         return array_map(static fn (Expression $e): string => $e->outputName(), $this->selects());
+    }
+
+    /**
+     * Append to or set the projections of the wrapped query (sqlglot Subquery.select).
+     * Options: append, dialect, copy.
+     */
+    public function select(mixed ...$args): static
+    {
+        [$expressions, $options] = Builder::splitOptions($args, ['append' => true, 'dialect' => null, 'copy' => true]);
+        $instance = $options['copy'] === false ? $this : $this->copy();
+        $inner = $instance->unnest();
+
+        if ($inner instanceof Query) {
+            $inner->select(...$expressions, append: (bool) $options['append'], dialect: Builder::dialectOption($options), copy: false);
+        }
+
+        return $instance;
     }
 }

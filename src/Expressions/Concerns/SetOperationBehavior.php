@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaravelSqlParser\LaravelSqlParser\Expressions\Concerns;
 
+use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Query;
 use LaravelSqlParser\LaravelSqlParser\Expressions\SetOperation;
@@ -104,5 +105,25 @@ trait SetOperationBehavior
         $value = $expression->args[$key] ?? null;
 
         return $value instanceof Expression ? $value->unnest() : null;
+    }
+
+    /**
+     * Append to or set the projections of both sides (sqlglot SetOperation.select).
+     * Options: append, dialect, copy.
+     */
+    public function select(mixed ...$args): static
+    {
+        [$expressions, $options] = Builder::splitOptions($args, ['append' => true, 'dialect' => null, 'copy' => true]);
+        $instance = $options['copy'] === false ? $this : $this->copy();
+
+        foreach (['this', 'expression'] as $key) {
+            $side = self::unnestedArg($instance, $key);
+
+            if ($side instanceof Query) {
+                $side->select(...$expressions, append: (bool) $options['append'], dialect: Builder::dialectOption($options), copy: false);
+            }
+        }
+
+        return $instance;
     }
 }

@@ -242,8 +242,10 @@ trait GeneratesExpressions
 
         if ($concatCoalesce !== true && $expression->flag('coalesce')) {
             $args = array_map(function (Expression $e): Expression {
-                // sqlglot annotates types here; without the optimizer only literal strings and
-                // array constructors are known not to need the COALESCE.
+                if ($e->type() === null) {
+                    $this->dialect->annotateTypes($e);
+                }
+
                 $type = $e->type();
 
                 if ($e->isString() || $e instanceof ArrayExpr || ($type !== null && $type->isType(DType::ARRAY))) {

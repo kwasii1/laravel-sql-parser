@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use LaravelSqlParser\LaravelSqlParser\Errors\UnsupportedError;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Alias;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Aliases;
+use LaravelSqlParser\LaravelSqlParser\Expressions\Anonymous;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Any;
 use LaravelSqlParser\LaravelSqlParser\Expressions\ApproxQuantile;
 use LaravelSqlParser\LaravelSqlParser\Expressions\ArrayExpr;
@@ -19,6 +20,7 @@ use LaravelSqlParser\LaravelSqlParser\Expressions\CaseExpr;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Cast;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Column;
 use LaravelSqlParser\LaravelSqlParser\Expressions\ColumnConstraint;
+use LaravelSqlParser\LaravelSqlParser\Expressions\ColumnDef;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Connector;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Constraint;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Create;
@@ -41,9 +43,11 @@ use LaravelSqlParser\LaravelSqlParser\Expressions\Having;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Identifier;
 use LaravelSqlParser\LaravelSqlParser\Expressions\IfExpr;
 use LaravelSqlParser\LaravelSqlParser\Expressions\ILike;
+use LaravelSqlParser\LaravelSqlParser\Expressions\Inline;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Interval;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Join;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Lambda;
+use LaravelSqlParser\LaravelSqlParser\Expressions\Lateral;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Like;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
 use LaravelSqlParser\LaravelSqlParser\Expressions\LTE;
@@ -52,6 +56,7 @@ use LaravelSqlParser\LaravelSqlParser\Expressions\Not;
 use LaravelSqlParser\LaravelSqlParser\Expressions\NullExpr;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Order;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Ordered;
+use LaravelSqlParser\LaravelSqlParser\Expressions\PartitionedByProperty;
 use LaravelSqlParser\LaravelSqlParser\Expressions\PercentileCont;
 use LaravelSqlParser\LaravelSqlParser\Expressions\PercentileDisc;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Pivot;
@@ -60,6 +65,7 @@ use LaravelSqlParser\LaravelSqlParser\Expressions\PropertyEQ;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Qualify;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Query;
 use LaravelSqlParser\LaravelSqlParser\Expressions\RowNumber;
+use LaravelSqlParser\LaravelSqlParser\Expressions\Schema;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Select;
 use LaravelSqlParser\LaravelSqlParser\Expressions\SetOperation;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Star;
@@ -1079,6 +1085,196 @@ trait Transforms
 
             $struct->set('expressions', $newExpressions);
         }
+
+        return $expression;
+    }
+
+    /**
+     * sqlglot unnest_to_explode: convert (cross join) UNNEST into (LATERAL VIEW) EXPLODE.
+     */
+    public function unnestToExplode(Expression $expression, bool $unnestUsingArraysZip = true): Expression
+    {
+        $zipExprs = static function (Expression $unnest, array $exprs, bool $hasMultiExpr) use ($unnestUsingArraysZip): array {
+            if ($hasMultiExpr) {
+                if (! $unnestUsingArraysZip) {
+                    throw new UnsupportedError('Cannot transpile UNNEST with multiple input arrays');
+                }
+
+                $zipped = [new Anonymous(['this' => 'ARRAYS_ZIP', 'expressions' => $exprs])];
+                $unnest->set('expressions', $zipped);
+
+                return $zipped;
+            }
+
+            return $exprs;
+        };
+
+        $udtfType = static fn (Expression $unnest, bool $hasMultiExpr): string => $unnest->flag('offset')
+            ? Posexplode::class
+            : ($hasMultiExpr ? Inline::class : Explode::class);
+
+        $offsetIdentifier = static function (Expression $unnest): ?Expression {
+            $offset = $unnest->args['offset'] ?? null;
+
+            if ($offset === null || $offset === false) {
+                return null;
+            }
+
+            return $offset instanceof Identifier ? $offset : Builder::toIdentifier('pos');
+        };
+
+        if (! $expression instanceof Select) {
+            return $expression;
+        }
+
+        $from = $expression->argExpr('from_');
+
+        if ($from !== null && ($from->args['this'] ?? null) instanceof Unnest) {
+            $unnest = $from->args['this'];
+            $alias = $unnest->argExpr('alias');
+            $exprs = $unnest->argList('expressions');
+            $hasMultiExpr = count($exprs) > 1;
+            $this_ = $zipExprs($unnest, $exprs, $hasMultiExpr)[0] ?? null;
+
+            $columns = $alias !== null ? $alias->argList('columns') : [];
+
+            if (($offset = $offsetIdentifier($unnest)) !== null) {
+                array_unshift($columns, $offset);
+            }
+
+            $class = $udtfType($unnest, $hasMultiExpr);
+            $unnest->replace(new Table([
+                'this' => new $class(['this' => $this_]),
+                'alias' => $alias !== null ? new TableAlias(['this' => $alias->args['this'] ?? null, 'columns' => $columns]) : null,
+            ]));
+        }
+
+        foreach ($expression->argList('joins') as $join) {
+            $joinExpr = $join->args['this'] ?? null;
+            $isLateral = $joinExpr instanceof Lateral;
+            $unnest = $isLateral ? ($joinExpr->args['this'] ?? null) : $joinExpr;
+
+            if (! $unnest instanceof Unnest) {
+                continue;
+            }
+
+            $alias = $isLateral ? $joinExpr->argExpr('alias') : $unnest->argExpr('alias');
+
+            if ($alias === null) {
+                throw new UnsupportedError('CROSS JOIN UNNEST to LATERAL VIEW EXPLODE transformation requires an alias');
+            }
+
+            $exprs = $unnest->argList('expressions');
+            $hasMultiExpr = count($exprs) > 1;
+            $exprs = $zipExprs($unnest, $exprs, $hasMultiExpr);
+
+            $join->pop();
+
+            $aliasCols = $alias->argList('columns');
+
+            if (! $hasMultiExpr && ! in_array(count($aliasCols), [1, 2], true)) {
+                throw new UnsupportedError('CROSS JOIN UNNEST to LATERAL VIEW EXPLODE transformation requires explicit column aliases');
+            }
+
+            if (($offset = $offsetIdentifier($unnest)) !== null) {
+                array_unshift($aliasCols, $offset);
+            }
+
+            $class = $udtfType($unnest, $hasMultiExpr);
+
+            foreach (array_values($exprs) as $i => $e) {
+                if (! isset($aliasCols[$i])) {
+                    break;
+                }
+
+                $expression->append('laterals', new Lateral([
+                    'this' => new $class(['this' => $e]),
+                    'view' => true,
+                    'alias' => new TableAlias([
+                        'this' => $i === 0 ? ($alias->args['this'] ?? null) : $alias->argExpr('this')?->copy(),
+                        'columns' => $i === 0 ? $aliasCols : array_map(static fn (Expression $c): Expression => $c->copy(), $aliasCols),
+                    ]),
+                ]));
+            }
+        }
+
+        return $expression;
+    }
+
+    /**
+     * sqlglot move_schema_columns_to_partitioned_by.
+     */
+    public function moveSchemaColumnsToPartitionedBy(Expression $expression): Expression
+    {
+        $schema = $expression->args['this'] ?? null;
+        $isPartitionable = in_array($expression->text('kind'), ['TABLE', 'VIEW'], true);
+
+        if ($schema instanceof Schema && $isPartitionable) {
+            $prop = $expression->find(PartitionedByProperty::class);
+            $propThis = $prop?->argExpr('this');
+
+            if ($prop !== null && $propThis !== null && ! $propThis instanceof Schema) {
+                $columns = [];
+
+                foreach ($propThis->argList('expressions') as $v) {
+                    $columns[strtoupper($v->name())] = true;
+                }
+
+                $partitions = [];
+                $rest = [];
+
+                foreach ($schema->argList('expressions') as $col) {
+                    if (isset($columns[strtoupper($col->name())])) {
+                        $partitions[] = $col;
+                    } else {
+                        $rest[] = $col;
+                    }
+                }
+
+                $schema->set('expressions', $rest);
+                $prop->replace(new PartitionedByProperty(['this' => new Schema(['expressions' => $partitions])]));
+                $expression->set('this', $schema);
+            }
+        }
+
+        return $expression;
+    }
+
+    /**
+     * sqlglot move_partitioned_by_to_schema_columns.
+     */
+    public function movePartitionedByToSchemaColumns(Expression $expression): Expression
+    {
+        $prop = $expression->find(PartitionedByProperty::class);
+        $propThis = $prop?->argExpr('this');
+
+        if ($prop === null || ! $propThis instanceof Schema) {
+            return $expression;
+        }
+
+        foreach ($propThis->argList('expressions') as $e) {
+            if (! $e instanceof ColumnDef || ! $e->flag('kind')) {
+                return $expression;
+            }
+        }
+
+        $defs = $propThis->argList('expressions');
+        $identifiers = [];
+
+        foreach ($defs as $e) {
+            $id = $e->args['this'] ?? null;
+            $identifiers[] = $id instanceof Identifier ? $id->copy() : Builder::toIdentifier(is_string($id) ? $id : null);
+        }
+
+        $schema = $expression->args['this'] ?? null;
+
+        if ($schema instanceof Expression) {
+            foreach ($defs as $e) {
+                $schema->append('expressions', $e);
+            }
+        }
+
+        $prop->set('this', new Tuple(['expressions' => $identifiers]));
 
         return $expression;
     }

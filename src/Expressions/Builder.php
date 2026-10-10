@@ -7,12 +7,15 @@ namespace LaravelSqlParser\LaravelSqlParser\Expressions;
 use InvalidArgumentException;
 use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
 use LaravelSqlParser\LaravelSqlParser\Errors\ParseError;
+use LaravelSqlParser\LaravelSqlParser\Optimizer\Simplify;
 
 /**
  * Expression builders (sqlglot's module-level helpers in expressions/core.py and builders.py).
  */
 final class Builder
 {
+    use Concerns\BuildsQueries;
+
     /** sqlglot SAFE_IDENTIFIER_RE: names that never need quoting. */
     public const string SAFE_IDENTIFIER = '/^[_a-zA-Z][\p{L}\p{N}_]*\n?\z/u';
 
@@ -239,6 +242,26 @@ final class Builder
         return $this_;
     }
 
+    /**
+     * The table qualifiers of the columns in an expression, except `$exclude` (sqlglot exp.column_table_names).
+     *
+     * @return list<string>
+     */
+    public static function columnTableNames(Expression $expression, string $exclude = ''): array
+    {
+        $names = [];
+
+        foreach ($expression->findAll(Column::class) as $column) {
+            $table = $column->table();
+
+            if ($table !== '' && $table !== $exclude) {
+                $names[$table] = true;
+            }
+        }
+
+        return array_map(strval(...), array_keys($names));
+    }
+
     public static function true(): Boolean
     {
         return new Boolean(['this' => true]);
@@ -349,29 +372,26 @@ final class Builder
             return $expressions;
         }
 
-        if ($dialect !== null) {
-            if ($this_->type() === null) {
-                $dialect->annotateTypes($this_);
-            }
+        $dialect ??= Dialect::get();
+        $expression = $expressions[0];
 
-            if (! $this_->isType(DType::UNKNOWN, DType::ARRAY)) {
-                return $expressions;
-            }
-        } elseif ($this_ instanceof Literal || $this_ instanceof Struct || $this_ instanceof Map) {
+        if ($this_->type() === null) {
+            $dialect->annotateTypes($this_);
+        }
+
+        if (! $this_->isType(DType::UNKNOWN, DType::ARRAY)) {
             return $expressions;
         }
 
-        $expression = $expressions[0];
-
-        if ($expression instanceof Literal && $expression->isInt()) {
-            return [Literal::number((int) $expression->name() + $offset)];
+        if ($expression->type() === null) {
+            $dialect->annotateTypes($expression);
         }
 
-        if ($expression instanceof Neg && ($inner = $expression->args['this'] ?? null) instanceof Literal && $inner->isInt()) {
-            return [Literal::number(-(int) $inner->name() + $offset)];
+        if (! $expression->isType(...DataType::INTEGER_TYPES)) {
+            return $expressions;
         }
 
-        return $expressions;
+        return [Simplify::simplify(self::binop(Add::class, $expression, Literal::number($offset)))];
     }
 
     /**

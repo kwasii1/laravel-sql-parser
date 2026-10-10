@@ -82,6 +82,29 @@ class Dialect
         'bigquery' => BigQuery\BigQuery::class,
         'snowflake' => Snowflake\Snowflake::class,
         'duckdb' => DuckDB\DuckDB::class,
+        'hive' => Hive\Hive::class,
+        'spark2' => Spark2\Spark2::class,
+        'spark' => Spark\Spark::class,
+        'databricks' => Databricks\Databricks::class,
+        'presto' => Presto\Presto::class,
+        'trino' => Trino\Trino::class,
+        'athena' => Athena\Athena::class,
+        'teradata' => Teradata\Teradata::class,
+        'doris' => Doris\Doris::class,
+        'starrocks' => StarRocks\StarRocks::class,
+        'singlestore' => SingleStore\SingleStore::class,
+        'materialize' => Materialize\Materialize::class,
+        'risingwave' => RisingWave\RisingWave::class,
+        'exasol' => Exasol\Exasol::class,
+        'fabric' => Fabric\Fabric::class,
+        'drill' => Drill\Drill::class,
+        'druid' => Druid\Druid::class,
+        'dremio' => Dremio\Dremio::class,
+        'dune' => Dune\Dune::class,
+        'tableau' => Tableau\Tableau::class,
+        'solr' => Solr\Solr::class,
+        'dax' => Dax\Dax::class,
+        'prql' => Prql\Prql::class,
     ];
 
     /** @var array<string, class-string<Dialect>> */
@@ -127,6 +150,11 @@ class Dialect
             return $dialect;
         }
 
+        // 'dialect, key = value, ...' configures an instance (version, normalization_strategy)
+        if ($dialect !== null && str_contains($dialect, ',')) {
+            return self::$configured[$dialect] ??= self::configure($dialect);
+        }
+
         $name = strtolower(trim($dialect ?? ''));
         $class = self::$registered[$name] ?? self::DIALECTS[$name] ?? null;
 
@@ -139,6 +167,32 @@ class Dialect
         }
 
         return self::$instances[$class] ??= new $class;
+    }
+
+    /** @var array<string, Dialect> */
+    private static array $configured = [];
+
+    private static function configure(string $dialect): self
+    {
+        $pieces = explode(',', $dialect);
+        $instance = new (self::get(trim($pieces[0]))::class);
+
+        foreach (array_slice($pieces, 1) as $pair) {
+            $kv = explode('=', $pair);
+            $key = strtolower(trim($kv[0]));
+            $value = count($kv) === 2 ? trim($kv[1]) : 'true';
+
+            if ($key === 'normalization_strategy') {
+                $instance->normalizationStrategy = strtoupper($value);
+            } elseif ($key === 'version') {
+                $parts = array_map('intval', array_slice([...explode('.', $value), '0', '0'], 0, 3));
+                $instance->version = [$parts[0], $parts[1], $parts[2]];
+            } elseif (count($kv) > 2) {
+                throw new InvalidArgumentException("Invalid dialect format: '{$dialect}'.");
+            }
+        }
+
+        return $instance;
     }
 
     /**
@@ -466,5 +520,23 @@ class Dialect
         }
 
         return $expression;
+    }
+
+    /**
+     * The default column aliases of a VALUES table: _col_0, _col_1, ...
+     *
+     * @return list<Identifier>
+     */
+    public function generateValuesAliases(Expression $expression): array
+    {
+        $first = $expression->argList('expressions')[0] ?? null;
+        $count = $first === null ? 0 : count($first->argList('expressions'));
+        $aliases = [];
+
+        for ($i = 0; $i < $count; $i++) {
+            $aliases[] = new Identifier(['this' => "_col_{$i}", 'quoted' => false]);
+        }
+
+        return $aliases;
     }
 }

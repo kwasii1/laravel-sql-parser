@@ -11,6 +11,8 @@ namespace LaravelSqlParser\LaravelSqlParser\Expressions;
  */
 class Merge extends Expression implements DML
 {
+    use Concerns\DMLBehavior;
+
     public const string KEY = 'merge';
 
     public const array ARG_TYPES = [

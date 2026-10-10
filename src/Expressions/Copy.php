@@ -11,6 +11,8 @@ namespace LaravelSqlParser\LaravelSqlParser\Expressions;
  */
 class Copy extends Expression implements DML
 {
+    use Concerns\DMLBehavior;
+
     public const string KEY = 'copy';
 
     public const array ARG_TYPES = [

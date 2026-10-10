@@ -15,6 +15,7 @@ use LaravelSqlParser\LaravelSqlParser\Expressions\Binary;
 use LaravelSqlParser\LaravelSqlParser\Expressions\BitwiseAnd;
 use LaravelSqlParser\LaravelSqlParser\Expressions\BitwiseRightShift;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
+use LaravelSqlParser\LaravelSqlParser\Expressions\Cast;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Coalesce;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Column;
 use LaravelSqlParser\LaravelSqlParser\Expressions\DataType;
@@ -32,6 +33,7 @@ use LaravelSqlParser\LaravelSqlParser\Expressions\EQ;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Explode;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
 use LaravelSqlParser\LaravelSqlParser\Expressions\From;
+use LaravelSqlParser\LaravelSqlParser\Expressions\GT;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Identifier;
 use LaravelSqlParser\LaravelSqlParser\Expressions\IfExpr;
 use LaravelSqlParser\LaravelSqlParser\Expressions\In;
@@ -48,10 +50,12 @@ use LaravelSqlParser\LaravelSqlParser\Expressions\Kwarg;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Lambda;
 use LaravelSqlParser\LaravelSqlParser\Expressions\LastDay;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Lateral;
+use LaravelSqlParser\LaravelSqlParser\Expressions\Length;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Like;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Limit;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Lower;
+use LaravelSqlParser\LaravelSqlParser\Expressions\LT;
 use LaravelSqlParser\LaravelSqlParser\Expressions\NEQ;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Not;
 use LaravelSqlParser\LaravelSqlParser\Expressions\NullExpr;
@@ -800,6 +804,12 @@ trait DialectHelpers
         return $this->renameFunc($expression, $expression->argList('expressions') !== [] ? 'GREATEST' : 'MAX');
     }
 
+    /** sqlglot to_number_with_nls_param. */
+    public function toNumberWithNlsParam(Expression $expression): string
+    {
+        return $this->func('TO_NUMBER', $expression->args['this'] ?? null, $expression->args['format'] ?? null, $expression->args['nlsparam'] ?? null);
+    }
+
     public function countIfToSum(Expression $expression): string
     {
         $cond = $expression->args['this'] ?? null;
@@ -1142,5 +1152,121 @@ trait DialectHelpers
         }
 
         return $modifiers;
+    }
+
+    /**
+     * sqlglot left_to_substring_sql.
+     */
+    public function leftToSubstringSql(Expression $expression): string
+    {
+        return $this->sql(new Substring([
+            'this' => $expression->args['this'] ?? null,
+            'start' => Literal::number(1),
+            'length' => $expression->args['expression'] ?? null,
+        ]));
+    }
+
+    /**
+     * sqlglot right_to_substring_sql.
+     */
+    public function rightToSubstringSql(Expression $expression): string
+    {
+        $this_ = $expression->argExpr('this');
+
+        return $this->sql(new Substring([
+            'this' => $this_,
+            'start' => Builder::binop(
+                Sub::class,
+                new Length(['this' => $this_?->copy()]),
+                Builder::paren(Builder::binop(Sub::class, $expression->argExpr('expression'), 1)),
+            ),
+        ]));
+    }
+
+    /**
+     * sqlglot regexp_extract_sql.
+     */
+    public function regexpExtractSqlHandler(Expression $expression): string
+    {
+        $group = $expression->argExpr('group');
+
+        // Do not render group if it's the default value for this dialect
+        if ($group !== null && $group->name() === (string) ($this->dialect->settings['REGEXP_EXTRACT_DEFAULT_GROUP'] ?? '')) {
+            $group = null;
+        }
+
+        return $this->func($expression::sqlName(), $expression->args['this'] ?? null, $expression->args['expression'] ?? null, $group);
+    }
+
+    /**
+     * sqlglot no_recursive_cte_sql.
+     */
+    public function noRecursiveCteSql(Expression $expression): string
+    {
+        if ($expression->flag('recursive')) {
+            $this->unsupported('Recursive CTEs are unsupported');
+            $expression->set('recursive', false);
+        }
+
+        return $this->withSql($expression);
+    }
+
+    /**
+     * sqlglot sequence_sql (GenerateSeries / GenerateDateArray -> SEQUENCE).
+     */
+    public function sequenceSql(Expression $expression): string
+    {
+        $start = $expression->argExpr('start');
+        $end = $expression->argExpr('end');
+        $step = $expression->argExpr('step');
+
+        if ($start instanceof Cast) {
+            $targetType = $start->argExpr('to');
+        } elseif ($end instanceof Cast) {
+            $targetType = $end->argExpr('to');
+        } else {
+            $targetType = null;
+        }
+
+        if ($start !== null && $end !== null) {
+            if ($targetType instanceof DataType && $targetType->isType('date', 'timestamp')) {
+                if ($start instanceof Cast && $targetType === $start->argExpr('to')) {
+                    $end = Builder::cast($end, $targetType);
+                } else {
+                    $start = Builder::cast($start, $targetType);
+                }
+            }
+
+            if ($expression->flag('is_end_exclusive')) {
+                $stepValue = $step ?? Literal::number(1);
+                $end = Builder::paren(new Sub(['this' => $end, 'expression' => $stepValue]), false);
+
+                $sequenceCall = new Anonymous([
+                    'this' => 'SEQUENCE',
+                    'expressions' => $step !== null ? [$start, $end, $step] : [$start, $end],
+                ]);
+                $zero = Literal::number(0);
+                $shouldReturnEmpty = Builder::or([
+                    new EQ(['this' => $stepValue->copy(), 'expression' => $zero->copy()]),
+                    Builder::and([
+                        new GT(['this' => $stepValue->copy(), 'expression' => $zero->copy()]),
+                        new GT(['this' => $start->copy(), 'expression' => $end->copy()]),
+                    ]),
+                    Builder::and([
+                        new LT(['this' => $stepValue->copy(), 'expression' => $zero->copy()]),
+                        new LT(['this' => $start->copy(), 'expression' => $end->copy()]),
+                    ]),
+                ]);
+                $emptyArrayOrSequence = new IfExpr([
+                    'this' => $shouldReturnEmpty,
+                    'true' => new ArrayExpr(['expressions' => []]),
+                    'false' => $sequenceCall,
+                ]);
+
+                return $this->sql($this->simplifyUnlessLiteral($emptyArrayOrSequence));
+            }
+        }
+
+        return $this->func('SEQUENCE', $start, $end, $step);
     }
 }

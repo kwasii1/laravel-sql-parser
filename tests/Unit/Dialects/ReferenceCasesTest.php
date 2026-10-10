@@ -26,6 +26,15 @@ function referenceDialectChecks(string $dialect): array
     $checks = [];
 
     foreach (Reference::dialectCases($dialect) as $i => $case) {
+        // validate_transpile: transpile() from this dialect to write_dialect
+        if ($case['type'] === 'transpile') {
+            if ($case['ok'] && isset($implemented[$case['write_dialect']])) {
+                $checks["#{$i} transpile {$case['write_dialect']}: {$case['sql']}"] = [$self, $case['write_dialect'], $case['sql'], $case['expected'], []];
+            }
+
+            continue;
+        }
+
         $options = array_filter(['pretty' => $case['pretty'], 'identify' => $case['identify']]);
 
         if ($case['type'] === 'identity') {
@@ -50,7 +59,8 @@ function referenceDialectChecks(string $dialect): array
     return $checks;
 }
 
-foreach (Reference::GENERATOR_DIALECTS as $dialect) {
+// Dialects without a sqlglot test module of their own (e.g. spark2) are covered by others' cases
+foreach (array_intersect(Reference::GENERATOR_DIALECTS, Reference::DIALECTS) as $dialect) {
     it("transpiles the recorded {$dialect} cases like sqlglot", function (string $read, string $write, string $sql, string $expected, array $options): void {
         $expression = Dialect::get($read === '' ? null : $read)->parseOne($sql);
         $target = Dialect::get($write === '' ? null : $write);

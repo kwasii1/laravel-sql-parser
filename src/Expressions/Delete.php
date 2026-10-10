@@ -11,6 +11,9 @@ namespace LaravelSqlParser\LaravelSqlParser\Expressions;
  */
 class Delete extends Expression implements DML
 {
+    use Concerns\DeleteBehavior;
+    use Concerns\DMLBehavior;
+
     public const string KEY = 'delete';
 
     public const array ARG_TYPES = [

@@ -6,13 +6,16 @@ namespace LaravelSqlParser\LaravelSqlParser\Support;
 
 use Closure;
 use Generator;
+use LaravelSqlParser\LaravelSqlParser\Errors\OptimizeError;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Cluster;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Column;
+use LaravelSqlParser\LaravelSqlParser\Expressions\Count;
 use LaravelSqlParser\LaravelSqlParser\Expressions\CTE;
 use LaravelSqlParser\LaravelSqlParser\Expressions\DDL;
 use LaravelSqlParser\LaravelSqlParser\Expressions\DerivedTable;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Distinct;
 use LaravelSqlParser\LaravelSqlParser\Expressions\DML;
+use LaravelSqlParser\LaravelSqlParser\Expressions\Dot;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
 use LaravelSqlParser\LaravelSqlParser\Expressions\FinalExpr;
 use LaravelSqlParser\LaravelSqlParser\Expressions\From;
@@ -91,6 +94,8 @@ final class Scope
 
     private bool $collected = false;
 
+    private bool $scansAllSubscopeColumns = false;
+
     /** @var list<Column> */
     private array $rawColumns = [];
 
@@ -120,6 +125,24 @@ final class Scope
 
     /** @var list<Pivot>|null */
     private ?array $pivots = null;
+
+    /** @var list<Expression> star columns (t.*) and star dots (s.f.*) */
+    private array $stars = [];
+
+    /** @var list<JoinHint> */
+    private array $joinHints = [];
+
+    /** @var array<int, true> object ids of the columns of this scope's expression */
+    private array $columnIndex = [];
+
+    /** @var array<string, array{0: Expression, 1: Table|Scope}>|null */
+    private ?array $selectedSources = null;
+
+    /** @var list<Column>|null */
+    private ?array $externalColumnsCache = null;
+
+    /** @var list<Column>|null */
+    private ?array $localColumns = null;
 
     /**
      * @param  array<string, Table|Scope>  $sources
@@ -170,6 +193,18 @@ final class Scope
         $this->collected = false;
         $this->references = null;
         $this->pivots = null;
+        $this->selectedSources = null;
+        $this->clearColumnCache();
+    }
+
+    /**
+     * Invalidate the column classification caches, e.g. after columns are qualified in place.
+     */
+    public function clearColumnCache(): void
+    {
+        $this->columns = null;
+        $this->externalColumnsCache = null;
+        $this->localColumns = null;
     }
 
     private function collect(): void
@@ -177,6 +212,9 @@ final class Scope
         $this->tables = $this->ctes = $this->subqueries = $this->derivedTables = $this->udtfs = [];
         $this->rawColumns = $this->tableColumns = [];
         $this->semiAntiJoinTables = [];
+        $this->stars = $this->joinHints = [];
+        $this->columnIndex = [];
+        $this->scansAllSubscopeColumns = false;
 
         // The inner query of a Subquery-rooted scope is scoped as a derived table by
         // traverseTables(), so it must not also be collected as a subquery
@@ -187,9 +225,15 @@ final class Scope
                 continue;
             }
 
-            if ($node instanceof Column && $node::class === Column::class) {
+            if ($node instanceof Dot && $node->isStar()) {
+                $this->stars[] = $node;
+            } elseif ($node instanceof Column && $node::class === Column::class) {
+                $this->columnIndex[spl_object_id($node)] = true;
+
                 if (! ($node->args['this'] ?? null) instanceof Star) {
                     $this->rawColumns[] = $node;
+                } else {
+                    $this->stars[] = $node;
                 }
             } elseif ($node instanceof Table && ! $node->parent instanceof JoinHint) {
                 if ($node->parent instanceof Join && $node->parent->isSemiOrAntiJoin()) {
@@ -197,6 +241,8 @@ final class Scope
                 }
 
                 $this->tables[] = $node;
+            } elseif ($node instanceof JoinHint) {
+                $this->joinHints[] = $node;
             } elseif ($node::class === Lateral::class || ($node instanceof UDTF && ($node->parent instanceof From || $node->parent instanceof Join))) {
                 $this->udtfs[] = $node;
             } elseif ($node instanceof CTE) {
@@ -207,10 +253,67 @@ final class Scope
                 $this->subqueries[] = $node;
             } elseif ($node instanceof TableColumn) {
                 $this->tableColumns[] = $node;
+            } elseif ($node instanceof Star && (($node->args['except_'] ?? null) !== null || ! $node->parent instanceof Count)) {
+                $this->scansAllSubscopeColumns = true;
             }
         }
 
         $this->collected = true;
+    }
+
+    /**
+     * Whether this scope selects every column of its sources (e.g. SELECT * or a bare star argument).
+     */
+    public function scansAllSubscopeColumns(): bool
+    {
+        $this->collected || $this->collect();
+
+        return $this->scansAllSubscopeColumns;
+    }
+
+    /**
+     * The scope tree from this node, in depth-first post-order (sqlglot Scope.traverse).
+     *
+     * @return list<Scope>
+     */
+    public function traverseTree(): array
+    {
+        $stack = [$this];
+        $result = [];
+
+        while ($stack !== []) {
+            $scope = array_pop($stack);
+            $result[] = $scope;
+            array_push($stack, ...$scope->cteScopes, ...$scope->setOperationScopes, ...$scope->tableScopes, ...$scope->subqueryScopes);
+        }
+
+        return array_reverse($result);
+    }
+
+    /**
+     * How many times each scope of this tree is referenced, keyed by spl_object_id (sqlglot Scope.ref_count).
+     *
+     * @return array<int, int>
+     */
+    public function refCount(): array
+    {
+        $counts = [];
+
+        foreach ($this->traverseTree() as $scope) {
+            foreach ($scope->selectedSources() as [, $source]) {
+                $id = spl_object_id($source);
+                $counts[$id] = ($counts[$id] ?? 0) + 1;
+            }
+
+            foreach (array_keys($scope->semiOrAntiJoinTables()) as $name) {
+                if (isset($scope->sources[$name])) {
+                    $id = spl_object_id($scope->sources[$name]);
+                    $counts[$id] = ($counts[$id] ?? 0) + 1;
+                }
+            }
+        }
+
+        return $counts;
     }
 
     /**
@@ -357,7 +460,6 @@ final class Scope
     {
         $old->replace($new);
         $this->clearCache();
-        $this->columns = null;
     }
 
     /** @var list<Column>|null */
@@ -412,6 +514,14 @@ final class Scope
      */
     public function externalColumns(): array
     {
+        return $this->externalColumnsCache ??= $this->computeExternalColumns();
+    }
+
+    /**
+     * @return list<Column>
+     */
+    private function computeExternalColumns(): array
+    {
         if ($this->expression instanceof SetOperation && count($this->setOperationScopes) === 2) {
             return [...$this->setOperationScopes[0]->externalColumns(), ...$this->setOperationScopes[1]->externalColumns()];
         }
@@ -433,6 +543,166 @@ final class Scope
     public function isRoot(): bool
     {
         return $this->scopeType === self::ROOT;
+    }
+
+    public function isSubquery(): bool
+    {
+        return $this->scopeType === self::SUBQUERY;
+    }
+
+    public function isDerivedTableScope(): bool
+    {
+        return $this->scopeType === self::DERIVED_TABLE;
+    }
+
+    public function isSetOperation(): bool
+    {
+        return $this->scopeType === self::SET_OPERATION;
+    }
+
+    public function isCte(): bool
+    {
+        return $this->scopeType === self::CTE;
+    }
+
+    public function isUdtf(): bool
+    {
+        return $this->scopeType === self::UDTF;
+    }
+
+    /**
+     * Whether this scope is a subquery that references columns of outer scopes.
+     */
+    public function isCorrelatedSubquery(): bool
+    {
+        return $this->canBeCorrelated && $this->externalColumns() !== [];
+    }
+
+    /**
+     * Star columns (t.*) and star dots (s.f.*) of this scope.
+     *
+     * @return list<Expression>
+     */
+    public function stars(): array
+    {
+        $this->collected || $this->collect();
+
+        return $this->stars;
+    }
+
+    /**
+     * @return list<JoinHint>
+     */
+    public function joinHints(): array
+    {
+        $this->collected || $this->collect();
+
+        return $this->joinHints;
+    }
+
+    /**
+     * Object ids (spl_object_id) of the columns that belong to this scope's expression.
+     *
+     * @return array<int, true>
+     */
+    public function columnIndex(): array
+    {
+        $this->collected || $this->collect();
+
+        return $this->columnIndex;
+    }
+
+    /**
+     * The sources actually selected from in this scope (in a FROM or JOIN), by name: [node, source].
+     *
+     * @return array<string, array{0: Expression, 1: Table|Scope}>
+     */
+    public function selectedSources(): array
+    {
+        if ($this->selectedSources === null) {
+            $result = [];
+            $semiAnti = $this->semiOrAntiJoinTables();
+
+            foreach ($this->references() as [$name, $node]) {
+                if (isset($semiAnti[$name])) {
+                    // The right side of a SEMI / ANTI join isn't selected from
+                    continue;
+                }
+
+                if (isset($result[$name])) {
+                    throw new OptimizeError("Alias already used: {$name}");
+                }
+
+                if (isset($this->sources[$name])) {
+                    $result[$name] = [$node, $this->sources[$name]];
+                }
+            }
+
+            $this->selectedSources = $result;
+        }
+
+        return $this->selectedSources;
+    }
+
+    /**
+     * Columns of this scope that aren't external.
+     *
+     * @return list<Column>
+     */
+    public function localColumns(): array
+    {
+        if ($this->localColumns === null) {
+            $external = [];
+
+            foreach ($this->externalColumns() as $column) {
+                $external[spl_object_id($column)] = true;
+            }
+
+            $this->localColumns = array_values(array_filter($this->columns(), static fn (Column $c): bool => ! isset($external[spl_object_id($c)])));
+        }
+
+        return $this->localColumns;
+    }
+
+    /**
+     * @return list<Column>
+     */
+    public function unqualifiedColumns(): array
+    {
+        return array_values(array_filter($this->columns(), static fn (Column $c): bool => $c->text('table') === ''));
+    }
+
+    /**
+     * The columns of this scope that reference a source.
+     *
+     * @return list<Column>
+     */
+    public function sourceColumns(string $sourceName): array
+    {
+        return array_values(array_filter($this->columns(), static fn (Column $c): bool => $c->text('table') === $sourceName));
+    }
+
+    public function renameSource(?string $oldName, string $newName): void
+    {
+        $oldName ??= '';
+
+        if (array_key_exists($oldName, $this->sources)) {
+            $source = $this->sources[$oldName];
+            unset($this->sources[$oldName]);
+            $this->sources[$newName] = $source;
+        }
+    }
+
+    public function addSource(string $name, Table|Scope $source): void
+    {
+        $this->sources[$name] = $source;
+        $this->clearCache();
+    }
+
+    public function removeSource(string $name): void
+    {
+        unset($this->sources[$name]);
+        $this->clearCache();
     }
 
     /**
@@ -922,10 +1192,10 @@ final class Scope
     }
 
     /**
-     * @template T of Expression
+     * @template T of object
      *
      * @param  class-string<T>  ...$types
-     * @return list<T>
+     * @return list<T&Expression>
      */
     public static function findAllInScope(Expression $expression, string ...$types): array
     {
@@ -942,6 +1212,19 @@ final class Scope
         }
 
         return $found;
+    }
+
+    /**
+     * The first node of the given types in the expression's scope.
+     *
+     * @template T of object
+     *
+     * @param  class-string<T>  ...$types
+     * @return (T&Expression)|null
+     */
+    public static function findInScope(Expression $expression, string ...$types): ?Expression
+    {
+        return self::findAllInScope($expression, ...$types)[0] ?? null;
     }
 
     /**

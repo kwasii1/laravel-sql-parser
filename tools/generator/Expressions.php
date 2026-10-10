@@ -125,6 +125,9 @@ final class Expressions
             $traits[] = 'Concerns\\'.$php.'Behavior';
         }
 
+        // Pint's ordered_traits order, so formatting never fights the generator
+        usort($traits, strcasecmp(...));
+
         $constants = ['KEY' => $class['key']];
         $parentValues = $this->effectiveConstants($bases[0]);
 

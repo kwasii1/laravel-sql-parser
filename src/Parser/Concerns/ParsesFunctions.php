@@ -107,6 +107,9 @@ use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenType;
  */
 trait ParsesFunctions
 {
+    /** The upper-cased name of the FUNCTIONS entry being built (for builders shared by several names). */
+    protected string $functionBuilderName = '';
+
     /**
      * @param  array<string, mixed>|null  $functions
      */
@@ -253,6 +256,8 @@ trait ParsesFunctions
             }
 
             if ($knownFunction) {
+                // The called name, for builders shared by several FUNCTIONS keys
+                $this->functionBuilderName = $upper;
                 $func = $this->callFunctionBuilder($function, $args);
                 $func = $this->validateExpression($func, $args);
 

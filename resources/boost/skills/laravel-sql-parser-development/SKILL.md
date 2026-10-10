@@ -1,8 +1,8 @@
 ---
 name: laravel-sql-parser-development
 description: >
-  Parse SQL into a syntax tree and transpile it between MySQL, MariaDB, PostgreSQL, SQLite and
-  SQL Server in Laravel applications with kwasii1/laravel-sql-parser: the LaravelSqlParser facade,
+  Parse SQL into a syntax tree and transpile it between MySQL, MariaDB, PostgreSQL, SQLite,
+  SQL Server, BigQuery, Snowflake, Oracle, Spark and 25 more dialects in Laravel applications with kwasii1/laravel-sql-parser: the LaravelSqlParser facade,
   the toSqlFor()/bindingsFor()/toRawSqlFor() query builder macros and the sql:transpile command.
 license: MIT
 metadata:
@@ -23,7 +23,7 @@ Use this skill when a Laravel application needs to translate SQL from one databa
 
 - confirm the package is installed (`composer require kwasii1/laravel-sql-parser`); the service provider and the `LaravelSqlParser` facade alias are auto-discovered
 - check which database drivers the app uses (`config/database.php`); with no dialect given, the package reads SQL in the default connection's dialect
-- supported dialects: `mysql`, `mariadb`, `postgres` (`pgsql`, `postgresql`), `sqlite`, `tsql` (`sqlsrv`, `mssql`); anything else throws `InvalidArgumentException`
+- supported dialects: `mysql`, `mariadb`, `postgres` (`pgsql`, `postgresql`), `sqlite`, `tsql` (`sqlsrv`, `mssql`), `bigquery`, `snowflake`, `redshift`, `databricks`, `clickhouse`, `exasol`, `teradata`, `fabric`, `hive`, `spark`, `spark2`, `presto`, `trino`, `athena`, `drill`, `druid`, `dremio`, `dune`, `oracle`, `duckdb`, `doris`, `starrocks`, `singlestore`, `materialize`, `risingwave`, `solr`, `tableau`, `dax`, `prql`; anything else throws `InvalidArgumentException`
 
 ### 2. Apply the package's public API
 
@@ -31,7 +31,10 @@ Use this skill when a Laravel application needs to translate SQL from one databa
 - transpile a builder query: `$query->toSqlFor('sqlsrv')`, `$query->bindingsFor('sqlsrv')` and `$query->toRawSqlFor('mysql')` work on the query builder and on Eloquent builders, and read the query in its connection's dialect
 - always pair `toSqlFor()` with `bindingsFor()`, never with `getBindings()`: rewrites can move or repeat placeholders (SQL Server's `TOP (?)`, `ILIKE` becoming `LOWER(a) LIKE LOWER(?)`)
 - raw SQL with `?` bindings: `Sql::transpileQuery($sql, $bindings, $from, $to)` returns `['sql' => ..., 'bindings' => [...]]`
+- optimize or qualify SQL: `Optimizer::optimize($sql, schema: ['users' => ['id' => 'INT']], dialect: 'mysql')` and `Qualify::qualify($tree, schema: ..., dialect: ...)` from `LaravelSqlParser\LaravelSqlParser\Optimizer` (sqlglot's optimizer: qualification, simplification, pushdowns, subquery merging); `Builder::findTables($tree)` lists the tables a query reads, CTEs excluded
 - inspect SQL: `Sql::parseOne($sql, 'mysql')` returns an expression tree; use `findAll(Table::class)`, `findAll(Column::class)` and `->name()` from `LaravelSqlParser\LaravelSqlParser\Expressions`, and `->sql('postgres')` to write it back
+- build SQL: `Builder::select('a')->from('t')->where('x > 1')->orderBy('a')->limit(10)->sql('mysql')` (`LaravelSqlParser\LaravelSqlParser\Expressions\Builder`); also `Builder::insert/update/delete/merge/union/condition/case`, and `and()`, `or()`, `not()`, `as()`, `eq()`, `isin()` on any expression; strings are parsed with `dialect:`, calls copy unless `copy: false`, list methods append unless `append: false`; `from_`/`and_`/`with_` are `from()`/`and()`/`with()`, `Update::set_()` is `assign()`
+- serialize a tree: `$tree->dump()` gives a JSON-safe array (sqlglot's format); `Expression::load($array)` rebuilds it
 - invalid SQL throws `LaravelSqlParser\LaravelSqlParser\Errors\ParseError` (a `SqlParserException`); catch it around user-supplied SQL
 - from the terminal: `php artisan sql:transpile "<sql>" --from=mysql --to=sqlsrv [--pretty] [--file=path] [--ast]`, or pipe SQL on standard input
 
@@ -72,4 +75,3 @@ $tables = array_map(fn ($t) => $t->name(), Sql::parseOne($sql, 'pgsql')->findAll
 - do not reuse `getBindings()` with `toSqlFor()` output; use `bindingsFor()` with the same dialect
 - do not assume one statement: `transpile()` and `parse()` return lists
 - do not enable `cache` for short queries; transpiling is faster than a cache round trip below `min_length`
-- do not request dialects the package doesn't ship (BigQuery, Snowflake, Oracle, ...) yet

@@ -24,6 +24,9 @@ use Stringable;
  */
 abstract class Expression implements Stringable
 {
+    use Concerns\BuildsConditions;
+    use Concerns\SerializesExpressions;
+
     public const string KEY = 'expression';
 
     /** @var array<string, bool> argument name => required */
@@ -902,6 +905,8 @@ abstract class Expression implements Stringable
                 if ($value instanceof self) {
                     $child = clone $value;
                     $child->parent = $node;
+                    $child->argKey = $key;
+                    $child->index = null;
                     $node->args[$key] = $child;
                     $stack[] = $child;
                 } elseif (is_array($value)) {
@@ -909,6 +914,8 @@ abstract class Expression implements Stringable
                         if ($item instanceof self) {
                             $child = clone $item;
                             $child->parent = $node;
+                            $child->argKey = $key;
+                            $child->index = $i;
                             $value[$i] = $child;
                             $stack[] = $child;
                         }

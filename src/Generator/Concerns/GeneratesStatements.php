@@ -872,7 +872,8 @@ trait GeneratesStatements
         } else {
             $typeSql = is_string($typeValue)
                 ? ($this->t['TYPE_MAPPING'][$typeValue] ?? DType::VALUES[$typeValue] ?? $typeValue)
-                : $this->sql($typeValue);
+                // sqlglot interpolates a non-DType value with str(), i.e. base-dialect SQL
+                : ($typeValue instanceof Expression ? (string) $typeValue : $this->sql($typeValue));
         }
 
         if ($interior !== '') {

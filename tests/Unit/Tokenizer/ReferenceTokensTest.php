@@ -30,11 +30,11 @@ function referenceTokenCases(string $dialect): array
  */
 function tokenPairs(string $sql, string $dialect): array
 {
-    $stream = Dialect::get($dialect)->tokenizer()->tokenize($sql);
     $pairs = [];
 
-    foreach ($stream->types as $i => $type) {
-        $pairs[] = [TokenType::name($type), $stream->texts[$i]];
+    // The dialect's public tokenize(), like sqlglot: Athena routes some statements to Hive's tokenizer
+    foreach (Dialect::get($dialect)->tokenize($sql) as $token) {
+        $pairs[] = [TokenType::name($token->type), $token->text];
     }
 
     return $pairs;
@@ -45,7 +45,12 @@ it('tokenizes identity.sql like sqlglot', function (string $sql, array $expected
 })->with(referenceTokenCases('identity'));
 
 foreach (Reference::DIALECTS as $dialect) {
+    // Some dialects' tests record no tokens (e.g. DAX's are all validate_transpile cases)
+    if (($cases = referenceTokenCases($dialect)) === []) {
+        continue;
+    }
+
     it("tokenizes {$dialect} inputs like sqlglot", function (string $sql, array $expected) use ($dialect): void {
         expect(tokenPairs($sql, $dialect))->toBe($expected);
-    })->with(referenceTokenCases($dialect));
+    })->with($cases);
 }

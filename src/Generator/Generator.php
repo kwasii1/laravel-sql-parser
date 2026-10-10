@@ -9,21 +9,17 @@ use InvalidArgumentException;
 use LaravelSqlParser\LaravelSqlParser\Dialects\Dialect;
 use LaravelSqlParser\LaravelSqlParser\Errors\ErrorLevel;
 use LaravelSqlParser\LaravelSqlParser\Errors\UnsupportedError;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Add;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Fetch;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Func;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Limit;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Literal;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Mul;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Neg;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Paren;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Properties;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Property;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Select;
 use LaravelSqlParser\LaravelSqlParser\Expressions\SetOperation;
-use LaravelSqlParser\LaravelSqlParser\Expressions\Sub;
 use LaravelSqlParser\LaravelSqlParser\Expressions\With;
+use LaravelSqlParser\LaravelSqlParser\Optimizer\Simplify;
 use LaravelSqlParser\LaravelSqlParser\Parser\Parser;
 use LaravelSqlParser\LaravelSqlParser\Tokenizer\TokenType;
 use ReflectionClass;
@@ -762,9 +758,7 @@ class Generator
     }
 
     /**
-     * sqlglot simplifies non-literal LIMIT/OFFSET values for dialects that only accept literals.
-     * The optimizer isn't ported, so only constant integer arithmetic (+, -, *, parentheses and
-     * negation) is folded; anything else is kept as it is.
+     * sqlglot's _simplify_unless_literal: non-literal values are run through the optimizer's simplify.
      */
     protected function simplifyUnlessLiteral(?Expression $expression): ?Expression
     {
@@ -772,42 +766,7 @@ class Generator
             return $expression;
         }
 
-        $value = self::foldInteger($expression);
-
-        return $value === null ? $expression : Literal::number($value);
-    }
-
-    private static function foldInteger(Expression $expression): ?int
-    {
-        if ($expression instanceof Literal) {
-            return $expression->isInt() ? (int) $expression->name() : null;
-        }
-
-        if ($expression instanceof Paren || $expression instanceof Neg) {
-            $inner = $expression->argExpr('this');
-            $value = $inner !== null ? self::foldInteger($inner) : null;
-
-            return $value === null ? null : ($expression instanceof Neg ? -$value : $value);
-        }
-
-        if ($expression instanceof Add || $expression instanceof Sub || $expression instanceof Mul) {
-            $left = $expression->argExpr('this');
-            $right = $expression->argExpr('expression');
-            $a = $left !== null ? self::foldInteger($left) : null;
-            $b = $right !== null ? self::foldInteger($right) : null;
-
-            if ($a === null || $b === null) {
-                return null;
-            }
-
-            return match (true) {
-                $expression instanceof Add => $a + $b,
-                $expression instanceof Sub => $a - $b,
-                default => $a * $b,
-            };
-        }
-
-        return null;
+        return Simplify::simplify($expression, dialect: $this->dialect);
     }
 
     public function replaceLineBreaks(string $string): string

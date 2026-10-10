@@ -11,6 +11,8 @@ namespace LaravelSqlParser\LaravelSqlParser\Expressions;
  */
 class Properties extends Expression
 {
+    use Concerns\PropertiesBehavior;
+
     public const string KEY = 'properties';
 
     public const array ARG_TYPES = [

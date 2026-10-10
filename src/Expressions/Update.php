@@ -11,6 +11,9 @@ namespace LaravelSqlParser\LaravelSqlParser\Expressions;
  */
 class Update extends Expression implements DML
 {
+    use Concerns\DMLBehavior;
+    use Concerns\UpdateBehavior;
+
     public const string KEY = 'update';
 
     public const array ARG_TYPES = [

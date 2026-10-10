@@ -34,6 +34,7 @@ use LaravelSqlParser\LaravelSqlParser\Expressions\TableFromRows;
 use LaravelSqlParser\LaravelSqlParser\Expressions\UDTF;
 use LaravelSqlParser\LaravelSqlParser\Expressions\Unnest;
 use LaravelSqlParser\LaravelSqlParser\Expressions\VarMap;
+use LaravelSqlParser\LaravelSqlParser\Schema\Schema;
 use LaravelSqlParser\LaravelSqlParser\Support\Scope;
 use WeakMap;
 
@@ -79,6 +80,12 @@ class TypeAnnotator
     /** @var array<string, array<string, true>> */
     private static ?array $defaultCoercesTo = null;
 
+    /** The schema the types of table columns come from (none: they're UNKNOWN). */
+    public ?Schema $schema = null;
+
+    /** Whether to re-annotate nodes that already have a (known) type (sqlglot overwrite_types). */
+    public bool $overwriteTypes = true;
+
     public function __construct(public readonly Dialect $dialect)
     {
         $tables = $dialect::TYPE_TABLES;
@@ -99,6 +106,20 @@ class TypeAnnotator
         /** @var WeakMap<Expression, array<string, DataType|string>> $setopTypes */
         $setopTypes = new WeakMap;
         $this->setopColumnTypes = $setopTypes;
+    }
+
+    /**
+     * Forget every annotated node (sqlglot TypeAnnotator.clear).
+     */
+    public function clear(): void
+    {
+        /** @var WeakMap<Expression, true> $visited */
+        $visited = new WeakMap;
+        $this->visited = $visited;
+        /** @var WeakMap<Expression, array<string, DataType|string>> $setopTypes */
+        $setopTypes = new WeakMap;
+        $this->setopColumnTypes = $setopTypes;
+        $this->nullExpressions = [];
     }
 
     /**
@@ -144,7 +165,18 @@ class TypeAnnotator
         return $expression;
     }
 
-    protected function annotateScope(Scope $scope): void
+    /**
+     * Evict an expression (or its subtree, when deep) from the annotation caches, so a later
+     * annotation pass doesn't skip it.
+     */
+    public function uncache(Expression $expression, bool $deep = true): void
+    {
+        foreach ($deep ? $expression->walk() : [$expression] as $node) {
+            unset($this->visited[$node], $this->setopColumnTypes[$node], $this->nullExpressions[spl_object_id($node)]);
+        }
+    }
+
+    public function annotateScope(Scope $scope): void
     {
         // Iterate through all the expressions of the current scope in post-order, and annotate
         $this->annotateExpression($scope->expression, $scope);
@@ -179,7 +211,7 @@ class TypeAnnotator
         while ($stack !== []) {
             [$expr, $childrenAnnotated] = array_pop($stack);
 
-            if (isset($this->visited[$expr])) {
+            if (isset($this->visited[$expr]) || (! $this->overwriteTypes && $expr->type() !== null && ! $expr->isType(DType::UNKNOWN))) {
                 continue; // The expression's type has already been inferred
             }
 
@@ -226,8 +258,8 @@ class TypeAnnotator
         }
 
         if ($source instanceof Table) {
-            // No schema: table columns are UNKNOWN
-            $this->setType($column, DType::UNKNOWN);
+            // Without a schema, table columns are UNKNOWN
+            $this->setType($column, $this->schema?->getColumnType($source, $column) ?? DType::UNKNOWN);
         } elseif ($source instanceof Scope) {
             $columnType = $this->sourceScopeSelects($source)[$column->name()] ?? null;
 
@@ -1146,7 +1178,7 @@ class TypeAnnotator
      *
      * @return array<string, array<string, true>>
      */
-    private static function defaultCoercesTo(): array
+    public static function defaultCoercesTo(): array
     {
         if (self::$defaultCoercesTo !== null) {
             return self::$defaultCoercesTo;

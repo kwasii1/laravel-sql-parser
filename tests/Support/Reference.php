@@ -12,13 +12,13 @@ use RuntimeException;
 final class Reference
 {
     /** Dialects whose recorded cases are exercised by the test suite. */
-    public const array DIALECTS = ['base', 'mysql', 'postgres', 'sqlite', 'tsql', 'redshift', 'oracle', 'clickhouse', 'bigquery', 'snowflake', 'duckdb'];
+    public const array DIALECTS = ['base', 'mysql', 'postgres', 'sqlite', 'tsql', 'redshift', 'oracle', 'clickhouse', 'bigquery', 'snowflake', 'duckdb', 'hive', 'spark', 'databricks', 'presto', 'trino', 'athena', 'teradata', 'doris', 'starrocks', 'singlestore', 'materialize', 'risingwave', 'exasol', 'fabric', 'drill', 'druid', 'dremio', 'dune', 'tableau', 'solr', 'dax', 'prql'];
 
     /**
      * Dialects whose parser and generator are implemented: their recorded cases are checked end to
      * end, and they're the only read / write targets exercised by validate_all cases.
      */
-    public const array GENERATOR_DIALECTS = ['base', 'mysql', 'postgres', 'sqlite', 'tsql', 'redshift', 'oracle', 'clickhouse', 'bigquery', 'snowflake', 'duckdb'];
+    public const array GENERATOR_DIALECTS = ['base', 'mysql', 'postgres', 'sqlite', 'tsql', 'redshift', 'oracle', 'clickhouse', 'bigquery', 'snowflake', 'duckdb', 'hive', 'spark2', 'spark', 'databricks', 'presto', 'trino', 'athena', 'teradata', 'doris', 'starrocks', 'singlestore', 'materialize', 'risingwave', 'exasol', 'fabric', 'drill', 'druid', 'dremio', 'dune', 'tableau', 'solr', 'dax', 'prql'];
 
     /** Marks a validate_all write that sqlglot expects to raise UnsupportedError. */
     public const string UNSUPPORTED = '__UNSUPPORTED__';

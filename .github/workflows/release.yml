@@ -1,0 +1,158 @@
+name: Release
+
+# Run by hand from the Actions tab: pick how much to bump the version. The workflow checks the
+# code, creates the next vX.Y.Z tag, publishes a GitHub release with generated notes, updates
+# CHANGELOG.md and tells Packagist about the new tag.
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: "Which part of the version to increase (0.x releases: minor for new features or breaking changes, patch for fixes)"
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+        default: patch
+      prerelease:
+        description: Mark the GitHub release as a pre-release
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Only release from main
+        if: github.ref != 'refs/heads/main'
+        run: |
+          echo "::error::Releases are made from main, not ${GITHUB_REF_NAME}."
+          exit 1
+
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        with:
+          php-version: 8.4
+          extensions: dom, curl, libxml, mbstring, zip, fileinfo, sqlite, pdo_sqlite, bcmath, intl
+          ini-values: error_reporting=E_ALL
+          tools: composer:v2
+          coverage: none
+
+      - name: Install dependencies
+        run: |
+          composer update --prefer-stable --prefer-dist --no-interaction --no-progress --no-scripts
+          composer run prepare
+
+      - name: Run the full validation
+        run: composer test
+
+      - name: Work out the next version
+        id: version
+        env:
+          BUMP: ${{ inputs.bump }}
+        run: |
+          latest=$(git tag --list 'v[0-9]*.[0-9]*.[0-9]*' --sort=-v:refname | head -n 1)
+
+          if [ -z "$latest" ]; then
+            # First release
+            next="v0.1.0"
+          else
+            IFS=. read -r major minor patch <<< "${latest#v}"
+            patch=${patch%%-*}
+
+            case "$BUMP" in
+              major) next="v$((major + 1)).0.0" ;;
+              minor) next="v${major}.$((minor + 1)).0" ;;
+              *) next="v${major}.${minor}.$((patch + 1))" ;;
+            esac
+          fi
+
+          if git rev-parse -q --verify "refs/tags/${next}" > /dev/null; then
+            echo "::error::Tag ${next} already exists."
+            exit 1
+          fi
+
+          echo "previous=${latest}" >> "$GITHUB_OUTPUT"
+          echo "next=${next}" >> "$GITHUB_OUTPUT"
+          echo "Releasing ${next} (previous: ${latest:-none})"
+
+      - name: Create the tag
+        env:
+          TAG: ${{ steps.version.outputs.next }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" -m "$TAG"
+          git push origin "$TAG"
+
+      - name: Publish the GitHub release
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.next }}
+          PREVIOUS: ${{ steps.version.outputs.previous }}
+          PRERELEASE: ${{ inputs.prerelease }}
+        run: |
+          args=(--title "$TAG" --generate-notes --verify-tag)
+
+          if [ -n "$PREVIOUS" ]; then
+            args+=(--notes-start-tag "$PREVIOUS")
+          fi
+
+          if [ "$PRERELEASE" = "true" ]; then
+            args+=(--prerelease)
+          fi
+
+          gh release create "$TAG" "${args[@]}"
+
+          {
+            echo "body<<RELEASE_NOTES_EOF"
+            gh release view "$TAG" --json body --jq .body
+            echo "RELEASE_NOTES_EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      # Releases made with the workflow's own token don't trigger other workflows, so
+      # update-changelog.yml won't run for this release: update the changelog here instead.
+      - name: Update changelog
+        uses: stefanzweifel/changelog-updater-action@a938690fad7edf25368f37e43a1ed1b34303eb36 # v1
+        with:
+          latest-version: ${{ steps.version.outputs.next }}
+          release-notes: ${{ steps.release.outputs.body }}
+
+      - name: Commit updated changelog
+        uses: stefanzweifel/git-auto-commit-action@4a55954c782fc1ea30b9056cd3e7a2b40ca8887d # v7
+        with:
+          branch: main
+          commit_message: Update CHANGELOG for ${{ steps.version.outputs.next }}
+          file_pattern: CHANGELOG.md
+
+      # Packagist normally picks up new tags through its GitHub integration. This step makes
+      # sure it does straight away, when the PACKAGIST_USERNAME / PACKAGIST_TOKEN secrets are set.
+      - name: Notify Packagist
+        env:
+          PACKAGIST_USERNAME: ${{ secrets.PACKAGIST_USERNAME }}
+          PACKAGIST_TOKEN: ${{ secrets.PACKAGIST_TOKEN }}
+        run: |
+          if [ -z "$PACKAGIST_USERNAME" ] || [ -z "$PACKAGIST_TOKEN" ]; then
+            echo "PACKAGIST_USERNAME / PACKAGIST_TOKEN not set: relying on Packagist's GitHub integration."
+            exit 0
+          fi
+
+          curl --fail-with-body -sS -X POST \
+            -H 'Content-Type: application/json' \
+            -d '{"repository":{"url":"https://github.com/kwasii1/laravel-sql-parser"}}' \
+            "https://packagist.org/api/update-package?username=${PACKAGIST_USERNAME}&apiToken=${PACKAGIST_TOKEN}"

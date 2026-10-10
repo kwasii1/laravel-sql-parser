@@ -12,7 +12,15 @@
 
 A fast SQL parser and transpiler for Laravel, written in pure PHP. It parses SQL into a syntax tree and writes it back out in another dialect: MySQL to SQL Server, Postgres to SQLite, and so on. It is a port of [sqlglot](https://github.com/tobymao/sqlglot) (v30.21.0) and passes sqlglot's own test cases for every supported dialect.
 
-**Supported dialects:** MySQL, MariaDB, PostgreSQL, SQLite and SQL Server (T-SQL), plus a generic ANSI dialect. Laravel's driver names (`mysql`, `mariadb`, `pgsql`, `sqlite`, `sqlsrv`) work everywhere a dialect is expected.
+**Supported dialects:** every dialect sqlglot ships, plus MariaDB and a generic ANSI dialect. Laravel's driver names (`mysql`, `mariadb`, `pgsql`, `sqlite`, `sqlsrv`) work everywhere a dialect is expected.
+
+| Family | Dialects (name to pass) |
+|---|---|
+| Laravel drivers | MySQL (`mysql`), MariaDB (`mariadb`), PostgreSQL (`postgres`, `pgsql`), SQLite (`sqlite`), SQL Server (`tsql`, `sqlsrv`, `mssql`) |
+| Warehouses | BigQuery (`bigquery`), Snowflake (`snowflake`), Redshift (`redshift`), Databricks (`databricks`), ClickHouse (`clickhouse`), Exasol (`exasol`), Teradata (`teradata`), Microsoft Fabric (`fabric`) |
+| Query engines | Hive (`hive`), Spark (`spark`, `spark2`), Presto (`presto`), Trino (`trino`), Athena (`athena`), Drill (`drill`), Druid (`druid`), Dremio (`dremio`), Dune (`dune`) |
+| Other databases | Oracle (`oracle`), DuckDB (`duckdb`), Doris (`doris`), StarRocks (`starrocks`), SingleStore (`singlestore`), Materialize (`materialize`), RisingWave (`risingwave`), Solr (`solr`) |
+| Other languages | Tableau (`tableau`), DAX (`dax`), PRQL (`prql`) |
 
 ## Installation
 
@@ -71,6 +79,58 @@ $select->sql('postgres'); // generate SQL for any dialect from the tree
 ```
 
 `Sql::parse()` returns one tree per statement, and `Sql::tokenize()` returns the tokens. Invalid SQL throws a `LaravelSqlParser\LaravelSqlParser\Errors\ParseError` with the line, column and surrounding text.
+
+### Building queries
+
+`Builder` ports sqlglot's fluent builders. Strings are parsed as SQL (pass `dialect:` to choose the dialect), every call returns a copy unless you pass `copy: false`, and list methods append unless you pass `append: false`:
+
+```php
+use LaravelSqlParser\LaravelSqlParser\Expressions\Builder;
+
+$query = Builder::select('id', 'name')
+    ->from('users')
+    ->where('active = 1')
+    ->where(Builder::column('age')->gte(18))
+    ->orderBy('name')
+    ->limit(10);
+
+$query->sql('tsql'); // 'SELECT TOP 10 id, name FROM users WHERE active = 1 AND age >= 18 ORDER BY name'
+
+Builder::condition('x = 1')->and('y = 2')->or('z = 3')->sql();       // '(x = 1 AND y = 2) OR z = 3'
+Builder::update('users', ['active' => false], where: 'id = 5')->sql(); // 'UPDATE users SET active = FALSE WHERE id = 5'
+```
+
+Also available: `Builder::from()`, `insert()`, `delete()`, `merge()`, `union()`, `intersect()`, `except()`, `subquery()`, `values()`, `case()`, `cast()`, `alias()`, `func()`, and on queries `join()`, `groupBy()`, `having()`, `with()`, `window()`, `qualify()`, `distinct()`, `ctas()`. Any expression has `and()`, `or()`, `not()`, `as()`, `eq()`, `neq()`, `gt()`, `isin()`, `between()`, `like()`, `is()` and friends. Python names ending in `_` drop it (`from_` is `from()`), and `Update::set_()` is `assign()`.
+
+### Optimizing queries
+
+`Optimizer::optimize()` ports sqlglot's optimizer: it qualifies tables and columns (expanding `*` from the schema), simplifies expressions, pushes predicates and projections down, merges and unnests subqueries and removes unused joins and CTEs. It takes a SQL string or a tree and returns a new tree:
+
+```php
+use LaravelSqlParser\LaravelSqlParser\Optimizer\Optimizer;
+
+$schema = ['x' => ['a' => 'INT', 'b' => 'INT']];
+
+Optimizer::optimize('SELECT a FROM (SELECT x.a FROM x) AS s WHERE 1 + 1 = 2 AND a > 1', schema: $schema)->sql();
+// 'SELECT "x"."a" AS "a" FROM "x" AS "x" WHERE "x"."a" > 1'
+```
+
+Pass `dialect:` for dialect-specific SQL, and `rules:` to run only some steps. Each rule is also usable on its own: for example `Qualify::qualify()` resolves every column to its table without rewriting the query, and `Simplify::simplify()` only folds expressions. The schema is a nested array of `table => column => type` (optionally `db => table => ...` or `catalog => db => table => ...`), or a `Schema\MappingSchema`.
+
+`Builder::findTables()` lists the tables a query reads (CTE names excluded), `Builder::tableName()` formats one, and `Builder::replaceTables()`, `Builder::expand()` and `Builder::replacePlaceholders()` rewrite them.
+
+### Serializing trees
+
+`dump()` turns a tree into a JSON-serializable array and `Expression::load()` rebuilds it, in the same format as sqlglot's `dump()`/`load()`:
+
+```php
+use LaravelSqlParser\LaravelSqlParser\Expressions\Expression;
+
+$json = json_encode($query->dump());
+$copy = Expression::load(json_decode($json, true));
+
+$copy->equals($query); // true
+```
 
 ### Artisan command
 

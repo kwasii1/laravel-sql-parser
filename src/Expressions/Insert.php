@@ -11,6 +11,9 @@ namespace LaravelSqlParser\LaravelSqlParser\Expressions;
  */
 class Insert extends Expression implements DDL, DML
 {
+    use Concerns\DMLBehavior;
+    use Concerns\InsertBehavior;
+
     public const string KEY = 'insert';
 
     public const array ARG_TYPES = [

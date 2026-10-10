@@ -568,9 +568,10 @@ class BigQueryGenerator extends Generator
         $expressionsSql = $this->expressions($expression, flat: true);
         $offset = $expression->args['offset'] ?? null;
 
-        if ($offset === 0) {
+        // Python's True == 1 and False == 0
+        if ($offset === 0 || $offset === false) {
             $expressionsSql = "OFFSET({$expressionsSql})";
-        } elseif ($offset === 1) {
+        } elseif ($offset === 1 || $offset === true) {
             $expressionsSql = "ORDINAL({$expressionsSql})";
         } elseif ($offset !== null) {
             $this->unsupported('Unsupported array offset: '.(is_scalar($offset) ? (string) $offset : 'expression'));
