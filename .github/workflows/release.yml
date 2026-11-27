@@ -128,7 +128,7 @@ jobs:
       # Releases made with the workflow's own token don't trigger other workflows, so
       # update-changelog.yml won't run for this release: update the changelog here instead.
       - name: Update changelog
-        uses: stefanzweifel/changelog-updater-action@a938690fad7edf25368f37e43a1ed1b34303eb36 # v1
+        uses: stefanzweifel/changelog-updater-action@f7c43fed0c8760b25199be6eae5c28fc22830ec6 # v1
         with:
           latest-version: ${{ steps.version.outputs.next }}
           release-notes: ${{ steps.release.outputs.body }}
